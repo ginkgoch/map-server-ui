@@ -14,11 +14,10 @@ html, body, #container, .ant-layout {
     padding: 4px;
 }
 
-/* #container {
-    display: grid;
-    grid-template-rows: 64px auto;
+.style-label {
+    padding-left: 6px;
 }
 
-.ant-layout-content {
-    display: grid;
-} */
+.ant-menu-inline {
+    line-height: 34px;
+}

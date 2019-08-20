@@ -1,21 +1,25 @@
 import React from 'react';
 import _ from 'lodash';
 import * as mapJSON from '../resources/map.json';
+import StyleItem from './StyleItem';
 import {Menu, Icon} from 'antd';
 const {SubMenu} = Menu;
 
 export default () => {
-    let groups = mapJSON.groups.map((g, i) => {
+    let styles = layer => {
+        return layer.styles.map(s => <Menu.Item key={s.id}><StyleItem style={s}></StyleItem></Menu.Item>);
+    };
+
+    let layers = _.flatMap(mapJSON.groups.map(g => g.layers)).map(l => {
         return (
-            <SubMenu key={`group_${i}`} title={ g.name }></SubMenu>
+            <SubMenu key={l.id} title={<i><Icon type="star"></Icon> {l.name}</i>}>
+                {
+                    styles(l)
+                }
+            </SubMenu>
         );
     });
 
-    let layers = _.flatMap(mapJSON.groups.map(g => g.layers)).map((l, i) => {
-        return (
-            <Menu.Item key={i}><i><Icon type="star"></Icon> {l.name}</i></Menu.Item>
-        );
-    });
     return (
         <Menu mode="inline" selectable={true} 
             mode="inline" 

@@ -8,74 +8,116 @@
     "height": 256,
     "maximumScale": 10000000000,
     "minimumScale": 0,
-    "scales": [591659030.6768064, 295829515.3384032, 147914757.6692016, 73957378.8346008, 36978689.4173004, 18489344.7086502, 9244672.3543251, 4622336.17716255, 2311168.088581275, 1155584.0442906376, 577792.0221453188, 288896.0110726594, 144448.0055363297, 72224.00276816485, 36112.001384082425, 18056.000692041212, 9028.000346020606, 4514.000173010303, 2257.0000865051516, 1128.5000432525758],
-    "groups": [{
-        "type": "layer-group",
-        "name": "Dynamic Layers",
-        "visible": true,
-        "layers": [{
-            "type": "feature-layer",
-            "name": "USStates",
-            "source": {
-                "type": "shapefile-feature-source",
-                "name": "USStates",
-                "projection": {
-                    "from": {
-                        "unit": "unknown"
+    "scales": [
+        591659030.6768064,
+        295829515.3384032,
+        147914757.6692016,
+        73957378.8346008,
+        36978689.4173004,
+        18489344.7086502,
+        9244672.3543251,
+        4622336.17716255,
+        2311168.088581275,
+        1155584.0442906376,
+        577792.0221453188,
+        288896.0110726594,
+        144448.0055363297,
+        72224.00276816485,
+        36112.001384082425,
+        18056.000692041212,
+        9028.000346020606,
+        4514.000173010303,
+        2257.0000865051516,
+        1128.5000432525758
+    ],
+    "groups": [
+        {
+            "type": "layer-group",
+            "name": "Default",
+            "visible": true,
+            "layers": [
+                {
+                    "type": "feature-layer",
+                    "id": "layer-vyrwgp22",
+                    "name": "USStates",
+                    "source": {
+                        "type": "shapefile-feature-source",
+                        "name": "USStates",
+                        "projection": {
+                            "from": {
+                                "unit": "unknown"
+                            },
+                            "to": {
+                                "unit": "unknown"
+                            }
+                        },
+                        "flag": "rs",
+                        "filePath": "./tests/data/layers/USStates.shp"
                     },
-                    "to": {
-                        "unit": "unknown"
-                    }
-                },
-                "flag": "rs",
-                "filePath": "./tests/data/layers/USStates.shp"
-            },
-            "styles": [{
-                "visible": true,
-                "type": "fill-style",
-                "name": "Fill Style",
-                "maximumScale": 10000000000,
-                "minimumScale": 0,
-                "lineWidth": 1,
-                "fillStyle": "yellow",
-                "strokeStyle": "blue"
-            }],
-            "minimumScale": 0,
-            "maximumScale": 10000000000
-        }]
-    }, {
-        "type": "layer-group",
-        "name": "Base Overaly",
-        "visible": true,
-        "layers": [{
-            "type": "feature-layer",
-            "name": "USStates",
-            "source": {
-                "type": "shapefile-feature-source",
-                "name": "USStates",
-                "projection": {
-                    "from": {
-                        "unit": "unknown"
-                    },
-                    "to": {
-                        "unit": "unknown"
-                    }
-                },
-                "flag": "rs",
-                "filePath": "./tests/data/layers/USStates.shp"
-            },
-            "styles": [{
-                "visible": true,
-                "type": "fill-style",
-                "name": "Fill Style",
-                "maximumScale": 10000000000,
-                "minimumScale": 0,
-                "lineWidth": 1,
-                "fillStyle": "yellow",
-                "strokeStyle": "blue"
-            }],
-            "minimumScale": 0,
-            "maximumScale": 10000000000
-        }]
-    }]
+                    "styles": [
+                        {
+                            "visible": true,
+                            "id": "style-k9dnjzab",
+                            "type": "fill-style",
+                            "name": "Fill Style",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "lineWidth": 1,
+                            "fillStyle": "yellow",
+                            "strokeStyle": "blue"
+                        },
+                        {
+                            "visible": true,
+                            "id": "style-k9dnjzac",
+                            "type": "fill-style",
+                            "name": "Fill Style",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "lineWidth": 1,
+                            "fillStyle": "yellow",
+                            "strokeStyle": "blue"
+                        },
+                        {
+                            "visible": true,
+                            "id": "style-d953rwqn",
+                            "type": "line-style",
+                            "name": "Line Style",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "strokeStyle": "#00ff00",
+                            "lineWidth": 6
+                        },
+                        {
+                            "visible": true,
+                            "id": "style-ddx3xnaz",
+                            "type": "point-style",
+                            "name": "Point Style",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "rect",
+                            "fillStyle": "green",
+                            "strokeStyle": "yellow",
+                            "lineWidth": 6,
+                            "radius": 20
+                        },
+                        {
+                            "visible": true,
+                            "id": "style-ddx3xnvg",
+                            "type": "point-style",
+                            "name": "Point Style",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "circle",
+                            "fillStyle": "red",
+                            "strokeStyle": "black",
+                            "lineWidth": 2,
+                            "radius": 20
+                        }
+                    ],
+                    "minimumScale": 0,
+                    "maximumScale": 10000000000
+                }
+            ]
+        }
+    ]
 }
