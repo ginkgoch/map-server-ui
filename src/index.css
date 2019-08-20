@@ -1,0 +1,24 @@
+@import '~antd/dist/antd.css';
+
+html, body, #container, .ant-layout {
+    height: 100%;
+    margin: 0px;
+}
+
+#header {
+    background-color: white;
+    box-shadow: 0 2px 8px #f0f1f2;
+}
+
+.ant-drawer-body {
+    padding: 4px;
+}
+
+/* #container {
+    display: grid;
+    grid-template-rows: 64px auto;
+}
+
+.ant-layout-content {
+    display: grid;
+} */
