@@ -4,6 +4,7 @@ import { Button, Layout, Drawer } from "antd";
 import Logo from "./components/Logo";
 import "./index.css";
 import ResourceMenu from './components/ResourceMenu';
+import StylePreview from "./components/StylePreview";
 
 const { Header, Content } = Layout;
 
