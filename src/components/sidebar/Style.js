@@ -31,15 +31,11 @@ export class Style extends React.Component {
             </Button>
         ));
 
-        return this._renderGeneral(style, btns);
-    }
-
-    _renderGeneral(style, btns) {
         return (
             <div>
                 <StylePreview style={ style }></StylePreview>
                 <span className="style-label">{style.name}</span>
-                <div style={{float: "right"}}>
+                <div style={{float: "right", display: "block"}}>
                     {btns}
                 </div>
             </div>

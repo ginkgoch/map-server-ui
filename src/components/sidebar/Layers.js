@@ -22,15 +22,43 @@ export class Layers extends React.Component {
                 {this.state.layers.map(layer => (
                     <SubMenu key={layer.id} title={<i><LayerPreview layer={layer}></LayerPreview> {layer.name}</i>}>
                     {
-                        layer.styles.map(s => (
-                            <Menu.Item key={s.id}>
-                                <Style style={s}></Style>
-                            </Menu.Item>
-                        ))
+                        layer.styles.map(s => { 
+                            switch(s.type) {
+                                case 'class-break-style':
+                                    return this.renderClassBreakStyle(s);
+                                default:
+                                    return this.renderGeneralStyle(s); 
+                            }
+                        })
                     }
                     </SubMenu>
                 ))}
             </Menu>
         );
     }
+
+    renderGeneralStyle(s) {
+        return (
+            <Menu.Item key={s.id}>
+                <Style style={s}></Style>
+            </Menu.Item>
+        );
+    }
+
+    renderClassBreakStyle(s) {
+        return (
+            <SubMenu key={s.id} title={ <Style style={s}></Style> }>
+                {
+                    s.classBreaks.map(cb => {
+                        return (
+                            <Menu.Item key={cb.style.id} style={{height: "30px", lineHeight: "30px"}}>
+                                <Style style={cb.style}></Style>
+                            </Menu.Item>
+                        );
+                    })
+                }
+            </SubMenu>
+        );
+    }
 };
+
