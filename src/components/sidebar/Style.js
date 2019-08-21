@@ -2,8 +2,6 @@ import React from 'react';
 import {Icon, Button, Menu} from 'antd';
 import StylePreview from '../shared/StylePreview';
 
-const {SubMenu} = Menu;
-
 export class Style extends React.Component {
     constructor(props) {
         super(props);

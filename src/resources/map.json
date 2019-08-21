@@ -112,6 +112,7 @@
                 },
                 {
                     "visible": true,
+                    "id": "style-dddenvg",
                     "type": "class-break-style",
                     "name": "Class Break Style",
                     "maximumScale": 10000000000,
@@ -122,6 +123,7 @@
                         "maximum": 25,
                         "style": {
                             "visible": true,
+                            "id": "style-dddse4nvg",
                             "type": "point-style",
                             "name": "0 ~ 25",
                             "maximumScale": 10000000000,
@@ -137,6 +139,7 @@
                         "maximum": 50,
                         "style": {
                             "visible": true,
+                            "id": "style-1111111",
                             "type": "point-style",
                             "name": "25 ~ 50",
                             "maximumScale": 10000000000,
@@ -152,6 +155,7 @@
                         "maximum": 75,
                         "style": {
                             "visible": true,
+                            "id": "style-2222222",
                             "type": "point-style",
                             "name": "50 ~ 75",
                             "maximumScale": 10000000000,
@@ -167,6 +171,7 @@
                         "maximum": 10000000000,
                         "style": {
                             "visible": true,
+                            "id": "style-33333333",
                             "type": "point-style",
                             "name": "75 ~ 10000000000",
                             "maximumScale": 10000000000,
