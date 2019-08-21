@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Button} from 'antd';
+import {Icon, Button, Menu} from 'antd';
 import StylePreview from './StylePreview';
 
 export default class StyleItem extends React.Component {
