@@ -2,7 +2,7 @@ import React from 'react';
 import {Icon, Button} from 'antd';
 import StylePreview from '../shared/StylePreview';
 
-export class StyleItem extends React.Component {
+export class Style extends React.Component {
     constructor(props) {
         super(props);
 

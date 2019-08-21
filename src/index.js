@@ -1,9 +1,11 @@
+import _ from 'lodash';
 import React from "react";
 import ReactDOM from "react-dom";
 import { Button, Layout, Drawer } from "antd";
 import Logo from "./components/Logo";
+import {Layers} from './components/sidebar';
+import * as mapJSON from './resources/map.json';
 import "./index.css";
-import {ResourceMenu} from './components/sidebar';
 
 const { Header, Content } = Layout;
 
@@ -24,7 +26,7 @@ let HelloComponent = () => {
             getContainer={() => document.querySelector('#content')}
             style={{ position: "absolute" }}
           >
-            <ResourceMenu></ResourceMenu>
+            <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)}></Layers>
           </Drawer>
         </div>
       </Content>
