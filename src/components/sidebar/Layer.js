@@ -1,6 +1,6 @@
 import React from "react";
 import { Collapse, Button, Icon } from "antd";
-import { Style, EditButtons } from '.';
+import { Style, EditButtons, ClassBreaks } from '.';
 import { LayerPreview } from "../shared/LayerPreview";
 
 const {Panel} = Collapse;
@@ -22,7 +22,9 @@ export class Layer extends React.Component {
                     {
                         layer.styles.map(s => (
                             <li key={s.id}>
-                                <Style key={s.id} style={s}></Style>
+                            {
+                                this._renderStyle(s)
+                            }
                             </li>
                         ))
                     }
@@ -30,6 +32,20 @@ export class Layer extends React.Component {
             </Panel>
         </Collapse>
         )
+    }
+
+    _renderStyle(s) {
+        if (s.type === 'class-break-style') {
+            return (
+            <div>
+                <Style style={s}></Style>
+                <ClassBreaks classBreaks={s.classBreaks}></ClassBreaks>
+            </div>
+            );
+        }
+        else return (
+            <Style style={s}></Style>
+        );
     }
 }
 

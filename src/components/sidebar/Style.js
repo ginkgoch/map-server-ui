@@ -15,10 +15,21 @@ export class Style extends React.Component {
             <div>
                 <StylePreview style={ style }></StylePreview>
                 <span className="style-label">{style.name}</span>
+                
+                {
+                    this._renderEditButton()
+                }
+            </div>
+        );
+    }
+
+    _renderEditButton() {
+        if (!this.props.hideEditButtons) {
+            return (
                 <div style={{float: "right"}}>
                     <EditButtons></EditButtons>
                 </div>
-            </div>
-        );
+            )
+        }
     }
 }
