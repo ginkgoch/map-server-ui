@@ -4,12 +4,8 @@ export class Render {
     static renderLayer(layer, canvas) {
         const styleCount = layer.styles.length;
         switch(styleCount) {
-            case 0: {
-                    const ctx = canvas.getContext('2d');
-                    ctx.antialias = 'none';
-                    ctx.strokeStyle = '#e0e0e0';
-                    ctx.strokeRect(padding, padding, canvas.width - padding * 2, canvas.height - padding * 2);
-                }
+            case 0: 
+                this.renderStyle(undefined, canvas);
                 break;
             default:
                 const count = styleCount > 4 ? 4 : styleCount;
@@ -43,7 +39,14 @@ export class Render {
             case 'point-style':
                 this._renderPointStyle(ctx, w, h, style, x, y);
                 break;
+            default:
+                _.assign(ctx, { strokeStyle: '#e0e0e0', lineWidth: 1 });
+                this._renderEmpty(ctx, w, h, x, y);
         }
+    }
+
+    static _renderEmpty(ctx, width, height, x = undefined, y = undefined) {
+        this._renderLineStyle(ctx, width, height, x, y);
     }
 
     static _renderFillStyle(ctx, width, height, x = undefined, y = undefined) {
