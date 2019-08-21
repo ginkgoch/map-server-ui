@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleRender } from '../utils/StyleRender';
+import { StyleRender } from '../../utils/StyleRender';
 
 export default class StylePreview extends React.Component {
     constructor(props) {

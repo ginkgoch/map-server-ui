@@ -1,10 +1,10 @@
-import React from 'react';
 import _ from 'lodash';
-import * as mapJSON from '../resources/map.json';
+import React from 'react';
 import {Menu} from 'antd';
-import LayerItem from './LayerItem.js';
+import * as mapJSON from '../../resources/map.json';
+import {LayerItem} from '.';
 
-export default () => {
+export const ResourceMenu = () => {
     let layers = _.flatMap(mapJSON.groups.map(g => g.layers)).map(l => {
         return (
             LayerItem(l, l.id)

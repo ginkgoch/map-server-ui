@@ -1,8 +1,8 @@
 import React from 'react';
-import {Icon, Button, Menu} from 'antd';
-import StylePreview from './StylePreview';
+import {Icon, Button} from 'antd';
+import StylePreview from '../shared/StylePreview';
 
-export default class StyleItem extends React.Component {
+export class StyleItem extends React.Component {
     constructor(props) {
         super(props);
 

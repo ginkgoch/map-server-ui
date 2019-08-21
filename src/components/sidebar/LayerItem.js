@@ -1,9 +1,9 @@
 import React from "react";
 import { Menu, Icon } from "antd";
-import StyleItem from './StyleItem';
+import {StyleItem} from '.';
 
 const {SubMenu} = Menu;
-export default (layer, key) => {
+export let LayerItem = (layer, key) => {
     return (
         <SubMenu key={key} title={<i><Icon type="star"></Icon> {layer.name}</i>}>
             {
