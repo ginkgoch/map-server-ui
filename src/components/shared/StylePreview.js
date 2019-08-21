@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleRender } from '../../utils/StyleRender';
+import { Render } from './Render';
 
 export default class StylePreview extends React.Component {
     constructor(props) {
@@ -13,10 +13,10 @@ export default class StylePreview extends React.Component {
     }
 
     componentDidMount() {
-        StyleRender.render(this.state.style, this.canvas);
+        Render.renderStyle(this.state.style, this.canvas);
     }
 
     componentDidUpdate() {
-        StyleRender.render(this.state.style, this.canvas);
+        Render.renderStyle(this.state.style, this.canvas);
     }
 }
