@@ -3,8 +3,7 @@ import ReactDOM from "react-dom";
 import { Button, Layout, Drawer } from "antd";
 import Logo from "./components/Logo";
 import "./index.css";
-import ResourceMenu from './components/ResourceMenu';
-import StylePreview from "./components/StylePreview";
+import {ResourceMenu} from './components/sidebar';
 
 const { Header, Content } = Layout;
 
