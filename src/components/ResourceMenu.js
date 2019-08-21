@@ -7,7 +7,10 @@ const {SubMenu} = Menu;
 
 export default () => {
     let styles = layer => {
-        return layer.styles.map(s => <Menu.Item key={s.id}><StyleItem style={s}></StyleItem></Menu.Item>);
+        return layer.styles.map(s => (
+            <Menu.Item key={s.id}>
+                <StyleItem key={s.id} style={s}></StyleItem>
+            </Menu.Item>));
     };
 
     let layers = _.flatMap(mapJSON.groups.map(g => g.layers)).map(l => {
