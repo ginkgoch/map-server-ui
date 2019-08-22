@@ -4,6 +4,8 @@ const padding = 2;
 
 export class Render {
     static renderLayer(layer, canvas) {
+        this._clearCanvas(canvas);
+
         const styleCount = layer.styles.length;
         switch(styleCount) {
             case 0: 
@@ -17,6 +19,8 @@ export class Render {
     }
 
     static renderStyles(styles, canvas) {
+        this._clearCanvas(canvas);        
+
         const count = styles.length > 4 ? 4 : styles.length;
         for (let i = 0; i < count; i++) {
             const [x, y] = this._centerBy(i, canvas.width, canvas.height);
@@ -146,5 +150,10 @@ export class Render {
 
     static _flatStylesInLayer(layer) {
         return this._flatStyles(layer.styles);
+    }
+
+    static _clearCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 }

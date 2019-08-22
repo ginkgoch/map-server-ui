@@ -32,7 +32,7 @@ export class EditButtons extends React.Component {
         return (
             <React.Fragment >
                 <div className="edit-buttons">
-                {btns}
+                    {btns}
                 </div>
             </React.Fragment>
         );
