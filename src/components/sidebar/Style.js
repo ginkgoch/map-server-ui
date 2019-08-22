@@ -12,9 +12,11 @@ export class Style extends React.Component {
     render() {
         const style = this.state.style;
         return (
-            <div>
-                <StylePreview style={ style }></StylePreview>
-                <span className="style-label">{style.name}</span>
+            <div className="sidebar-item">
+                <div>
+                    <StylePreview style={ style }></StylePreview>
+                    <span className="style-label">{style.name}</span>
+                </div>
                 
                 {
                     this._renderEditButton()
@@ -26,7 +28,7 @@ export class Style extends React.Component {
     _renderEditButton() {
         if (!this.props.hideEditButtons) {
             return (
-                <div style={{float: "right"}}>
+                <div>
                     <EditButtons></EditButtons>
                 </div>
             )

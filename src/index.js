@@ -27,11 +27,13 @@ let HelloComponent = () => {
             getContainer={() => document.querySelector('#content')}
             style={{ position: "absolute" }}
           >
-            {
+            {/* {
               _.flatMap(mapJSON.groups, g => g.layers).map(l => (
                 <Layer key={l.id} layer={l}></Layer>
               ))
-            }
+            } */}
+
+            <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)}></Layers>
           </Drawer>
         </div>
       </Content>

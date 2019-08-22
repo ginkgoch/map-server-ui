@@ -21,3 +21,8 @@ html, body, #container, .ant-layout {
 .ant-menu-inline {
     line-height: 34px;
 }
+
+.sidebar-item {
+    display: flex;
+    justify-content: space-between;
+}

@@ -173,7 +173,7 @@
                             "visible": true,
                             "id": "style-33333333",
                             "type": "point-style",
-                            "name": "75 ~ 10000000000",
+                            "name": "75 ~ ∞",
                             "maximumScale": 10000000000,
                             "minimumScale": 0,
                             "symbol": "default",

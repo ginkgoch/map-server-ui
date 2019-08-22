@@ -20,7 +20,7 @@ export class Layers extends React.Component {
                 inlineIndent="12"
                 style={{ borderRightWidth: 0 }}>
                 {this.state.layers.map(layer => (
-                    <SubMenu key={layer.id} title={<i><LayerPreview layer={layer}></LayerPreview> {layer.name}</i>}>
+                    <SubMenu key={layer.id} title={<span><LayerPreview layer={layer}></LayerPreview> {layer.name}</span>}>
                     {
                         layer.styles.map(s => { 
                             switch(s.type) {

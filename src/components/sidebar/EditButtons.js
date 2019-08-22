@@ -13,10 +13,16 @@ export class EditButtons extends React.Component {
 
         const btns = [{
             type: 'edit',
-            click: this.props.onEditButtonClick
+            click: (e) => {
+                e.stopPropagation();
+                this.props.onEditButtonClick && this.props.onEditButtonClick(e);
+            }
         }, {
             type: 'close',
-            click: this.props.onCloseButtonClick
+            click: (e) => {
+                e.stopPropagation();
+                this.props.onCloseButtonClick && this.props.onCloseButtonClick(e);
+            }
         }].map(btn => (
             <Button key={btn.type} shape="circle" size="small" style={btnStyle} onClick={btn.click}>
                 <Icon type={btn.type} size="small" style={iconStyle}></Icon>
