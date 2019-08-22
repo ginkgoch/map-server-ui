@@ -47,7 +47,8 @@ export class Render {
                 this._renderPointStyle(ctx, w, h, style, x, y);
                 break;
             case 'class-break-style':
-                this._renderClassBreakStyle(style, canvas);
+            case 'value-style':
+                this._renderComplexStyles(style, canvas);
                 break;
             default:
                 _.assign(ctx, { strokeStyle: '#e0e0e0', lineWidth: 1 });
@@ -105,7 +106,7 @@ export class Render {
         ctx.stroke();
     }
 
-    static _renderClassBreakStyle(style, canvas) {
+    static _renderComplexStyles(style, canvas) {
         const styles = this._flatStyle(style);
         this.renderStyles(styles, canvas);
     }
@@ -129,6 +130,9 @@ export class Render {
     static _flatStyle(style) {
         if (style.type === 'class-break-style') {
             return style.classBreaks.map(cb => cb.style);
+        }
+        else if (style.type === 'value-style') {
+            return style.items.map(cb => cb.style);
         }
         else {
             return [style];

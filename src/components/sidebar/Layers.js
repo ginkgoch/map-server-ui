@@ -26,6 +26,8 @@ export class Layers extends React.Component {
                             switch(s.type) {
                                 case 'class-break-style':
                                     return this.renderClassBreakStyle(s);
+                                case 'value-style':
+                                    return this.renderValueStyle(s);
                                 default:
                                     return this.renderGeneralStyle(s); 
                             }
@@ -50,6 +52,22 @@ export class Layers extends React.Component {
             <SubMenu key={s.id} title={ <Style style={s}></Style> }>
                 {
                     s.classBreaks.map(cb => {
+                        return (
+                            <Menu.Item key={cb.style.id} style={{height: "30px", lineHeight: "30px"}}>
+                                <Style style={cb.style}></Style>
+                            </Menu.Item>
+                        );
+                    })
+                }
+            </SubMenu>
+        );
+    }
+
+    renderValueStyle(s) {
+        return (
+            <SubMenu key={s.id} title={ <Style style={s}></Style> }>
+                {
+                    s.items.map(cb => {
                         return (
                             <Menu.Item key={cb.style.id} style={{height: "30px", lineHeight: "30px"}}>
                                 <Style style={cb.style}></Style>
