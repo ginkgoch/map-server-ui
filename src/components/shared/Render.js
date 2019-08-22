@@ -38,6 +38,7 @@ export class Render {
 
         switch (style.type) {
             case 'fill-style':
+            case 'general-style':
                 this._renderFillStyle(ctx, w, h, x, y);
                 break;
             case 'line-style':

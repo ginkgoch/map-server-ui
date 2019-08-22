@@ -29,7 +29,7 @@ export class Layers extends React.Component {
                                 case 'value-style':
                                     return this.renderValueStyle(s);
                                 default:
-                                    return this.renderGeneralStyle(s); 
+                                    return this.renderSimpleStyle(s); 
                             }
                         })
                     }
@@ -39,7 +39,7 @@ export class Layers extends React.Component {
         );
     }
 
-    renderGeneralStyle(s) {
+    renderSimpleStyle(s) {
         return (
             <Menu.Item key={s.id}>
                 <Style style={s}></Style>
