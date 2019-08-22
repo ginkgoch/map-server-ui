@@ -30,8 +30,10 @@ export class EditButtons extends React.Component {
         ));
 
         return (
-            <React.Fragment>
+            <React.Fragment >
+                <div className="edit-buttons">
                 {btns}
+                </div>
             </React.Fragment>
         );
     }
