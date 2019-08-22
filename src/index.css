@@ -21,3 +21,16 @@ html, body, #container, .ant-layout {
 .ant-menu-inline {
     line-height: 34px;
 }
+
+.sidebar-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar-item div div.edit-buttons {
+    display: none;
+}
+
+.sidebar-item:hover div div.edit-buttons {
+    display: block;
+}

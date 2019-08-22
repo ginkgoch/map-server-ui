@@ -1,27 +1,30 @@
+import _ from 'lodash';
+
 const padding = 2;
 
 export class Render {
     static renderLayer(layer, canvas) {
         const styleCount = layer.styles.length;
         switch(styleCount) {
-            case 0: {
-                    const ctx = canvas.getContext('2d');
-                    ctx.antialias = 'none';
-                    ctx.strokeStyle = '#e0e0e0';
-                    ctx.strokeRect(padding, padding, canvas.width - padding * 2, canvas.height - padding * 2);
-                }
+            case 0: 
+                this.renderStyle(undefined, canvas);
                 break;
             default:
-                const count = styleCount > 4 ? 4 : styleCount;
-                for (let i = 0; i < count; i++) {
-                    const [x, y] = this._centerBy(i, canvas.width, canvas.height);
-                    const s = _.cloneDeep(layer.styles[i]);
-                    if (s.lineWidth !== undefined) {
-                        s.lineWidth = 1;
-                    }
-                    this.renderStyle(s, canvas, x, y, canvas.width / 2, canvas.height / 2);
-                }
+                const styles = this._flatStylesInLayer(layer);
+                this.renderStyles(styles, canvas);
                 break;
+        }
+    }
+
+    static renderStyles(styles, canvas) {
+        const count = styles.length > 4 ? 4 : styles.length;
+        for (let i = 0; i < count; i++) {
+            const [x, y] = this._centerBy(i, canvas.width, canvas.height);
+            const s = _.cloneDeep(styles[i]);
+            if (s.lineWidth !== undefined) {
+                s.lineWidth = 1;
+            }
+            this.renderStyle(s, canvas, x, y, canvas.width / 2, canvas.height / 2);
         }
     }
 
@@ -43,7 +46,17 @@ export class Render {
             case 'point-style':
                 this._renderPointStyle(ctx, w, h, style, x, y);
                 break;
+            case 'class-break-style':
+                this._renderClassBreakStyle(style, canvas);
+                break;
+            default:
+                _.assign(ctx, { strokeStyle: '#e0e0e0', lineWidth: 1 });
+                this._renderEmpty(ctx, w, h, x, y);
         }
+    }
+
+    static _renderEmpty(ctx, width, height, x = undefined, y = undefined) {
+        this._renderLineStyle(ctx, width, height, x, y);
     }
 
     static _renderFillStyle(ctx, width, height, x = undefined, y = undefined) {
@@ -92,6 +105,11 @@ export class Render {
         ctx.stroke();
     }
 
+    static _renderClassBreakStyle(style, canvas) {
+        const styles = this._flatStyle(style);
+        this.renderStyles(styles, canvas);
+    }
+
     static _centerBy(i, width, height) {
         const bw = width / 2 + padding;
         const bh = height / 2 + padding;
@@ -106,5 +124,22 @@ export class Render {
             default:
                 return [width / 2 - padding + bw / 2, height / 2 - padding + bh / 2];
         }
+    }
+
+    static _flatStyle(style) {
+        if (style.type === 'class-break-style') {
+            return style.classBreaks.map(cb => cb.style);
+        }
+        else {
+            return [style];
+        }
+    }
+
+    static _flatStyles(styles) {
+        return _.flatMap(styles, style => this._flatStyle(style));
+    }
+
+    static _flatStylesInLayer(layer) {
+        return this._flatStyles(layer.styles);
     }
 }

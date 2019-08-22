@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Button, Layout, Drawer } from "antd";
 import Logo from "./components/Logo";
-import {Layers} from './components/sidebar';
+import {Layers, Layer} from './components/sidebar';
 import * as mapJSON from './resources/map.json';
 import "./index.css";
 
@@ -20,12 +20,19 @@ let HelloComponent = () => {
           <Drawer
             placement="left"
             title="Resources"
+            width="360px"
             visible={true}
             mask={false}
             closable={false}
             getContainer={() => document.querySelector('#content')}
             style={{ position: "absolute" }}
           >
+            {/* {
+              _.flatMap(mapJSON.groups, g => g.layers).map(l => (
+                <Layer key={l.id} layer={l}></Layer>
+              ))
+            } */}
+
             <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)}></Layers>
           </Drawer>
         </div>
