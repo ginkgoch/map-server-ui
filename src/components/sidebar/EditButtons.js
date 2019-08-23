@@ -11,22 +11,26 @@ export class EditButtons extends React.Component {
       marginLeft: 4
     };
 
-    const btns = [
-      {
+    let btns = [];
+    if (!this.props.hideEditButton) {
+      btns.push({
         type: "edit",
         click: e => {
           e.stopPropagation();
           this.props.onEditButtonClick && this.props.onEditButtonClick(e);
         }
-      },
-      {
-        type: "close",
-        click: e => {
-          e.stopPropagation();
-          this.props.onCloseButtonClick && this.props.onCloseButtonClick(e);
-        }
+      });
+    }
+
+    btns.push({
+      type: "close",
+      click: e => {
+        e.stopPropagation();
+        this.props.onCloseButtonClick && this.props.onCloseButtonClick(e);
       }
-    ].map(btn => (
+    });
+
+    btns = btns.map(btn => (
       <Button
         key={btn.type}
         shape="circle"

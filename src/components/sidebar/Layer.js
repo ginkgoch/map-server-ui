@@ -1,10 +1,8 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { Menu } from "antd";
-import { Style } from ".";
-import { LayerPreview } from "../shared/LayerPreview";
-import { EditButtons } from ".";
-import { ModalUtils } from "../shared";
+import { LayerPreview, ModalUtils } from "../shared";
+import { EditButtons, Style } from ".";
 
 const { SubMenu } = Menu;
 
@@ -16,8 +14,9 @@ export class Layer extends Component {
 
   render() {
     const layer = this.state.layer;
+    const passThroughProps = _.omit(this.props, 'onCloseButtonClick');
     return (
-      <SubMenu key={layer.id} title={this.layerTitle(layer)} {...this.props}>
+      <SubMenu key={layer.id} title={this.layerTitle(layer)} {...passThroughProps}>
         {layer.styles.map(s => (
           <Style
             key={s.id}
@@ -46,7 +45,7 @@ export class Layer extends Component {
           <LayerPreview layer={l} /> {l.name}
         </span>
         <div>
-          <EditButtons onCloseButtonClick={this.props.onCloseButtonClick} />
+          <EditButtons hideEditButton={true} onCloseButtonClick={this.props.onCloseButtonClick} />
         </div>
       </div>
     );
