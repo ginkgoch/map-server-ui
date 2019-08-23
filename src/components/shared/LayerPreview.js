@@ -20,10 +20,10 @@ export class LayerPreview extends React.Component {
   }
 
   componentDidMount() {
-    Render.renderLayer(this.state.layer, this.canvas);
+    Render.renderLayer(this.props.layer, this.canvas);
   }
 
   componentDidUpdate() {
-    Render.renderLayer(this.state.layer, this.canvas);
+    Render.renderLayer(this.props.layer, this.canvas);
   }
 }

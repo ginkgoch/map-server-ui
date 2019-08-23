@@ -17,7 +17,7 @@ export class Style extends React.Component {
   }
 
   _renderStyle() {
-    const style = this.state.style;
+    const style = this.props.style;
 
     switch (style.type) {
       case "class-break-style":

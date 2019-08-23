@@ -42,7 +42,7 @@ export class Layer extends Component {
   editStyle(id, layer) {
     return () => {
       const style = layer.styles.find(s => s.id === id);
-      this.props.onEditButtonClick && this.props.onEditButtonClick(style.name);
+      this.props.onEditButtonClick && this.props.onEditButtonClick(style, layer);
     }
   }
 
