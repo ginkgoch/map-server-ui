@@ -37,7 +37,7 @@ export class Style extends React.Component {
           <span className="style-label">{style.name}</span>
         </div>
         <div>
-          <EditButtons onCloseButtonClick={onCloseButtonClick} />
+          <EditButtons onCloseButtonClick={onCloseButtonClick} onEditButtonClick={this.props.onEditButtonClick} />
         </div>
       </div>
     );
@@ -115,7 +115,7 @@ export class Style extends React.Component {
   }
 
   _passThroughProps() {
-    return _.omit(this.props, ["layer", "style", "onCloseButtonClick"]);
+    return _.omit(this.props, ["layer", "style", "onCloseButtonClick", "onEditButtonClick"]);
   }
 
   _confirm(typeName, okHandler) {

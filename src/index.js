@@ -1,44 +1,68 @@
 import _ from 'lodash';
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button, Layout, Drawer } from "antd";
+import { Layout, Drawer } from "antd";
 import Logo from "./components/Logo";
-import {Layers, Layer} from './components/sidebar';
+import {Layers} from './components/sidebar';
 import * as mapJSON from './resources/map.json';
 import "./index.css";
 
 const { Header, Content } = Layout;
 
-let HelloComponent = () => {
-  return (
-    <Layout>
-      <Header id="header">
-        <Logo />
-      </Header>
-      <Content>
-        <div id="content" style={{position: "relative", height: "100%"}}>
-          <Drawer
-            placement="left"
-            title="Resources"
-            width="360px"
-            visible={true}
-            mask={false}
-            closable={false}
-            getContainer={() => document.querySelector('#content')}
-            style={{ position: "absolute" }}
-          >
-            {/* {
-              _.flatMap(mapJSON.groups, g => g.layers).map(l => (
-                <Layer key={l.id} layer={l}></Layer>
-              ))
-            } */}
+// let HelloComponent = () => {
+class AppComponent extends React.Component {
+  constructor(props) {
+    super(props);
 
-            <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)}></Layers>
-          </Drawer>
-        </div>
-      </Content>
-    </Layout>
-  );
-};
+    this.state = { styleEditPanelVisible: false, editingStyleName: '' };
+  } 
 
-ReactDOM.render(<HelloComponent />, document.querySelector("#container"));
+  render() {
+    return (
+      <Layout>
+        <Header id="header">
+          <Logo />
+        </Header>
+        <Content>
+          <div id="content" style={{position: "relative", height: "100%"}}>
+            <Drawer
+              placement="left"
+              title="Resources"
+              width="280px"
+              visible={true}
+              mask={false}
+              closable={false}
+              getContainer={() => document.querySelector('#content')}
+              style={{ position: "absolute" }}
+            >
+              <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)} onEditButtonClick={ this.editStyle() }></Layers>
+              <Drawer
+                title={"Edit Style " + this.state.editingStyleName}
+                width="360px"
+                placement="left"
+                visible={this.state.styleEditPanelVisible}
+                closable={true}
+                getContainer={() => document.querySelector('#content')}
+                style={{ position: "absolute" }} onClose={this.showStyleEditPanel.bind(this, false)}></Drawer>
+            </Drawer>
+          </div>
+        </Content>
+      </Layout>
+    );
+  }
+
+  editStyle() {
+    return styleName => {
+      this.state.editingStyleName = styleName;
+      this.setState(this.state);
+      this.showStyleEditPanel(true);
+    }
+  }
+
+  showStyleEditPanel(visible = false) {
+    this.state.styleEditPanelVisible = visible;
+    this.setState(this.state);
+  }
+}
+
+ReactDOM.render(<AppComponent />, document.querySelector("#container"));

@@ -25,6 +25,7 @@ export class Layers extends React.Component {
             key={layer.id}
             layer={layer}
             onCloseButtonClick={this.removeLayer(layer.id, this.state.layers)}
+            onEditButtonClick={this.props.onEditButtonClick}
           />
         ))}
       </Menu>
