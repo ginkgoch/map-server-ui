@@ -23,10 +23,10 @@ export class StylePreview extends React.Component {
   }
 
   componentDidMount() {
-    Render.renderStyle(this.state.style, this.canvas);
+    Render.renderStyle(this.props.style, this.canvas);
   }
 
   componentDidUpdate() {
-    Render.renderStyle(this.state.style, this.canvas);
+    Render.renderStyle(this.props.style, this.canvas);
   }
 }

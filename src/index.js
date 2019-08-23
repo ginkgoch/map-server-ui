@@ -15,7 +15,11 @@ class AppComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { styleEditPanelVisible: false, editingStyleName: '', editStyleComponent: <NoneStyle /> };
+    this.state = { 
+      styleEditPanelVisible: false, 
+      editingStyleName: '', 
+      layers: _.flatMap(mapJSON.groups, g => g.layers),
+      editStyleComponent: <NoneStyle /> };
   }
 
   render() {
@@ -36,7 +40,7 @@ class AppComponent extends React.Component {
               getContainer={() => document.querySelector('#content')}
               style={{ position: "absolute" }}
             >
-              <Layers layers={_.flatMap(mapJSON.groups, g => g.layers)} onEditButtonClick={this.editStyle()}></Layers>
+              <Layers layers={this.state.layers} onEditButtonClick={this.editStyle()}></Layers>
               <Drawer
                 title={"Edit Style " + this.state.editingStyleName}
                 width="360px"
@@ -76,14 +80,18 @@ class AppComponent extends React.Component {
     style = _.cloneDeep(style);
 
     const onEditStyleCanceled = this.showStyleEditPanel.bind(this, false);
-    const onEditStyleSubmit = style => {
-      showStyleEditPanel(false);
-    };
+    const onEditStyleSubmit = (newStyle => {
+      const index = layer.styles.findIndex(s => s.id === newStyle.id);
+      layer.styles[index] = newStyle;
+
+      this.setState(this.state);
+      this.showStyleEditPanel(false);
+    }).bind(this);
 
     switch (style.type) {
       case 'fill-style':
         return (
-          <FillStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+          <FillStyle style={style} layer={layer} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
         );
     }
   }

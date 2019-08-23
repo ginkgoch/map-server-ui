@@ -23,7 +23,7 @@ export class FillStyle extends Component {
         return (  
             <Form layout="horizontal" {...colStyle}>
                 <Form.Item label="Name">
-                    <Input placeholder="Name" value={this.state.style.name}></Input>
+                    <Input placeholder="Name" value={this.state.style.name} onChange={this.onNameChange.bind(this)}></Input>
                 </Form.Item>
                 <Form.Item label="Fill">
                     <ColorPicker color={hexColor(this.state.style.fillStyle)} className="color-picker" onChange={this.onFillStyleChange.bind(this)}></ColorPicker>
@@ -39,7 +39,7 @@ export class FillStyle extends Component {
                 </Form.Item>
                 <Form.Item wrapperCol={{span: 12, offset:8}}>
                     <Button style={{marginRight: 8}} onClick={this.props.onEditStyleCanceled}>Cancel</Button>
-                    <Button type="primary" htmlType="submit" onClick={ () => this.props.onEditStyleSubmit(this.state.style) }>Submit</Button>
+                    <Button type="primary" onClick={ () => this.props.onEditStyleSubmit(this.state.style) }>Submit</Button>
                 </Form.Item>
             </Form>
         );
@@ -58,5 +58,11 @@ export class FillStyle extends Component {
     onLineWidthChange(lineWidth) {
         this.state.style.lineWidth = lineWidth;
         this.setState(this.state.style);
+    }
+
+    onNameChange(e) {
+        const name = e.target.value;
+        this.state.style.name = name;
+        this.setState(this.state);
     }
 }
