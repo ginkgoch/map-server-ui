@@ -6,6 +6,7 @@ import Logo from "./components/Logo";
 import {Layers} from './components/sidebar';
 import * as mapJSON from './resources/map.json';
 import "./index.css";
+import { FillStyle } from './components/styles';
 
 const { Header, Content } = Layout;
 
@@ -43,7 +44,11 @@ class AppComponent extends React.Component {
                 visible={this.state.styleEditPanelVisible}
                 closable={true}
                 getContainer={() => document.querySelector('#content')}
-                style={{ position: "absolute" }} onClose={this.showStyleEditPanel.bind(this, false)}></Drawer>
+                style={{ position: "absolute" }} onClose={this.showStyleEditPanel.bind(this, false)}>
+                  <div style={{paddingTop: 24}}>
+                    <FillStyle></FillStyle>
+                  </div>
+                </Drawer>
             </Drawer>
           </div>
         </Content>
