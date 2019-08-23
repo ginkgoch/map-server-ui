@@ -14,7 +14,7 @@ export class Layer extends Component {
 
   render() {
     const layer = this.state.layer;
-    const passThroughProps = _.omit(this.props, 'onCloseButtonClick');
+    const passThroughProps = _.omit(this.props, ['onCloseButtonClick', 'onEditButtonClick']);
     return (
       <SubMenu key={layer.id} title={this.layerTitle(layer)} {...passThroughProps}>
         {layer.styles.map(s => (
@@ -23,6 +23,7 @@ export class Layer extends Component {
             style={s}
             layer={layer}
             onCloseButtonClick={this.removeStyle(s.id, layer)}
+            onEditButtonClick={this.editStyle(s.id, layer)}
           />
         ))}
       </SubMenu>
@@ -36,6 +37,13 @@ export class Layer extends Component {
         this.setState({ layer });
       });
     };
+  }
+
+  editStyle(id, layer) {
+    return () => {
+      const style = layer.styles.find(s => s.id === id);
+      this.props.onEditButtonClick && this.props.onEditButtonClick(style.name);
+    }
   }
 
   layerTitle(l) {
