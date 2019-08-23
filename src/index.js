@@ -6,11 +6,10 @@ import Logo from "./components/Logo";
 import { Layers } from './components/sidebar';
 import * as mapJSON from './resources/map.json';
 import "./index.css";
-import { FillStyle, NoneStyle } from './components/styles';
+import { FillStyle, NoneStyle, LineStyle } from './components/styles';
 
 const { Header, Content } = Layout;
 
-// let HelloComponent = () => {
 class AppComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -64,7 +63,7 @@ class AppComponent extends React.Component {
 
   editStyle() {
     return (style, layer) => {
-      this.state.editingStyleName = style.name;
+      this.state.editingStyleName = this.getStyleTypeName(style);
       this.state.editStyleComponent = this.getStyleComponent(style, layer);
       this.setState(this.state);
       this.showStyleEditPanel(true);
@@ -90,9 +89,22 @@ class AppComponent extends React.Component {
 
     switch (style.type) {
       case 'fill-style':
-        return (
-          <FillStyle style={style} layer={layer} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
-        );
+        return <FillStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+      case 'line-style':
+        return <LineStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+    }
+  }
+
+  getStyleTypeName(style) {
+    switch(style.type) {
+      case 'fill-style': return 'Fill Style';
+      case 'line-style': return 'Line Style';
+      case 'point-style': return 'Point Style';
+      case 'icon-style': return 'Icon Style';
+      case 'class-break-style': return 'Class Break Style';
+      case 'value-style': return 'Value Style';
+      default:
+        return style.type;
     }
   }
 }
