@@ -9,10 +9,13 @@ export class StylePreview extends React.Component {
   }
 
   render() {
+    const width = this.props.width || 20;
+    const height = this.props.height || 20;
+
     return (
       <canvas
-        width="20"
-        height="20"
+        width={width}
+        height={height}
         ref={canvas => (this.canvas = canvas)}
         style={{ verticalAlign: "middle" }}
       />

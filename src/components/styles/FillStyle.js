@@ -1,11 +1,14 @@
 import 'rc-color-picker/assets/index.css';
 import React, { Component } from 'react';
-import { Form, Input, Button } from "antd";
 import ColorPicker from "rc-color-picker";
+import { Form, Input, Button, InputNumber } from "antd";
+import { StylePreview } from '../shared';
+import { hexColor } from './KnownColors';
 
 export class FillStyle extends Component {
     constructor(props) {
         super(props);
+
         this.state = { style: props.style }
     }
     render() { 
@@ -20,22 +23,40 @@ export class FillStyle extends Component {
         return (  
             <Form layout="horizontal" {...colStyle}>
                 <Form.Item label="Name">
-                    <Input placeholder="Name"></Input>
+                    <Input placeholder="Name" value={this.state.style.name}></Input>
                 </Form.Item>
                 <Form.Item label="Fill">
-                    <ColorPicker color={'#36c'} style={{Width: "100%"}}></ColorPicker>
+                    <ColorPicker color={hexColor(this.state.style.fillStyle)} className="color-picker" onChange={this.onFillStyleChange.bind(this)}></ColorPicker>
                 </Form.Item>
                 <Form.Item label="Stroke">
-                    <Input placeholder="Stroke"></Input>
+                    <ColorPicker color={hexColor(this.state.style.strokeStyle)} className="color-picker" onChange={this.onStrokeStyleChange.bind(this)}></ColorPicker>
                 </Form.Item>
                 <Form.Item label="Stroke Width">
-                    <Input placeholder="Stroke Width"></Input>
+                    <InputNumber min={0} value={this.state.style.lineWidth} onChange={this.onLineWidthChange.bind(this)}></InputNumber>
                 </Form.Item>
                 <Form.Item wrapperCol={{span: 12, offset:8}}>
-                    <Button style={{marginRight: 8}}>Cancel</Button>
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <StylePreview style={this.state.style} width={60} height={60}></StylePreview>
+                </Form.Item>
+                <Form.Item wrapperCol={{span: 12, offset:8}}>
+                    <Button style={{marginRight: 8}} onClick={this.props.onEditStyleCanceled}>Cancel</Button>
+                    <Button type="primary" htmlType="submit" onClick={ () => this.props.onEditStyleSubmit(this.state.style) }>Submit</Button>
                 </Form.Item>
             </Form>
         );
+    }
+
+    onFillStyleChange(color) {
+        this.state.style.fillStyle = color.color;
+        this.setState(this.state.style);
+    }
+
+    onStrokeStyleChange(color) {
+        this.state.style.strokeStyle = color.color;
+        this.setState(this.state.style);
+    }
+
+    onLineWidthChange(lineWidth) {
+        this.state.style.lineWidth = lineWidth;
+        this.setState(this.state.style);
     }
 }
