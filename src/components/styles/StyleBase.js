@@ -28,9 +28,9 @@ export class StyleBase extends Component {
                     this.renderContent()
                 }
 
-                <Form.Item wrapperCol={{span: 12, offset:8}}>
-                    <StylePreview style={this.state.style} width={60} height={60}></StylePreview>
-                </Form.Item>
+                {
+                    this.renderPreview()
+                }
                 <Form.Item wrapperCol={{span: 12, offset:8}}>
                     <Button style={{marginRight: 8}} onClick={this.props.onEditStyleCanceled}>Cancel</Button>
                     <Button type="primary" onClick={ () => this.props.onEditStyleSubmit(this.state.style) }>Submit</Button>
@@ -41,6 +41,18 @@ export class StyleBase extends Component {
 
     renderContent() {
         return [];
+    }
+
+    renderPreview() {
+        if (!this.state.hidePreview) {
+            return (
+                <Form.Item wrapperCol={{span: 12, offset:8}}>
+                    <StylePreview style={this.state.style} width={60} height={60}></StylePreview>
+                </Form.Item>
+            );
+        }
+
+        return null;
     }
 
     onFillStyleChange(color) {
