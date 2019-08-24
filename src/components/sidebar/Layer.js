@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Menu } from "antd";
 import { LayerPreview, ModalUtils } from "../shared";
 import { EditButtons, Style } from ".";
-import { FillStyle, LineStyle, NoneStyle } from "../styles";
+import { FillStyle, LineStyle, NoneStyle, PointStyle } from "../styles";
 
 const { SubMenu } = Menu;
 
@@ -79,6 +79,8 @@ export class Layer extends Component {
         return <FillStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
       case 'line-style':
         return <LineStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+      case 'point-style':
+        return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
       default:
         return <NoneStyle />
     }
