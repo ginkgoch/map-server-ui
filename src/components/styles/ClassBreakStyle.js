@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleBase } from './StyleBase';
-import { List, Form, Icon, Button, Divider } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 
 export class ClassBreakStyle extends StyleBase {
@@ -42,11 +42,30 @@ export class ClassBreakStyle extends StyleBase {
     mainActions() {
         const btnProps = { shape: "circle", size: "small" };
         return <div>
-            <Button {...btnProps}><Icon type="plus" /></Button>
+            <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
+                <Button {...btnProps}><Icon type="plus" /></Button>
+            </Dropdown>
             <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={ this.state.style.classBreaks.length === 0 }>
                 <Icon type="delete" />
             </Button>
         </div>
+    }
+
+    newStyleOptions() {
+        const options = [
+            {type: 'fill-style', name: 'Fill Style'},
+            {type: 'line-style', name: 'Line Style'},
+            {type: 'point-style', name: 'Point Style'}
+        ];
+        return (
+            <Menu>
+                {
+                    options.map(opt => (
+                        <Menu.Item key={opt.type}>{opt.name}</Menu.Item>
+                    ))
+                }
+            </Menu>
+        );
     }
 
     preview(style) {

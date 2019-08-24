@@ -6,16 +6,24 @@ import { StyleBase } from './StyleBase';
 
 export class FillStyle extends StyleBase {
     renderContent() {
-        return <>
-            <Form.Item label="Fill">
-                <ColorPicker color={hexColor(this.state.style.fillStyle)} className="color-picker" onChange={this.onFillStyleChange.bind(this)}></ColorPicker>
-            </Form.Item>
-            <Form.Item label="Stroke">
-                <ColorPicker color={hexColor(this.state.style.strokeStyle)} className="color-picker" onChange={this.onStrokeStyleChange.bind(this)}></ColorPicker>
-            </Form.Item>
-            <Form.Item label="Stroke Width">
-                <InputNumber min={0} value={this.state.style.lineWidth} onChange={this.onLineWidthChange.bind(this)}></InputNumber>
-            </Form.Item>
-        </>
+        return <FillStyleFormItems 
+            style={this.state.style}
+            onFillStyleChange={this.onFillStyleChange.bind(this)}
+            onStrokeStyleChange={this.onStrokeStyleChange.bind(this)}
+            onLineWidthChange={this.onLineWidthChange.bind(this)} />
     }
 }
+
+export const FillStyleFormItems = props => {
+    return <>
+        <Form.Item label="Fill">
+            <ColorPicker color={hexColor(props.style.fillStyle)} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
+        </Form.Item>
+        <Form.Item label="Stroke">
+            <ColorPicker color={hexColor(props.style.strokeStyle)} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
+        </Form.Item>
+        <Form.Item label="Stroke Width">
+            <InputNumber min={0} value={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
+        </Form.Item>
+    </>
+};
