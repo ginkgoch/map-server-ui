@@ -8,6 +8,14 @@ export class LayerPreview extends React.Component {
     this.state = { layer: props.layer };
   }
 
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (preState.layer !== nextProps) {
+      return { layer: nextProps.layer };
+    }
+
+    return null;
+  }
+
   render() {
     return (
       <canvas
@@ -20,10 +28,10 @@ export class LayerPreview extends React.Component {
   }
 
   componentDidMount() {
-    Render.renderLayer(this.props.layer, this.canvas);
+    Render.renderLayer(this.state.layer, this.canvas);
   }
 
   componentDidUpdate() {
-    Render.renderLayer(this.props.layer, this.canvas);
+    Render.renderLayer(this.state.layer, this.canvas);
   }
 }

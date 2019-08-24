@@ -8,6 +8,14 @@ export class StylePreview extends React.Component {
     this.state = { style: props.style };
   }
 
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (preState.style !== nextProps.style) {
+      return { style: nextProps.style };
+    }
+
+    return null;
+  }
+
   render() {
     const width = this.props.width || 20;
     const height = this.props.height || 20;
@@ -23,10 +31,10 @@ export class StylePreview extends React.Component {
   }
 
   componentDidMount() {
-    Render.renderStyle(this.props.style, this.canvas);
+    Render.renderStyle(this.state.style, this.canvas);
   }
 
   componentDidUpdate() {
-    Render.renderStyle(this.props.style, this.canvas);
+    Render.renderStyle(this.state.style, this.canvas);
   }
 }
