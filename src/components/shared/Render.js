@@ -9,7 +9,7 @@ export class Render {
         const styleCount = layer.styles.length;
         switch(styleCount) {
             case 0: 
-                this.renderStyle(undefined, canvas);
+                this._renderStyle(undefined, canvas);
                 break;
             default:
                 const styles = this._flatStylesInLayer(layer);
@@ -28,11 +28,17 @@ export class Render {
             if (s.lineWidth !== undefined) {
                 s.lineWidth = 1;
             }
-            this.renderStyle(s, canvas, x, y, canvas.width / 2, canvas.height / 2);
+            this._renderStyle(s, canvas, x, y, canvas.width / 2, canvas.height / 2);
         }
     }
 
-    static renderStyle(style, canvas, x = undefined, y = undefined, w = undefined, h = undefined) {
+    static renderStyle(style, canvas) {
+        this._clearCanvas(canvas);
+         
+        this._renderStyle(style, canvas);
+    }
+
+    static _renderStyle(style, canvas, x = undefined, y = undefined, w = undefined, h = undefined) {
         const ctx = canvas.getContext('2d');
         ctx.antialias = 'none';
         _.assign(ctx, style);

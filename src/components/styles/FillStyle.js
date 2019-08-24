@@ -1,6 +1,6 @@
 import React from 'react';
-import ColorPicker from "rc-color-picker";
 import { Form, InputNumber } from "antd";
+import ColorPicker from "rc-color-picker";
 import { hexColor } from './KnownColors';
 import { StyleBase } from './StyleBase';
 
