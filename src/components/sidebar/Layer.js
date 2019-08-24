@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Menu } from "antd";
 import { LayerPreview, ModalUtils } from "../shared";
 import { EditButtons, Style } from ".";
-import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle } from "../styles";
+import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle, StyleUtils } from "../styles";
 
 const { SubMenu } = Menu;
 
@@ -89,15 +89,6 @@ export class Layer extends Component {
   }
 
   getStyleTypeName(style) {
-    switch (style.type) {
-      case 'fill-style': return 'Fill Style';
-      case 'line-style': return 'Line Style';
-      case 'point-style': return 'Point Style';
-      case 'icon-style': return 'Icon Style';
-      case 'class-break-style': return 'Class Break Style';
-      case 'value-style': return 'Value Style';
-      default:
-        return style.type;
-    }
+    return StyleUtils.styleTypeName(style);
   }
 }

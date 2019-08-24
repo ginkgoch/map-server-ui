@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleBase } from './StyleBase';
-import { List, Form, Icon, Button, Divider, Menu, Dropdown } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
+import { StyleUtils } from '.'
 
 export class ClassBreakStyle extends StyleBase {
     renderContent() {
         this.state.hidePreview = true;
+
         return <>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -45,7 +47,7 @@ export class ClassBreakStyle extends StyleBase {
             <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
                 <Button {...btnProps}><Icon type="plus" /></Button>
             </Dropdown>
-            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={ this.state.style.classBreaks.length === 0 }>
+            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={this.state.style.classBreaks.length === 0}>
                 <Icon type="delete" />
             </Button>
         </div>
@@ -53,19 +55,44 @@ export class ClassBreakStyle extends StyleBase {
 
     newStyleOptions() {
         const options = [
-            {type: 'fill-style', name: 'Fill Style'},
-            {type: 'line-style', name: 'Line Style'},
-            {type: 'point-style', name: 'Point Style'}
+            { type: 'fill-style' },
+            { type: 'line-style' },
+            { type: 'point-style' }
         ];
         return (
             <Menu>
                 {
                     options.map(opt => (
-                        <Menu.Item key={opt.type}>{opt.name}</Menu.Item>
+                        <Menu.Item key={opt.type} onClick={this.showClassBreakModal(opt.type)}>{StyleUtils.styleTypeName(opt.type)}</Menu.Item>
                     ))
                 }
             </Menu>
         );
+    }
+
+    showClassBreakModal(type) {
+        const configuringStyle = this.getDefaultStyle(type);
+        const configuringClassBreak = {
+            "minimum": 0,
+            "maximum": 100,
+            "style": configuringStyle
+        };
+        return () => {
+            Modal.confirm({
+                title: 'New Class Break - ' + StyleUtils.styleTypeName(type),
+                width: 480,
+                content: (
+                    <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{marginTop: 40}}>
+                        <Form.Item label="Range">
+                            <InputNumber defaultValue={configuringClassBreak.minimum} /> ~ <InputNumber defaultValue={configuringClassBreak.maximum} />
+                        </Form.Item>
+                        {
+                            this.getConfiguringFormItems(configuringClassBreak.style)
+                        }
+                    </Form>
+                )
+            });
+        };
     }
 
     preview(style) {
@@ -79,5 +106,13 @@ export class ClassBreakStyle extends StyleBase {
             this.state.style.classBreaks.length = 0;
             this.setState(this.state);
         })
+    }
+
+    getDefaultStyle(type) {
+        return StyleUtils.defaultStyle(type);
+    }
+
+    getConfiguringFormItems(style) {
+        return StyleUtils.configureItems(style);
     }
 }
