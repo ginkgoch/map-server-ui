@@ -35,10 +35,10 @@ html, body, #container, .ant-layout {
     display: block;
 }
 
-.color-picker, .color-picker span {
+.color-picker, .color-picker>span {
     width: 100%;
 }
 
-.color-picker span {
+.color-picker>span {
     height: 34px;
 }
