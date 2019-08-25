@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleBase } from './StyleBase';
-import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 
-export class ClassBreakStyle extends StyleBase {
+export class ValueStyle extends StyleBase {
     renderContent() {
         this.state.hidePreview = true;
 
@@ -14,7 +14,7 @@ export class ClassBreakStyle extends StyleBase {
             </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h4>Class Break Items</h4> {this.mainActions()}
+                    <h4>Value Items</h4> {this.mainActions()}
                 </div>
                 <Divider style={{ margin: "12px 0 12px 0" }} />
                 <List itemLayout="horizontal" dataSource={this.data()} renderItem={style => (
@@ -33,14 +33,14 @@ export class ClassBreakStyle extends StyleBase {
     }
 
     data() {
-        const classBreaks = this.state.style.classBreaks;
-        return classBreaks.map(cb => cb.style);
+        const valueItems = this.state.style.items;
+        return valueItems.map(vi => vi.style);
     }
 
     actions(key) {
         return [
-            <Button key="edit" shape="circle" size="small" onClick={this.editClassBreak(key)}><Icon type="edit" /></Button>,
-            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeClassBreak.bind(this, key)}><Icon type="close" /></Button>
+            <Button key="edit" shape="circle" size="small" onClick={this.editValueItem(key)}><Icon type="edit" /></Button>,
+            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeValueItem.bind(this, key)}><Icon type="close" /></Button>
         ];
     }
 
@@ -55,7 +55,7 @@ export class ClassBreakStyle extends StyleBase {
             <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
                 <Button {...btnProps}><Icon type="plus" /></Button>
             </Dropdown>
-            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={this.state.style.classBreaks.length === 0}>
+            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={this.state.style.items.length === 0}>
                 <Icon type="delete" />
             </Button>
         </div>
@@ -66,74 +66,71 @@ export class ClassBreakStyle extends StyleBase {
             <Menu>
                 {
                     StyleUtils.simpleStyleTypes().map(type => (
-                        <Menu.Item key={type} onClick={this.newClassBreak(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
+                        <Menu.Item key={type} onClick={this.newValueItem(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
                     ))
                 }
             </Menu>
         );
     }
 
-    newClassBreak(type) {
+    newValueItem(type) {
         const newStyle = StyleUtils.defaultStyle(type);
-        const newClassBreak = {
-            "minimum": 0,
-            "maximum": 100,
+        const newItem = {
+            "value": "",
             "style": newStyle
         };
 
-        return this._showClassBreakModal(newClassBreak, cb => {
-            this.state.style.classBreaks.push(cb);
+        return this._showValueItemModal(newItem, cb => {
+            this.state.style.items.push(cb);
             this.setState(this.state);
-        }, 'New Class Break');
+        }, 'New Value Item');
     }
 
-    editClassBreak(key) {
-        const classBreak = this.state.style.classBreaks.find(cb => cb.style.id === key);
-        return this._showClassBreakModal(classBreak, cb => {
+    editValueItem(key) {
+        const valueItem = this.state.style.items.find(vi => vi.style.id === key);
+        return this._showValueItemModal(valueItem, () => {
             this.setState(this.state);
         }, 'Edit Class Break');
     }
 
-    _showClassBreakModal(classBreak, okHandler, title) {
+    _showValueItemModal(valueItem, okHandler, title) {
         return () => {
             Modal.confirm({
-                title: title + ' - ' + StyleUtils.styleTypeName(classBreak.style.type),
+                title: title + ' - ' + StyleUtils.styleTypeName(valueItem.style.type),
                 width: 480,
                 content: (
                     <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
-                        <Form.Item label="Range">
-                            <InputNumber min={0} defaultValue={classBreak.minimum} onChange={v => classBreak.minimum = v} />
-                            <span style={{ padding: 4 }}>~</span>
-                            <InputNumber min={0} defaultValue={classBreak.maximum} onChange={v => classBreak.maximum = v} />
+                        <Form.Item label="Value">
+                            <Input defaultValue={valueItem.value} onChange={e => valueItem.value = e.target.value} />
                         </Form.Item>
                         {
-                            StyleUtils.configureItems(classBreak.style)
+                            StyleUtils.configureItems(valueItem.style)
                         }
                     </Form>
                 ),
                 onOk: () => {
-                    classBreak.style.name = `${classBreak.minimum} ~ ${classBreak.maximum}`;
-                    okHandler && okHandler(classBreak);
+                    valueItem.style.name = valueItem.value;
+                    okHandler && okHandler(valueItem);
                 }
             });
         };
     }
 
     clean() {
-        ModalUtils.promptModal('Are you sure to clean all the class break items?', () => {
-            this.state.style.classBreaks.length = 0;
+        ModalUtils.promptModal('Are you sure to clean all the value items?', () => {
+            this.state.style.items.length = 0;
             this.setState(this.state);
         })
     }
 
-    removeClassBreak(key) {
-        const index = this.state.style.classBreaks.findIndex(cb => cb.style.id === key);
+    removeValueItem(key) {
+        const index = this.state.style.items.findIndex(vi => vi.style.id === key);
         if (index < 0) {
-            ModalUtils.warning('Remove Failed', 'Class Break Not Found.')
+            ModalUtils.warning('Remove Failed', 'Value Item Not Found.')
         }
 
-        ModalUtils.promptRemoveModal('Class Break', () => {
-            this.state.style.classBreaks.splice(index, 1);
+        ModalUtils.promptRemoveModal('Value Item', () => {
+            this.state.style.items.splice(index, 1);
             this.setState(this.state);
         });
     }
