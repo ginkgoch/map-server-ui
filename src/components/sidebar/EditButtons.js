@@ -22,6 +22,16 @@ export class EditButtons extends React.Component {
       });
     }
 
+    if (!this.props.hideStyleButton) {
+      btns.push({
+        type: 'bg-colors',
+        click: e => {
+          e.stopPropagation();
+          this.props.onStyleButtonClick && this.props.onStyleButtonClick(e);
+        }
+      });
+    }
+
     btns.push({
       type: "close",
       click: e => {

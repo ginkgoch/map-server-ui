@@ -38,7 +38,7 @@ export class Layer extends Component {
           <LayerPreview layer={l} /> {l.name}
         </span>
         <div>
-          <EditButtons hideEditButton={true} onCloseButtonClick={this.props.removingLayer} />
+          <EditButtons hideEditButton={true} hideStyleButton={false} onCloseButtonClick={this.props.removingLayer} />
         </div>
       </div>
     );

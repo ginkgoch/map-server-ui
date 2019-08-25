@@ -37,7 +37,7 @@ export class Style extends React.Component {
           <span className="style-label">{style.name}</span>
         </div>
         <div>
-          <EditButtons onCloseButtonClick={onCloseButtonClick} onEditButtonClick={this.props.onEditButtonClick} />
+          <EditButtons hideStyleButton={true} onCloseButtonClick={onCloseButtonClick} onEditButtonClick={this.props.onEditButtonClick} />
         </div>
       </div>
     );
