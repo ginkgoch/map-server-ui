@@ -20,7 +20,7 @@ export class ValueStyle extends StyleBase {
                 <List itemLayout="horizontal" dataSource={this.data()} renderItem={style => (
                     <List.Item key={style.id}>
                         <List.Item.Meta title={style.name}
-                            avatar={this.preview(style)}
+                            avatar={<StylePreview style={style}></StylePreview>}
                         />
                         <div>
                             {this.actions(style.id)}
@@ -74,7 +74,7 @@ export class ValueStyle extends StyleBase {
     }
 
     newValueItem(type) {
-        const newStyle = this.getDefaultStyle(type);
+        const newStyle = StyleUtils.defaultStyle(type);
         const newItem = {
             "value": "",
             "style": newStyle
@@ -104,7 +104,7 @@ export class ValueStyle extends StyleBase {
                             <Input defaultValue={valueItem.value} onChange={e => valueItem.value = e.target.value} />
                         </Form.Item>
                         {
-                            this.getConfiguringFormItems(valueItem.style)
+                            StyleUtils.configureItems(valueItem.style)
                         }
                     </Form>
                 ),
@@ -133,33 +133,5 @@ export class ValueStyle extends StyleBase {
             this.state.style.items.splice(index, 1);
             this.setState(this.state);
         });
-    }
-
-    preview(style) {
-        return (
-            <StylePreview style={style}></StylePreview>
-        );
-    }
-
-    getDefaultStyle(type) {
-        return StyleUtils.defaultStyle(type);
-    }
-
-    getConfiguringFormItems(style) {
-        const props = {
-            onFillStyleChange: color => {
-                style.fillStyle = color.color;
-            },
-            onStrokeStyleChange: color => {
-                style.strokeStyle = color.color;
-            },
-            onLineWidthChange: lineWidth => {
-                style.lineWidth = lineWidth;
-            },
-            onSymbolChanged: symbol => {
-                style.symbol = symbol;
-            }
-        };
-        return StyleUtils.configureItems(style, props);
     }
 }

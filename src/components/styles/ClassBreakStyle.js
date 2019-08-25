@@ -20,7 +20,7 @@ export class ClassBreakStyle extends StyleBase {
                 <List itemLayout="horizontal" dataSource={this.data()} renderItem={style => (
                     <List.Item key={style.id}>
                         <List.Item.Meta title={style.name}
-                            avatar={this.preview(style)}
+                            avatar={<StylePreview style={style}></StylePreview>}
                         />
                         <div>
                             {this.actions(style.id)}
@@ -74,7 +74,7 @@ export class ClassBreakStyle extends StyleBase {
     }
 
     newClassBreak(type) {
-        const newStyle = this.getDefaultStyle(type);
+        const newStyle = StyleUtils.defaultStyle(type);
         const newClassBreak = {
             "minimum": 0,
             "maximum": 100,
@@ -102,12 +102,12 @@ export class ClassBreakStyle extends StyleBase {
                 content: (
                     <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
                         <Form.Item label="Range">
-                            <InputNumber min={0} defaultValue={classBreak.minimum} onChange={ v => classBreak.minimum = v } /> 
-                            <span style={{padding: 4}}>~</span>
-                            <InputNumber min={0} defaultValue={classBreak.maximum} onChange={ v => classBreak.maximum = v } />
+                            <InputNumber min={0} defaultValue={classBreak.minimum} onChange={v => classBreak.minimum = v} />
+                            <span style={{ padding: 4 }}>~</span>
+                            <InputNumber min={0} defaultValue={classBreak.maximum} onChange={v => classBreak.maximum = v} />
                         </Form.Item>
                         {
-                            this.getConfiguringFormItems(classBreak.style)
+                            StyleUtils.configureItems(classBreak.style)
                         }
                     </Form>
                 ),
@@ -136,33 +136,5 @@ export class ClassBreakStyle extends StyleBase {
             this.state.style.classBreaks.splice(index, 1);
             this.setState(this.state);
         });
-    }
-
-    preview(style) {
-        return (
-            <StylePreview style={style}></StylePreview>
-        );
-    }
-
-    getDefaultStyle(type) {
-        return StyleUtils.defaultStyle(type);
-    }
-
-    getConfiguringFormItems(style) {
-        const props = {
-            onFillStyleChange: color => {
-                style.fillStyle = color.color;
-            },
-            onStrokeStyleChange: color => {
-                style.strokeStyle = color.color;
-            },
-            onLineWidthChange: lineWidth => {
-                style.lineWidth = lineWidth;
-            },
-            onSymbolChanged: symbol => {
-                style.symbol = symbol;
-            }
-        };
-        return StyleUtils.configureItems(style, props);
     }
 }

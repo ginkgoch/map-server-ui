@@ -60,7 +60,24 @@ export class StyleUtils {
         }
     }
 
-    static configureItems(style, props) {
+    static configureItems(style, props = undefined) {
+        if (props === undefined) {
+            props = {
+                onFillStyleChange: color => {
+                    style.fillStyle = color.color;
+                },
+                onStrokeStyleChange: color => {
+                    style.strokeStyle = color.color;
+                },
+                onLineWidthChange: lineWidth => {
+                    style.lineWidth = lineWidth;
+                },
+                onSymbolChanged: symbol => {
+                    style.symbol = symbol;
+                }
+            };
+        }
+
         switch (style.type) {
             case 'fill-style':
                 return <FillStyleFormItems style={style} {...props} />;
@@ -75,5 +92,23 @@ export class StyleUtils {
 
     static simpleStyleTypes() {
         return ['fill-style', 'line-style', 'point-style'];
+    }
+
+    static getConfiguringFormItems(style) {
+        const props = {
+            onFillStyleChange: color => {
+                style.fillStyle = color.color;
+            },
+            onStrokeStyleChange: color => {
+                style.strokeStyle = color.color;
+            },
+            onLineWidthChange: lineWidth => {
+                style.lineWidth = lineWidth;
+            },
+            onSymbolChanged: symbol => {
+                style.symbol = symbol;
+            }
+        };
+        return this.configureItems(style, props);
     }
 }
