@@ -38,19 +38,20 @@ class AppComponent extends React.Component {
               visible={true}
               mask={false}
               closable={false}
-              getContainer={() => document.querySelector('#content')}
+              getContainer={'#content'}
               style={{ position: "absolute" }}
             >
               <Layers layers={this.state.layers}
                 showStyleEditPanel={this.showStyleEditPanel.bind(this)} />
               <Drawer
-                title={ this.state.secondaryDrawerTitle + " - " + this.state.editingStyleType}
+                title={this.state.secondaryDrawerTitle + " - " + this.state.editingStyleType}
                 width="360px"
                 placement="left"
                 visible={this.state.styleEditPanelVisible}
-                closable={true}
-                getContainer={() => document.querySelector('#content')}
-                style={{ position: "absolute" }} onClose={this.showStyleEditPanel.bind(this, false)}>
+                closable={false}
+                style={{ position: "absolute" }}
+                getContainer={'#content'}
+                onClose={this.showStyleEditPanel.bind(this, false)}>
                 <div style={{ paddingTop: 24 }}>{this.state.editStyleComponent}</div>
               </Drawer>
             </Drawer>
@@ -61,7 +62,11 @@ class AppComponent extends React.Component {
   }
 
   showStyleEditPanel(visible = false, editStyleComponent = null, editingStyleType = '', secondaryDrawerTitle = 'Edit Style') {
-    this.setState({ styleEditPanelVisible: visible, editStyleComponent, editingStyleType, secondaryDrawerTitle });
+    if (!visible) {
+      this.setState({ styleEditPanelVisible: visible });
+    } else {
+      this.setState({ styleEditPanelVisible: visible, editStyleComponent, editingStyleType, secondaryDrawerTitle });
+    }
   }
 }
 
