@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleBase } from './StyleBase';
-import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 
@@ -9,6 +9,9 @@ export class ClassBreakStyle extends StyleBase {
         this.state.hidePreview = true;
 
         return <>
+            <Form.Item label="Field">
+                <Input defaultValue={this.state.style.field} onChange={this.updateField.bind(this)}></Input>
+            </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h4>Class Break Items</h4> {this.mainActions()}
@@ -39,6 +42,11 @@ export class ClassBreakStyle extends StyleBase {
             <Button key="edit" shape="circle" size="small" onClick={this.editClassBreak(key)}><Icon type="edit" /></Button>,
             <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeClassBreak.bind(this, key)}><Icon type="close" /></Button>
         ];
+    }
+
+    updateField(e) {
+        this.state.style.field = e.target.value;
+        this.setState(this.state);
     }
 
     mainActions() {
