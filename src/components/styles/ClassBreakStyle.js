@@ -79,7 +79,9 @@ export class ClassBreakStyle extends StyleBase {
                 content: (
                     <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
                         <Form.Item label="Range">
-                            <InputNumber defaultValue={configuringClassBreak.minimum} /> ~ <InputNumber defaultValue={configuringClassBreak.maximum} />
+                            <InputNumber min={0} defaultValue={configuringClassBreak.minimum} onChange={ v => configuringClassBreak.minimum = v } /> 
+                            <span style={{padding: 4}}>~</span>
+                            <InputNumber min={0} defaultValue={configuringClassBreak.maximum} onChange={ v => configuringClassBreak.maximum = v } />
                         </Form.Item>
                         {
                             this.getConfiguringFormItems(configuringClassBreak.style)
@@ -125,6 +127,20 @@ export class ClassBreakStyle extends StyleBase {
     }
 
     getConfiguringFormItems(style) {
-        return StyleUtils.configureItems(style);
+        const props = {
+            onFillStyleChange: color => {
+                style.fillStyle = color.color;
+            },
+            onStrokeStyleChange: color => {
+                style.strokeStyle = color.color;
+            },
+            onLineWidthChange: lineWidth => {
+                style.lineWidth = lineWidth;
+            },
+            onSymbolChanged: symbol => {
+                style.symbol = symbol;
+            }
+        };
+        return StyleUtils.configureItems(style, props);
     }
 }
