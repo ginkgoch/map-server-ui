@@ -90,7 +90,12 @@ export class ClassBreakStyle extends StyleBase {
                             this.getConfiguringFormItems(configuringClassBreak.style)
                         }
                     </Form>
-                )
+                ),
+                onOk: () => {
+                    configuringClassBreak.style.name = `${configuringClassBreak.minimum} ~ ${configuringClassBreak.maximum}`;
+                    this.state.style.classBreaks.push(configuringClassBreak);
+                    this.setState(this.state);
+                }
             });
         };
     }
