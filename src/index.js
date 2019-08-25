@@ -26,7 +26,7 @@ class AppComponent extends React.Component {
   render() {
     return (
       <Layout>
-        <Header id="header">
+        <Header id="header" style={{ borderBottom: '1px solid #e8e8e8' }}>
           <Logo />
         </Header>
         <Content>
