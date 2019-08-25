@@ -16,6 +16,7 @@ class AppComponent extends React.Component {
 
     this.state = {
       styleEditPanelVisible: false,
+      secondaryDrawerTitle: '',
       editingStyleName: '',
       layers: _.flatMap(mapJSON.groups, g => g.layers),
       editStyleComponent: <NoneStyle />
@@ -43,7 +44,7 @@ class AppComponent extends React.Component {
               <Layers layers={this.state.layers}
                 showStyleEditPanel={this.showStyleEditPanel.bind(this)} />
               <Drawer
-                title={"Edit Style " + this.state.editingStyleType}
+                title={ this.state.secondaryDrawerTitle + " - " + this.state.editingStyleType}
                 width="360px"
                 placement="left"
                 visible={this.state.styleEditPanelVisible}
@@ -59,8 +60,8 @@ class AppComponent extends React.Component {
     );
   }
 
-  showStyleEditPanel(visible = false, editStyleComponent = null, editingStyleType = '') {
-    this.setState({ styleEditPanelVisible: visible, editStyleComponent, editingStyleType });
+  showStyleEditPanel(visible = false, editStyleComponent = null, editingStyleType = '', secondaryDrawerTitle = 'Edit Style') {
+    this.setState({ styleEditPanelVisible: visible, editStyleComponent, editingStyleType, secondaryDrawerTitle });
   }
 }
 

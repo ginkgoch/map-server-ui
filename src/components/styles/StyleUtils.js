@@ -55,6 +55,16 @@ export class StyleUtils {
                     lineWidth: 1,
                     radius: 20
                 });
+            case 'class-break-style':
+                return _.assign(general, {
+                    field: '',
+                    classBreaks: []
+                });
+            case 'value-style':
+                return _.assign(general, {
+                    field: '',
+                    items: []
+                });
             default:
                 return general;
         }
