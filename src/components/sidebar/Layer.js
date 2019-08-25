@@ -38,7 +38,7 @@ export class Layer extends Component {
           <LayerPreview layer={l} /> {l.name}
         </span>
         <div>
-          <EditButtons hideEditButton={true} hideStyleButton={false} onCloseButtonClick={this.props.removingLayer} />
+          <EditButtons hideEditButton={true} hideStyleButton={false} onCloseButtonClick={this.props.removingLayer} onNewStyleMenuItemClick={this.newStyle(l)} />
         </div>
       </div>
     );
@@ -55,36 +55,52 @@ export class Layer extends Component {
 
   editStyle(id, layer) {
     return () => {
-      const style = layer.styles.find(s => s.id === id);
-      const styleEditComponent = this.getStyleComponent(style, layer);
+      const onEditStyleSubmit = (newStyle => {
+        const index = layer.styles.findIndex(s => s.id === newStyle.id);
+        layer.styles[index] = newStyle;
+  
+        this.setState(this.state);
+        this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
+      }).bind(this);
+
+      let style = layer.styles.find(s => s.id === id);
+      style = _.cloneDeep(style);
+
+      const styleEditComponent = this.getStyleComponent(style, layer, onEditStyleSubmit);
       const styleType = this.getStyleTypeName(style);
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(true, styleEditComponent, styleType);
     };
   }
 
-  getStyleComponent(style, layer) {
-    style = _.cloneDeep(style);
-
-    const onEditStyleCanceled = this.props.showStyleEditPanel.bind(this, false);
-    const onEditStyleSubmit = (newStyle => {
-      const index = layer.styles.findIndex(s => s.id === newStyle.id);
-      layer.styles[index] = newStyle;
-
+  newStyle(layer) {
+    const onNewStyleSubmit = (newStyle => {
+      layer.styles.push(newStyle);
       this.setState(this.state);
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
     }).bind(this);
 
+    return styleType => {
+      const style = StyleUtils.defaultStyle(styleType);
+      const styleEditComponent = this.getStyleComponent(style, layer, onNewStyleSubmit);
+      const styleTypeName = this.getStyleTypeName(style);
+      this.props.showStyleEditPanel && this.props.showStyleEditPanel(true, styleEditComponent, styleTypeName, 'New Style');
+    };
+  }
+
+  getStyleComponent(style, layer, onSubmitHandler) {
+    const onEditStyleCanceled = this.props.showStyleEditPanel.bind(this, false);
+
     switch (style.type) {
       case 'fill-style':
-        return <FillStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+        return <FillStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'line-style':
-        return <LineStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+        return <LineStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'point-style':
-        return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+        return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'class-break-style':
-        return <ClassBreakStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+        return <ClassBreakStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'value-style':
-          return <ValueStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onEditStyleSubmit} />
+          return <ValueStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       default:
         return <NoneStyle />
     }

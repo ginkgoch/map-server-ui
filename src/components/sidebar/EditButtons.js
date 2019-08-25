@@ -42,15 +42,6 @@ export class EditButtons extends React.Component {
     });
 
     btns = btns.map(btn => (
-      // <Button
-      //   key={btn.type}
-      //   shape="circle"
-      //   size="small"
-      //   style={btnStyle}
-      //   onClick={btn.click}
-      // >
-      //   <Icon type={btn.type} size="small" style={iconStyle} />
-      // </Button>
       this.getButton(btn, btnStyle, iconStyle)
     ));
 
@@ -90,11 +81,18 @@ export class EditButtons extends React.Component {
     return <Menu>
       {
         allStyleTypes.map(type => (
-          <Menu.Item key={type} onClick={e => e.domEvent.stopPropagation()}>
+          <Menu.Item key={type} onClick={e => this.newStyle(type, e)()}>
             {StyleUtils.styleTypeName(type)}
           </Menu.Item>
         ))
       }
     </Menu>
+  }
+
+  newStyle(styleType, e) {
+    return () => {
+      this.props.onNewStyleMenuItemClick && this.props.onNewStyleMenuItemClick(styleType);
+      e.domEvent.stopPropagation();
+    }
   }
 }
