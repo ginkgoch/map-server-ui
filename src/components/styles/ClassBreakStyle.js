@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleBase } from './StyleBase';
-import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 
@@ -9,6 +9,9 @@ export class ClassBreakStyle extends StyleBase {
         this.state.hidePreview = true;
 
         return <>
+            <Form.Item label="Field">
+                <Input defaultValue={this.state.style.field} onChange={this.updateField.bind(this)}></Input>
+            </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h4>Class Break Items</h4> {this.mainActions()}
@@ -20,7 +23,7 @@ export class ClassBreakStyle extends StyleBase {
                             avatar={this.preview(style)}
                         />
                         <div>
-                            {this.actions()}
+                            {this.actions(style.id)}
                         </div>
                     </List.Item>
                 )}>
@@ -34,11 +37,16 @@ export class ClassBreakStyle extends StyleBase {
         return classBreaks.map(cb => cb.style);
     }
 
-    actions() {
+    actions(key) {
         return [
-            <Button key="edit" shape="circle" size="small"><Icon type="edit" /></Button>,
-            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }}><Icon type="close" /></Button>
+            <Button key="edit" shape="circle" size="small" onClick={this.editClassBreak(key)}><Icon type="edit" /></Button>,
+            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeClassBreak.bind(this, key)}><Icon type="close" /></Button>
         ];
+    }
+
+    updateField(e) {
+        this.state.style.field = e.target.value;
+        this.setState(this.state);
     }
 
     mainActions() {
@@ -54,51 +62,61 @@ export class ClassBreakStyle extends StyleBase {
     }
 
     newStyleOptions() {
-        const options = [
-            { type: 'fill-style' },
-            { type: 'line-style' },
-            { type: 'point-style' }
-        ];
         return (
             <Menu>
                 {
-                    options.map(opt => (
-                        <Menu.Item key={opt.type} onClick={this.showClassBreakModal(opt.type)}>{StyleUtils.styleTypeName(opt.type)}</Menu.Item>
+                    StyleUtils.simpleStyleTypes().map(type => (
+                        <Menu.Item key={type} onClick={this.newClassBreak(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
                     ))
                 }
             </Menu>
         );
     }
 
-    showClassBreakModal(type) {
-        const configuringStyle = this.getDefaultStyle(type);
-        const configuringClassBreak = {
+    newClassBreak(type) {
+        const newStyle = this.getDefaultStyle(type);
+        const newClassBreak = {
             "minimum": 0,
             "maximum": 100,
-            "style": configuringStyle
+            "style": newStyle
         };
-        return () => {
-            Modal.confirm({
-                title: 'New Class Break - ' + StyleUtils.styleTypeName(type),
-                width: 480,
-                content: (
-                    <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{marginTop: 40}}>
-                        <Form.Item label="Range">
-                            <InputNumber defaultValue={configuringClassBreak.minimum} /> ~ <InputNumber defaultValue={configuringClassBreak.maximum} />
-                        </Form.Item>
-                        {
-                            this.getConfiguringFormItems(configuringClassBreak.style)
-                        }
-                    </Form>
-                )
-            });
-        };
+
+        return this._showClassBreakModal(newClassBreak, cb => {
+            this.state.style.classBreaks.push(cb);
+            this.setState(this.state);
+        }, 'New Class Break');
     }
 
-    preview(style) {
-        return (
-            <StylePreview style={style}></StylePreview>
-        );
+    editClassBreak(key) {
+        const classBreak = this.state.style.classBreaks.find(cb => cb.style.id === key);
+        return this._showClassBreakModal(classBreak, cb => {
+            this.setState(this.state);
+        }, 'Edit Class Break');
+    }
+
+    _showClassBreakModal(classBreak, okHandler, title) {
+        return () => {
+            Modal.confirm({
+                title: title + ' - ' + StyleUtils.styleTypeName(classBreak.style.type),
+                width: 480,
+                content: (
+                    <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
+                        <Form.Item label="Range">
+                            <InputNumber min={0} defaultValue={classBreak.minimum} onChange={ v => classBreak.minimum = v } /> 
+                            <span style={{padding: 4}}>~</span>
+                            <InputNumber min={0} defaultValue={classBreak.maximum} onChange={ v => classBreak.maximum = v } />
+                        </Form.Item>
+                        {
+                            this.getConfiguringFormItems(classBreak.style)
+                        }
+                    </Form>
+                ),
+                onOk: () => {
+                    classBreak.style.name = `${classBreak.minimum} ~ ${classBreak.maximum}`;
+                    okHandler && okHandler(classBreak);
+                }
+            });
+        };
     }
 
     clean() {
@@ -108,11 +126,43 @@ export class ClassBreakStyle extends StyleBase {
         })
     }
 
+    removeClassBreak(key) {
+        const index = this.state.style.classBreaks.findIndex(cb => cb.style.id === key);
+        if (index < 0) {
+            ModalUtils.warning('Remove Failed', 'Class Break Not Found.')
+        }
+
+        ModalUtils.promptRemoveModal('Class Break', () => {
+            this.state.style.classBreaks.splice(index, 1);
+            this.setState(this.state);
+        });
+    }
+
+    preview(style) {
+        return (
+            <StylePreview style={style}></StylePreview>
+        );
+    }
+
     getDefaultStyle(type) {
         return StyleUtils.defaultStyle(type);
     }
 
     getConfiguringFormItems(style) {
-        return StyleUtils.configureItems(style);
+        const props = {
+            onFillStyleChange: color => {
+                style.fillStyle = color.color;
+            },
+            onStrokeStyleChange: color => {
+                style.strokeStyle = color.color;
+            },
+            onLineWidthChange: lineWidth => {
+                style.lineWidth = lineWidth;
+            },
+            onSymbolChanged: symbol => {
+                style.symbol = symbol;
+            }
+        };
+        return StyleUtils.configureItems(style, props);
     }
 }

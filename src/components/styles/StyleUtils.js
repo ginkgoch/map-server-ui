@@ -60,16 +60,20 @@ export class StyleUtils {
         }
     }
 
-    static configureItems(style) {
+    static configureItems(style, props) {
         switch (style.type) {
             case 'fill-style':
-                return <FillStyleFormItems style={style} />;
+                return <FillStyleFormItems style={style} {...props} />;
             case 'line-style':
-                return <LineStyleFormItems style={style} />;
+                return <LineStyleFormItems style={style} {...props} />;
             case 'point-style':
-                return <PointStyleFormItems style={style} />;
+                return <PointStyleFormItems style={style} {...props} />;
             default:
                 return null;
         }
+    }
+
+    static simpleStyleTypes() {
+        return ['fill-style', 'line-style', 'point-style'];
     }
 }
