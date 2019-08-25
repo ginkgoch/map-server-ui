@@ -20,7 +20,7 @@ export class ClassBreakStyle extends StyleBase {
                             avatar={this.preview(style)}
                         />
                         <div>
-                            {this.actions()}
+                            {this.actions(style.id)}
                         </div>
                     </List.Item>
                 )}>
@@ -34,10 +34,10 @@ export class ClassBreakStyle extends StyleBase {
         return classBreaks.map(cb => cb.style);
     }
 
-    actions() {
+    actions(key) {
         return [
             <Button key="edit" shape="circle" size="small"><Icon type="edit" /></Button>,
-            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }}><Icon type="close" /></Button>
+            <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeClassBreak.bind(this, key)}><Icon type="close" /></Button>
         ];
     }
 
@@ -54,16 +54,11 @@ export class ClassBreakStyle extends StyleBase {
     }
 
     newStyleOptions() {
-        const options = [
-            { type: 'fill-style' },
-            { type: 'line-style' },
-            { type: 'point-style' }
-        ];
         return (
             <Menu>
                 {
-                    options.map(opt => (
-                        <Menu.Item key={opt.type} onClick={this.showClassBreakModal(opt.type)}>{StyleUtils.styleTypeName(opt.type)}</Menu.Item>
+                    StyleUtils.simpleStyleTypes().map(type => (
+                        <Menu.Item key={type} onClick={this.showClassBreakModal(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
                     ))
                 }
             </Menu>
@@ -82,7 +77,7 @@ export class ClassBreakStyle extends StyleBase {
                 title: 'New Class Break - ' + StyleUtils.styleTypeName(type),
                 width: 480,
                 content: (
-                    <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{marginTop: 40}}>
+                    <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
                         <Form.Item label="Range">
                             <InputNumber defaultValue={configuringClassBreak.minimum} /> ~ <InputNumber defaultValue={configuringClassBreak.maximum} />
                         </Form.Item>
@@ -100,17 +95,29 @@ export class ClassBreakStyle extends StyleBase {
         };
     }
 
-    preview(style) {
-        return (
-            <StylePreview style={style}></StylePreview>
-        );
-    }
-
     clean() {
         ModalUtils.promptModal('Are you sure to clean all the class break items?', () => {
             this.state.style.classBreaks.length = 0;
             this.setState(this.state);
         })
+    }
+
+    removeClassBreak(key) {
+        const index = this.state.style.classBreaks.findIndex(cb => cb.style.id === key);
+        if (index < 0) {
+            ModalUtils.warning('Remove Failed', 'Class Break Not Found.')
+        }
+
+        ModalUtils.promptRemoveModal('Class Break', () => {
+            this.state.style.classBreaks.splice(index, 1);
+            this.setState(this.state);
+        });
+    }
+
+    preview(style) {
+        return (
+            <StylePreview style={style}></StylePreview>
+        );
     }
 
     getDefaultStyle(type) {

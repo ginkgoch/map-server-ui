@@ -72,4 +72,8 @@ export class StyleUtils {
                 return null;
         }
     }
+
+    static simpleStyleTypes() {
+        return ['fill-style', 'line-style', 'point-style'];
+    }
 }
