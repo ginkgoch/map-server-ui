@@ -42,3 +42,8 @@ html, body, #container, .ant-layout {
 .color-picker>span {
     height: 34px;
 }
+
+.ant-drawer-content-wrapper {
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15) !important;
+    -webkit-box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+}
