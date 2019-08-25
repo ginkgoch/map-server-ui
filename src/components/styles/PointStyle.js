@@ -36,7 +36,7 @@ export const PointStyleFormItems = props => {
             <ColorPicker color={hexColor(props.style.strokeStyle)} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke Width">
-            <InputNumber min={0} value={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
+            <InputNumber min={0} defaultValue={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
         </Form.Item>
     </>
 };
