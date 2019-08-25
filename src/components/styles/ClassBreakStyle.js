@@ -36,7 +36,7 @@ export class ClassBreakStyle extends StyleBase {
 
     actions(key) {
         return [
-            <Button key="edit" shape="circle" size="small"><Icon type="edit" /></Button>,
+            <Button key="edit" shape="circle" size="small" onClick={this.editClassBreak(key)}><Icon type="edit" /></Button>,
             <Button key="remove" shape="circle" size="small" style={{ marginLeft: 4 }} onClick={this.removeClassBreak.bind(this, key)}><Icon type="close" /></Button>
         ];
     }
@@ -58,40 +58,54 @@ export class ClassBreakStyle extends StyleBase {
             <Menu>
                 {
                     StyleUtils.simpleStyleTypes().map(type => (
-                        <Menu.Item key={type} onClick={this.showClassBreakModal(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
+                        <Menu.Item key={type} onClick={this.newClassBreak(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
                     ))
                 }
             </Menu>
         );
     }
 
-    showClassBreakModal(type) {
-        const configuringStyle = this.getDefaultStyle(type);
-        const configuringClassBreak = {
+    newClassBreak(type) {
+        const newStyle = this.getDefaultStyle(type);
+        const newClassBreak = {
             "minimum": 0,
             "maximum": 100,
-            "style": configuringStyle
+            "style": newStyle
         };
+
+        return this._showClassBreakModal(newClassBreak, cb => {
+            this.state.style.classBreaks.push(cb);
+            this.setState(this.state);
+        }, 'New Class Break');
+    }
+
+    editClassBreak(key) {
+        const classBreak = this.state.style.classBreaks.find(cb => cb.style.id === key);
+        return this._showClassBreakModal(classBreak, cb => {
+            this.setState(this.state);
+        }, 'Edit Class Break');
+    }
+
+    _showClassBreakModal(classBreak, okHandler, title) {
         return () => {
             Modal.confirm({
-                title: 'New Class Break - ' + StyleUtils.styleTypeName(type),
+                title: title + ' - ' + StyleUtils.styleTypeName(classBreak.style.type),
                 width: 480,
                 content: (
                     <Form layout="horizontal" labelCol={{ xs: { span: 6 } }} wrapperCol={{ xs: { span: 16 } }} style={{ marginTop: 40 }}>
                         <Form.Item label="Range">
-                            <InputNumber min={0} defaultValue={configuringClassBreak.minimum} onChange={ v => configuringClassBreak.minimum = v } /> 
+                            <InputNumber min={0} defaultValue={classBreak.minimum} onChange={ v => classBreak.minimum = v } /> 
                             <span style={{padding: 4}}>~</span>
-                            <InputNumber min={0} defaultValue={configuringClassBreak.maximum} onChange={ v => configuringClassBreak.maximum = v } />
+                            <InputNumber min={0} defaultValue={classBreak.maximum} onChange={ v => classBreak.maximum = v } />
                         </Form.Item>
                         {
-                            this.getConfiguringFormItems(configuringClassBreak.style)
+                            this.getConfiguringFormItems(classBreak.style)
                         }
                     </Form>
                 ),
                 onOk: () => {
-                    configuringClassBreak.style.name = `${configuringClassBreak.minimum} ~ ${configuringClassBreak.maximum}`;
-                    this.state.style.classBreaks.push(configuringClassBreak);
-                    this.setState(this.state);
+                    classBreak.style.name = `${classBreak.minimum} ~ ${classBreak.maximum}`;
+                    okHandler && okHandler(classBreak);
                 }
             });
         };
