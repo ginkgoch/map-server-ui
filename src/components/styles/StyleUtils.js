@@ -94,6 +94,10 @@ export class StyleUtils {
         return ['fill-style', 'line-style', 'point-style'];
     }
 
+    static allStyleTypes() {
+        return [...this.simpleStyleTypes(), 'class-break-style', 'value-style'];
+    }
+
     static getConfiguringFormItems(style) {
         const props = {
             onFillStyleChange: color => {
