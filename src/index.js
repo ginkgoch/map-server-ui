@@ -2,11 +2,12 @@ import _ from 'lodash';
 import React from "react";
 import ReactDOM from "react-dom";
 import { Layout, Drawer } from "antd";
-import Logo from "./components/Logo";
+import Logo from "./components/header/Logo";
 import { Layers } from './components/sidebar';
 import { NoneStyle } from './components/styles';
 import * as mapJSON from './resources/map.json';
 import "./index.css";
+import { LaunchButton } from './components/header/LaunchButton';
 
 const { Header, Content } = Layout;
 
@@ -27,6 +28,7 @@ class AppComponent extends React.Component {
     return (
       <Layout>
         <Header id="header" style={{ borderBottom: '1px solid #e8e8e8' }}>
+          <LaunchButton />
           <Logo />
         </Header>
         <Content>
