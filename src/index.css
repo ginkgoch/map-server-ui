@@ -47,3 +47,7 @@ html, body, #container, .ant-layout {
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15) !important;
     -webkit-box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+.launch-button>span {
+    margin-left: 14px;
+}
