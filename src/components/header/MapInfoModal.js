@@ -30,19 +30,16 @@ const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
         >
           <Form layout="vertical">
             <Form.Item label="Name">
-              {/* <Input placeholder="New  Map Name" defaultValue={this.state.name} onChange={this._onNameChanged.bind(this)} /> */}
               {getFieldDecorator("name", {
                 rules: [{ required: true, message: "Please input map name" }],
               })(<Input placeholder="New  Map Name" />)}
             </Form.Item>
             <Form.Item label="Projection (CRS)">
-              {/* <Select defaultValue={this.state.crs} onChange={this._onCrsChanged.bind(this)}>{crsOptions}</Select> */}
               {getFieldDecorator("crs", {
                 initialValue: 'WGS84'
               })(<Select>{crsOptions}</Select>)}
             </Form.Item>
             <Form.Item label="Description">
-              {/* <TextArea rows={3} defaultValue={this.state.description} onChange={this._onDescriptionChanged.bind(this)}></TextArea> */}
               {getFieldDecorator("description")(<TextArea rows={3} />)}
             </Form.Item>
           </Form>
