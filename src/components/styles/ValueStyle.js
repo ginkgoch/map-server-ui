@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleBase, StyleBaseForm } from './StyleBase';
+import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'

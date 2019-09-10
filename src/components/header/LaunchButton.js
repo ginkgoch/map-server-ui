@@ -55,8 +55,6 @@ export class LaunchButton extends React.Component {
     }
 
     onMenuItemClick(e) {
-        console.log(e);
-
         switch (e.key) {
             case 'home-new':
                 this._createMapModalVisible(true);
