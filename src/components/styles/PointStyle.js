@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleBase } from './StyleBase';
+import { StyleBaseForm } from './StyleBase';
 import { Form, Select, InputNumber } from 'antd';
 import ColorPicker from "rc-color-picker";
 import { hexColor } from './KnownColors';
 
-export class PointStyle extends StyleBase {
+class PointStyleForm extends StyleBaseForm {
     renderContent() {
         return <PointStyleFormItems style={this.state.style}
             onSymbolChanged={this.onSymbolChanged.bind(this)}
@@ -40,3 +40,5 @@ export const PointStyleFormItems = props => {
         </Form.Item>
     </>
 };
+
+export const PointStyle = Form.create({name: 'PointStyle'})(PointStyleForm);

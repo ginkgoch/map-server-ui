@@ -2,9 +2,9 @@ import React from 'react';
 import { Form, InputNumber } from "antd";
 import ColorPicker from "rc-color-picker";
 import { hexColor } from './KnownColors';
-import { StyleBase } from './StyleBase';
+import { StyleBaseForm } from './StyleBase';
 
-export class FillStyle extends StyleBase {
+class FillStyleForm extends StyleBaseForm {
     renderContent() {
         return <FillStyleFormItems 
             style={this.state.style}
@@ -27,3 +27,5 @@ export const FillStyleFormItems = props => {
         </Form.Item>
     </>
 };
+
+export const FillStyle = Form.create({name: 'FillStyle'})(FillStyleForm);

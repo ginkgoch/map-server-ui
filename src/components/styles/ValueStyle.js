@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleBase } from './StyleBase';
+import { StyleBase, StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 
-export class ValueStyle extends StyleBase {
+class ValueStyleForm extends StyleBaseForm {
     renderContent() {
         this.state.hidePreview = true;
 
@@ -135,3 +135,5 @@ export class ValueStyle extends StyleBase {
         });
     }
 }
+
+export const ValueStyle = Form.create({name: 'ValueStyle'})(ValueStyleForm);

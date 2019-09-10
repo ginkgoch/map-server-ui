@@ -2,9 +2,9 @@ import React from 'react';
 import ColorPicker from "rc-color-picker";
 import { Form, InputNumber } from "antd";
 import { hexColor } from './KnownColors';
-import { StyleBase } from './StyleBase';
+import { StyleBaseForm } from './StyleBase';
 
-export class LineStyle extends StyleBase {
+class LineStyleForm extends StyleBaseForm {
     renderContent() {
         return <LineStyleFormItems style={this.state.style} 
             onStrokeStyleChange={this.onStrokeStyleChange.bind(this)}
@@ -22,3 +22,5 @@ export const LineStyleFormItems = props => {
         </Form.Item>
     </>
 };
+
+export const LineStyle = Form.create({name: 'LineStyle'})(LineStyleForm);
