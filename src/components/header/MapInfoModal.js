@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Form, Input, Select, Modal } from "antd";
 
-const { Option } = Select;
-const { TextArea } = Input;
 const crsCandidates = [
-  { name: "EPSG:4326 (WGS84)", crs: "WGS84", default: true },
-  { name: "EPSG:3857 (GOOGLE, EPSG:900913)", crs: "GOOGLE" }
+  { name: "EPSG:4326 (WGS84)", crs: "WGS84", unit: "degrees", default: true },
+  { name: "EPSG:3857 (GOOGLE, EPSG:900913)", unit: "m", crs: "GOOGLE" }
 ];
 
+const { Option } = Select;
+const { TextArea } = Input;
 const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
   class extends Component {
     render() {
@@ -36,7 +36,7 @@ const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
             </Form.Item>
             <Form.Item label="Projection (CRS)">
               {getFieldDecorator("crs", {
-                initialValue: 'WGS84'
+                initialValue: crsCandidates[0].crs
               })(<Select>{crsOptions}</Select>)}
             </Form.Item>
             <Form.Item label="Description">
@@ -56,18 +56,13 @@ export class MapInfoModal extends Component {
     this.state = {
       name: props.name || "",
       description: props.description || "",
-      crs: props.crs || this.defaultCrs,
+      crs: props.crs || crsCandidates[0].crs,
       loading: false
     };
   }
 
   _saveFormRef(formRef) {
     this.formRef = formRef;
-  }
-
-  _hasError(fieldsErr) {
-    const hasErr = Object.keys(fieldsErr).some(f => fieldsErr[f]);
-    return hasErr;
   }
 
   render() {
@@ -82,18 +77,12 @@ export class MapInfoModal extends Component {
     );
   }
 
-  get defaultCrs() {
-    const defaultCrs = crsCandidates.find(crs => crs.default);
-    return defaultCrs ? defaultCrs.crs : "WGS84";
-  }
-
   async _onMapCreated(e) {
     e.preventDefault();
     if (!this.props.onMapCreated) return;
 
     try {
       this.setState({ loading: true });
-      // const mapModel = { name: this.state.name, description: this.state.description, crs: this._getCrs(this.state.crs) };
 
       const that = this;
       const mapModel = await new Promise(res => {
@@ -105,7 +94,7 @@ export class MapInfoModal extends Component {
           res({
             name: values.name,
             description: values.description,
-            crs: that._getCrs(values.crs)
+            crs: that.parseCrs(values.crs)
           });
         });
       });
@@ -115,7 +104,7 @@ export class MapInfoModal extends Component {
       }
 
       await this.props.onMapCreated(mapModel);
-      this._reset();
+      this.formRef.props.form.resetFields();
     } catch (err) {
       this._showErrorMessage(err);
     } finally {
@@ -123,33 +112,13 @@ export class MapInfoModal extends Component {
     }
   }
 
-  _onNameChanged(e) {
-    this.setState({ name: e.target.value });
-  }
-
-  _onDescriptionChanged(e) {
-    this.setState({ description: e.target.value });
-  }
-
-  _onCrsChanged(e) {
-    this.setState({ crs: e });
-  }
-
-  _getCrs(crs) {
-    switch (crs) {
-      case "WGS84":
-        return { projection: crs, unit: "degrees" };
-      default:
-        return { projection: crs, unit: "m" };
+  parseCrs(crsID) {
+    const crs = crsCandidates.find(c => c.crs === crsID);
+    if (crs === undefined) {
+      crs = crsCandidates[0];
     }
-  }
-
-  _reset() {
-    this.setState({
-      name: "",
-      description: "",
-      crs: this.defaultCrs
-    });
+    
+    return { projection: crs.crs, unit: crs.unit };
   }
 
   _showErrorMessage(err) {
