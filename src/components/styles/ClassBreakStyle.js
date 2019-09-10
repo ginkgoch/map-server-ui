@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleBase } from './StyleBase';
+import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 
-export class ClassBreakStyle extends StyleBase {
+class ClassBreakStyleForm extends StyleBaseForm {
     renderContent() {
         this.state.hidePreview = true;
 
@@ -138,3 +138,5 @@ export class ClassBreakStyle extends StyleBase {
         });
     }
 }
+
+export const ClassBreakStyle = Form.create({name: 'ClassBreakStyle'})(ClassBreakStyleForm);

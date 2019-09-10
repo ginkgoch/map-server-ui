@@ -8,6 +8,47 @@ const crsCandidates = [
   { name: "EPSG:3857 (GOOGLE, EPSG:900913)", crs: "GOOGLE" }
 ];
 
+const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
+  class extends Component {
+    render() {
+      const { form } = this.props;
+      const { getFieldDecorator } = form;
+      const crsOptions = crsCandidates.map(crs => (
+        <Option key={`crs-${crs.crs}`} value={crs.crs}>
+          {crs.name}
+        </Option>
+      ));
+
+      const passThroughProps = _.omit(this.props, ["onMapCreated"]);
+      const { onMapCreated, loading } = this.props;
+      return (
+        <Modal
+          title="Create New Map"
+          {...passThroughProps}
+          onOk={onMapCreated}
+          confirmLoading={loading}
+        >
+          <Form layout="vertical">
+            <Form.Item label="Name">
+              {getFieldDecorator("name", {
+                rules: [{ required: true, message: "Please input map name" }],
+              })(<Input placeholder="New  Map Name" />)}
+            </Form.Item>
+            <Form.Item label="Projection (CRS)">
+              {getFieldDecorator("crs", {
+                initialValue: 'WGS84'
+              })(<Select>{crsOptions}</Select>)}
+            </Form.Item>
+            <Form.Item label="Description">
+              {getFieldDecorator("description")(<TextArea rows={3} />)}
+            </Form.Item>
+          </Form>
+        </Modal>
+      );
+    }
+  }
+);
+
 export class MapInfoModal extends Component {
   constructor(props) {
     super(props);
@@ -20,28 +61,24 @@ export class MapInfoModal extends Component {
     };
   }
 
-  render() {
-    const crsOptions = crsCandidates.map(crs => (
-      <Option key={`crs-${crs.crs}`} value={crs.crs}>
-        {crs.name}
-      </Option>
-    ));
+  _saveFormRef(formRef) {
+    this.formRef = formRef;
+  }
 
-    const passThroughProps = _.omit(this.props, ['onMapCreated']);
+  _hasError(fieldsErr) {
+    const hasErr = Object.keys(fieldsErr).some(f => fieldsErr[f]);
+    return hasErr;
+  }
+
+  render() {
+    const passThroughProps = _.omit(this.props, ["onMapCreated"]);
     return (
-      <Modal title="Create New Map" {...passThroughProps} onOk={this._onMapCreated.bind(this)} confirmLoading={this.state.loading}>
-        <Form layout="vertical">
-          <Form.Item label="Name">
-            <Input placeholder="New  Map Name" defaultValue={this.state.name} onChange={this._onNameChanged.bind(this)} />
-          </Form.Item>
-          <Form.Item label="Projection (CRS)">
-            <Select defaultValue={this.state.crs} onChange={this._onCrsChanged.bind(this)}>{crsOptions}</Select>
-          </Form.Item>
-          <Form.Item label="Description">
-            <TextArea rows={3} defaultValue={this.state.description} onChange={this._onDescriptionChanged.bind(this)}></TextArea>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <MapInfoModalForm
+        wrappedComponentRef={this._saveFormRef.bind(this)}
+        onMapCreated={this._onMapCreated.bind(this)}
+        loading={this.state.loading}
+        {...passThroughProps}
+      />
     );
   }
 
@@ -50,53 +87,75 @@ export class MapInfoModal extends Component {
     return defaultCrs ? defaultCrs.crs : "WGS84";
   }
 
-  async _onMapCreated() {
+  async _onMapCreated(e) {
+    e.preventDefault();
     if (!this.props.onMapCreated) return;
 
     try {
-        this.setState({ loading: true });
-        const mapModel = { name: this.state.name, description: this.state.description, crs: this._getCrs(this.state.crs) };
-        await this.props.onMapCreated(mapModel);
-        this._reset();
-    }
-    catch (err) {
-        this._showErrorMessage(err);
-    }
-    finally {
-        this.setState({ loading: false });
+      this.setState({ loading: true });
+      // const mapModel = { name: this.state.name, description: this.state.description, crs: this._getCrs(this.state.crs) };
+
+      const that = this;
+      const mapModel = await new Promise(res => {
+        that.formRef.props.form.validateFields((err, values) => {
+          if (err) {
+            res(null);
+          }
+
+          res({
+            name: values.name,
+            description: values.description,
+            crs: that._getCrs(values.crs)
+          });
+        });
+      });
+
+      if (mapModel === null) {
+        return;
+      }
+
+      await this.props.onMapCreated(mapModel);
+      this._reset();
+    } catch (err) {
+      this._showErrorMessage(err);
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
   _onNameChanged(e) {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   }
 
   _onDescriptionChanged(e) {
-    this.setState({description: e.target.value});
+    this.setState({ description: e.target.value });
   }
 
   _onCrsChanged(e) {
-    this.setState({crs: e});
+    this.setState({ crs: e });
   }
 
   _getCrs(crs) {
     switch (crs) {
-      case 'WGS84':
-        return { projection: crs, unit: 'degrees' };
+      case "WGS84":
+        return { projection: crs, unit: "degrees" };
       default:
-        return { projection: crs, unit: 'm' };
+        return { projection: crs, unit: "m" };
     }
   }
 
   _reset() {
-      this.setState({
-          name: '',
-          description: '',
-          crs: this.defaultCrs
-      });
+    this.setState({
+      name: "",
+      description: "",
+      crs: this.defaultCrs
+    });
   }
 
   _showErrorMessage(err) {
-    Modal.error({ title: 'Create Map Failed', content: 'Create map failed. ' + err  });
+    Modal.error({
+      title: "Create Map Failed",
+      content: "Create map failed. " + err
+    });
   }
 }
