@@ -5,8 +5,8 @@ import Logo from "../header/Logo";
 import { Layers } from '../sidebar';
 import { NoneStyle } from '../styles';
 import * as mapJSON from '../../resources/map.json';
-import "../../index.css";
 import { LaunchButton } from '../header/LaunchButton';
+import "../../index.css";
 
 const { Header, Content } = Layout;
 

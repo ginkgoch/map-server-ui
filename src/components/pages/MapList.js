@@ -2,8 +2,9 @@ import React, { Component, Fragment } from "react";
 import { MapsService } from "../../services/maps/MapsService";
 import { List, Row, Col, Button, Icon, Modal, Popconfirm } from "antd";
 import moment from "moment";
-import { MapInfoModal } from "../header/MapInfoModal";
+import { MapInfoModal } from "../modals/MapInfoModal";
 import { Link } from 'react-router-dom';
+import "../../index.css";
 
 const ListHeader = props => (
     <div className="map-list-header">
@@ -36,12 +37,15 @@ export class MapList extends Component {
                             size="large"
                             dataSource={this.state.maps}
                             header={
-                                <ListHeader onClick={this.setMapInfoModalVisible.bind(this, true)} />
+                                <ListHeader onClick={this.createNewMapModel.bind(this)} />
                             }
                             renderItem={item => (
                                 <List.Item
                                     key={item.id}
                                     actions={[
+                                        <Button shape="circle" size="small" onClick={this.editMapModel.bind(this, item.id)}>
+                                            <Icon type="edit" />
+                                        </Button>,
                                         <Popconfirm
                                             title="Are you sure to remove map?"
                                             onConfirm={async e =>
@@ -77,8 +81,10 @@ export class MapList extends Component {
                 </Row>
                 <MapInfoModal
                     visible={this.state.mapInfoModalVisible}
-                    onCancel={this.setMapInfoModalVisible.bind(this, false)}
-                    onMapCreated={newMapInfo => this.onMapCreated(newMapInfo)}
+                    title={this.state.title}
+                    mapModel={this.state.mapModel}
+                    onCancel={this.cancelEditingMapModel.bind(this)}
+                    onConfirm={async (newMapInfo, editing) => await this.onMapModalConfirm(newMapInfo, editing)}
                 ></MapInfoModal>
             </Fragment>
         );
@@ -105,19 +111,51 @@ export class MapList extends Component {
         this.setState({ maps });
     }
 
-    async onMapCreated(newMapInfo) {
-        const response = await MapsService.create(
-            newMapInfo.name,
-            newMapInfo.crs,
-            newMapInfo.description
-        );
+    async onMapModalConfirm(newMapInfo, editing = false) {
+        let response = null;
+        if (editing) {
+            response = await MapsService.updateMap(newMapInfo);
+        }
+        else {
+            response = await MapsService.create(
+                newMapInfo.name,
+                newMapInfo.crs,
+                newMapInfo.description
+            );
+        }
         if (response.status === 200) {
             this.setMapInfoModalVisible(false);
             await this.resetList();
         }
+        
+        this.setState({ mapModel: null });
     }
 
     setMapInfoModalVisible(visible) {
         this.setState({ mapInfoModalVisible: visible });
+    }
+
+    async editMapModel(id) {
+        try {
+            const response = await MapsService.getMapByID(id);
+            this.setState({ title: 'Edit Map Info', mapModel: response.data});
+            this.setMapInfoModalVisible(true);
+        }
+        catch (ex) {
+            Modal.error({
+                title: `Edit Map Info Failed`,
+                content: ex.toString()
+            })
+        }
+    }
+
+    createNewMapModel() {
+        this.setState({ title: undefined, mapModel: null});
+        this.setMapInfoModalVisible(true);
+    }
+
+    cancelEditingMapModel() {
+        this.setState({ mapModel: null });
+        this.setMapInfoModalVisible(false);
     }
 }

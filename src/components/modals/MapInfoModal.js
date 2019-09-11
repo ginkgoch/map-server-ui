@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Select, Modal } from "antd";
+import _ from 'lodash';
 
 const crsCandidates = [
   { name: "EPSG:4326 (WGS84)", crs: "WGS84", unit: "degrees", default: true },
@@ -10,6 +11,21 @@ const { Option } = Select;
 const { TextArea } = Input;
 const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
   class extends Component {
+    constructor(props) {
+      super(props);
+
+      this.state = { mapModel: props.mapModel, title: props.title };
+    }
+
+    static getDerivedStateFromProps(nextProps, preState) {
+      if (preState.title !== nextProps.title || preState.mapModel !== nextProps.mapModel) {
+        return {...preState, title: nextProps.title, mapModel: nextProps.mapModel};
+      }
+      else {
+        return null;
+      }
+    }
+
     render() {
       const { form } = this.props;
       const { getFieldDecorator } = form;
@@ -19,28 +35,33 @@ const MapInfoModalForm = Form.create({ name: "MapInfoModalForm" })(
         </Option>
       ));
 
-      const passThroughProps = _.omit(this.props, ["onMapCreated"]);
-      const { onMapCreated, loading } = this.props;
+      const passThroughProps = _.omit(this.props, ["onConfirm"]);
+      const { onConfirm, loading } = this.props;
+      const title = this.state.title || 'Create New Map'
+
       return (
         <Modal
-          title="Create New Map"
+          title={title}
           {...passThroughProps}
-          onOk={onMapCreated}
+          onOk={onConfirm}
           confirmLoading={loading}
         >
           <Form layout="vertical">
             <Form.Item label="Name">
               {getFieldDecorator("name", {
                 rules: [{ required: true, message: "Please input map name" }],
+                initialValue: (this.state.mapModel ? this.state.mapModel.name : '')
               })(<Input placeholder="New  Map Name" />)}
             </Form.Item>
             <Form.Item label="Projection (CRS)">
               {getFieldDecorator("crs", {
-                initialValue: crsCandidates[0].crs
+                initialValue: (this.state.mapModel ? this.state.mapModel.content.srs.projection : crsCandidates[0].crs)
               })(<Select>{crsOptions}</Select>)}
             </Form.Item>
             <Form.Item label="Description">
-              {getFieldDecorator("description")(<TextArea rows={3} />)}
+              {getFieldDecorator("description", {
+                initialValue: (this.state.mapModel ? this.state.mapModel.description : '')
+              })(<TextArea rows={3} />)}
             </Form.Item>
           </Form>
         </Modal>
@@ -66,20 +87,20 @@ export class MapInfoModal extends Component {
   }
 
   render() {
-    const passThroughProps = _.omit(this.props, ["onMapCreated"]);
+    const passThroughProps = _.omit(this.props, ["onConfirm"]);
     return (
       <MapInfoModalForm
         wrappedComponentRef={this._saveFormRef.bind(this)}
-        onMapCreated={this._onMapCreated.bind(this)}
+        onConfirm={async e => await this.onConfirm(e)}
         loading={this.state.loading}
         {...passThroughProps}
       />
     );
   }
 
-  async _onMapCreated(e) {
+  async onConfirm(e) {
     e.preventDefault();
-    if (!this.props.onMapCreated) return;
+    if (!this.props.onConfirm) return;
 
     try {
       this.setState({ loading: true });
@@ -103,10 +124,19 @@ export class MapInfoModal extends Component {
         return;
       }
 
-      await this.props.onMapCreated(mapModel);
+      if (this.props.mapModel) {
+        const editingMapModel = _.cloneDeep(this.props.mapModel);
+        editingMapModel.name = mapModel.name;
+        editingMapModel.description = mapModel.description;
+        editingMapModel.content.srs = mapModel.crs;
+        await this.props.onConfirm(editingMapModel, true);
+      }
+      else {
+        await this.props.onConfirm(mapModel);
+      }
       this.formRef.props.form.resetFields();
     } catch (err) {
-      this._showErrorMessage(err);
+      this.showErrorMessage(err);
     } finally {
       this.setState({ loading: false });
     }
@@ -121,10 +151,10 @@ export class MapInfoModal extends Component {
     return { projection: crs.crs, unit: crs.unit };
   }
 
-  _showErrorMessage(err) {
+  showErrorMessage(err) {
     Modal.error({
-      title: "Create Map Failed",
-      content: "Create map failed. " + err
+      title: "Failed",
+      content: err.toString()
     });
   }
 }
