@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { MapsService } from "../../services/maps/MapsService";
 import { List, Row, Col, Button, Icon, Modal, Popconfirm } from "antd";
 import moment from "moment";
-import { MapInfoModal } from "../header/MapInfoModal";
+import { MapInfoModal } from "../modals/MapInfoModal";
 import { Link } from 'react-router-dom';
 
 const ListHeader = props => (
