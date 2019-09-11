@@ -1,5 +1,4 @@
 @import '~antd/dist/antd.css';
-
 html, body, #container, .ant-layout {
     height: 100%;
     margin: 0px;
@@ -50,4 +49,35 @@ html, body, #container, .ant-layout {
 
 .launch-button>span {
     margin-left: 14px;
+}
+
+.map-list {
+    margin-top: 40px;
+}
+
+.map-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.map-list-item-title {
+    font-size: 16px;
+}
+
+.map-list-item-desc {
+    color: black;
+    margin: 16px 0 8px 0;
+}
+
+.map-list-header-item {
+    display: inline-block;
+}
+
+.map-list-item-extra {
+    margin-top: 0px;
+}
+
+.map-list-item-extra>span {
+    margin-right: 10px;
 }

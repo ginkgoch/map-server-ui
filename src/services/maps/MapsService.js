@@ -15,4 +15,14 @@ export class MapsService {
         const response = await Requests.post('/maps', mapModel);
         return response;
     }
+
+    static async getMaps() {
+        const response = await Requests.get('/maps');
+        return response;
+    }
+
+    static async deleteMapByID(id) {
+        const response = await Requests.delete(`/maps/${id}`);
+        return response;
+    }
 }
