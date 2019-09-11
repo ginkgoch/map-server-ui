@@ -23,6 +23,10 @@ export class MapEditor extends React.Component {
     };
   }
 
+  componentDidMount() {
+    console.log('Current map ID: ', this.props.match.params.mapID)
+  }
+
   render() {
     return (
       <Layout>
