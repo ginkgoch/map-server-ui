@@ -8,7 +8,7 @@ export class LaunchButton extends React.Component {
         super(props);
 
         this.state = {
-            createMapModalVisible: false
+            mapModalVisible: false
         };
     }
 
@@ -45,9 +45,9 @@ export class LaunchButton extends React.Component {
                         <Icon type="menu"></Icon>
                     </Button>
                 </Dropdown>
-                <MapInfoModal visible={this.state.createMapModalVisible}
-                    onCancel={this._createMapModalVisible.bind(this, false)}
-                    onMapCreated={newMapInfo => this._onMapCreated(newMapInfo)}></MapInfoModal>
+                <MapInfoModal visible={this.state.mapModalVisible}
+                    onCancel={this.setMapModalVisible.bind(this, false)}
+                    onConfirm={newMapInfo => this.onMapModalConfirm(newMapInfo)}></MapInfoModal>
             </Fragment>
         );
     }
@@ -55,19 +55,19 @@ export class LaunchButton extends React.Component {
     onMenuItemClick(e) {
         switch (e.key) {
             case 'home-new':
-                this._createMapModalVisible(true);
+                this.setMapModalVisible(true);
                 break;
         }
     }
 
-    _createMapModalVisible(visible) {
-        this.setState({ createMapModalVisible: visible });
+    setMapModalVisible(visible) {
+        this.setState({ mapModalVisible: visible });
     }
 
-    async _onMapCreated(newMapInfo) {
+    async onMapModalConfirm(newMapInfo) {
         const response = await MapsService.create(newMapInfo.name, newMapInfo.crs, newMapInfo.description);
         if (response.status === 200) {
-            this._createMapModalVisible(false);
+            this.setMapModalVisible(false);
         }
     }
 }

@@ -52,7 +52,7 @@ html, body, #container, .ant-layout {
 }
 
 .map-list {
-    margin-top: 40px;
+    padding-top: 40px;
 }
 
 .map-list-header {

@@ -21,6 +21,16 @@ export class MapsService {
         return response;
     }
 
+    static async getMapByID(id) {
+        const response = await Requests.get(`/maps/${id}`);
+        return response;
+    }
+
+    static async updateMap(newMapModel) {
+        const response = await Requests.put(`/maps/${newMapModel.id}`, newMapModel);
+        return response;
+    }
+
     static async deleteMapByID(id) {
         const response = await Requests.delete(`/maps/${id}`);
         return response;
