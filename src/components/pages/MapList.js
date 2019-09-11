@@ -3,6 +3,7 @@ import { MapsService } from "../../services/maps/MapsService";
 import { List, Row, Col, Button, Icon, Modal, Popconfirm } from "antd";
 import moment from "moment";
 import { MapInfoModal } from "../header/MapInfoModal";
+import { Link } from 'react-router-dom';
 
 const ListHeader = props => (
     <div className="map-list-header">
@@ -54,7 +55,7 @@ export class MapList extends Component {
                                     ]}
                                 >
                                     <List.Item.Meta
-                                        title={<span className="map-list-item-title"><a href="#">{item.name}</a></span>}
+                                        title={<span className="map-list-item-title"><Link to={`/maps/${item.id}`}>{item.name}</Link></span>}
                                         description={
                                             <div>
                                                 <div className="map-list-item-desc">
