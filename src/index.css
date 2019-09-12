@@ -9,6 +9,13 @@ html, body, #container, .ant-layout {
     box-shadow: 0 2px 8px #f0f1f2;
 }
 
+#header > .header-title {
+    display: flex; 
+    justify-content: center; 
+    width: 100%;
+    position: absolute;
+}
+
 .ant-drawer-body {
     padding: 4px;
 }
@@ -80,4 +87,9 @@ html, body, #container, .ant-layout {
 
 .map-list-item-extra>span {
     margin-right: 10px;
+}
+
+.sidebar-title {
+    display: flex;
+    justify-content: space-between;
 }

@@ -11,6 +11,14 @@ export class Layers extends React.Component {
     this.state = { layers: props.layers };
   }
 
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (nextProps.layers !== preState.layers) {
+      return {...preState, layers: nextProps.layers};
+    }
+
+    return null;
+  }
+
   render() {
     return (
       <Menu

@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: path.resolve('dist'),
     filename: "index.js",
+    publicPath: '/'
   },
   module: {
     rules: [{
@@ -40,5 +41,6 @@ module.exports = {
     inline: true,
     host: '0.0.0.0',
     port: 8080,
+    historyApiFallback: true
   }
 };
