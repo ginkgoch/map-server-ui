@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import { Layout, Drawer, Spin, Popover, Icon } from "antd";
+import { Layout, Drawer, Spin, Popover, Icon, Modal } from "antd";
 import Logo from "../header/Logo";
 import { Layers } from "../sidebar";
 import { NoneStyle } from "../styles";
@@ -29,6 +29,8 @@ export class MapEditor extends React.Component {
       editingStyleName: "",
       mapModel: null,
       mapModelLoading: true,
+      savingMapModel: false,
+      savingMapModelError: '',
       editStyleComponent: <NoneStyle />
     };
   }
@@ -37,26 +39,67 @@ export class MapEditor extends React.Component {
     const mapID = this.props.match.params.mapID;
     const response = await MapsService.getMapByID(mapID);
     if (response.status === 200) {
-      this.setState({ mapModel: response.data, mapModelLoading: false });
+      const mapModel = response.data;
+      this.normalizeGroups(mapModel)
+      this.setState({ mapModel, mapModelLoading: false });
+    }
+
+    const that = this;
+    window.ginkgoch = {
+      savingTimeoutID: null,
+      saveCurrentMapModel: () => {
+        if (this.savingTimerID) {
+          clearTimeout(this.savingTimerID);
+        }
+        this.savingTimerID = setTimeout(async () => {
+          this.savingTimerID = null;
+          try {
+            await MapsService.updateMap(that.state.mapModel);
+          }
+          catch (ex) {
+            that.setState({
+              savingMapModelError: ex.toString()
+            })
+            const errorModal = Modal.error({
+              title: 'Save Map Failed',
+              content: (
+                <div>
+                  <div>Latest map status is not synchronized with server with following err. Click &nbsp;
+                    <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>here</a> to save again or refresh current page to sync with latest state.</div>
+                  <p style={{marginTop: 8}}>{that.state.savingMapModelError}</p>
+                </div>
+              )
+            })
+          }
+        }, 1000);
+      }
+    }
+  }
+
+  async onReSaveButtonClick(e, errorModal) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      console.log(this);
+      this.setState({savingMapModel: true, savingMapModelError: ''});
+      const response = await MapsService.updateMap(this.state.mapModel);
+      if (response.status === 200) {
+        errorModal.destroy();
+      }
+    }
+    catch (ex) {
+      this.setState({savingMapModelError: ex.toString()});
+    }
+    finally {
+      this.setState({savingMapModel: false});
     }
   }
 
   render() {
-    const layers = this.state.mapModel
-      ? _.flatMap(this.state.mapModel.content.groups, g => g.layers)
-      : [];
+    const layers = this.state.mapModel ? this.state.mapModel.content.groups[0].layers : [];
     const title = this.state.mapModel ? this.state.mapModel.name : "Unknown";
-    // const description = this.state.mapModel ? this.state.mapModel.description : '';
-    const description = (
-      <div style={{ width: 480 }}>
-        Selim III, then Sultan of the Ottoman empire, engaged in many reforms
-        and modernizations during his reign, and this 1803 atlas was the first
-        known complete printed atlas in the Muslim world to use European-style
-        cartography. Only 50 copies were printed, and many of these were burned
-        in a warehouse fire during a Janissary uprising of those opposed to
-        Selim’s reforms, so it is also one of the rarest printed atlases.
-      </div>
-    );
+    const description = (<div style={{ width: 480 }}>{this.state.mapModel ? this.state.mapModel.description : ''}</div>);
 
     return (
       <Layout>
@@ -65,7 +108,7 @@ export class MapEditor extends React.Component {
             <h1>
               {title}
               <Popover content={description} placement="bottom" trigger="click">
-                <Icon style={{marginLeft: 6}} type="more" />
+                <Icon style={{ marginLeft: 6 }} type="more" />
               </Popover>
             </h1>
           </div>
@@ -128,6 +171,21 @@ export class MapEditor extends React.Component {
         editingStyleType,
         secondaryDrawerTitle
       });
+    }
+  }
+
+  normalizeGroups(mapModel) {
+    const map = _.result(mapModel, 'content');
+    if (map === undefined) {
+      return;
+    }
+
+    if (!map.groups) {
+      map.groups = [{
+        "type": "layer-group",
+        "name": "Default",
+        "visible": true
+      }];
     }
   }
 }
