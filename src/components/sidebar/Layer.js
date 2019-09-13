@@ -49,6 +49,7 @@ export class Layer extends Component {
       ModalUtils.promptRemoveModal("style", () => {
         _.remove(layer.styles, s => s.id === id);
         this.setState({ layer });
+        this.saveMapModal();
       });
     };
   }
@@ -60,6 +61,7 @@ export class Layer extends Component {
         layer.styles[index] = newStyle;
   
         this.setState(this.state);
+        this.saveMapModal();
         this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
       }).bind(this);
 
@@ -76,6 +78,7 @@ export class Layer extends Component {
     const onNewStyleSubmit = (newStyle => {
       layer.styles.push(newStyle);
       this.setState(this.state);
+      this.saveMapModal();
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
     }).bind(this);
 
@@ -108,5 +111,9 @@ export class Layer extends Component {
 
   getStyleTypeName(style) {
     return StyleUtils.styleTypeName(style);
+  }
+
+  saveMapModal() {
+    window.ginkgoch.saveCurrentMapModel();
   }
 }
