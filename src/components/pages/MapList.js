@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { MapsService } from "../../services/maps/MapsService";
+import { MapsService } from "../../services/MapsService";
 import { List, Row, Col, Button, Icon, Modal, Popconfirm } from "antd";
 import moment from "moment";
 import { MapInfoModal } from "../modals/MapInfoModal";

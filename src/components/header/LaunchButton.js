@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Menu, Icon, Button, Dropdown } from "antd";
 import { MapInfoModal } from "../modals";
-import { MapsService } from "../../services/maps/MapsService";
+import { MapsService } from "../../services/MapsService";
 
 export class LaunchButton extends React.Component {
     constructor(props) {

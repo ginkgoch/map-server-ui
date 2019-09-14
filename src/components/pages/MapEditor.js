@@ -1,12 +1,13 @@
 import _ from "lodash";
 import React from "react";
-import { Layout, Drawer, Spin, Popover, Icon, Modal } from "antd";
+import { Layout, Drawer, Spin, Popover, Icon, Modal, Button } from "antd";
 import Logo from "../header/Logo";
 import { Layers } from "../sidebar";
 import { NoneStyle } from "../styles";
 import { LaunchButton } from "../header/LaunchButton";
 import "../../index.css";
-import { MapsService } from "../../services/maps/MapsService";
+import { MapsService } from "../../services/MapsService";
+import { DataSources } from "../sidebar/DataSources";
 
 const { Header, Content } = Layout;
 
@@ -14,7 +15,12 @@ const SideBarHeader = props => {
   return (
     <div className="sidebar-title">
       <span>Resources</span>
-      <Spin size="small" spinning={props.loading}></Spin>
+      <span>
+        <Spin size="small" spinning={props.loading}></Spin>
+        <Button shape="circle" size="small">
+          <Icon type="plus" />
+        </Button>
+      </span>
     </div>
   );
 };
@@ -131,6 +137,8 @@ export class MapEditor extends React.Component {
                 layers={layers}
                 showStyleEditPanel={this.showStyleEditPanel.bind(this)}
               />
+
+              <DataSources />
               <Drawer
                 title={
                   this.state.secondaryDrawerTitle +
