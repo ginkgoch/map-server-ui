@@ -30,14 +30,13 @@ export class MapEditor extends React.Component {
     super(props);
 
     this.state = {
-      styleEditPanelVisible: false,
+      secondaryDrawerVisible: false,
       secondaryDrawerTitle: "",
-      editingStyleName: "",
       mapModel: null,
       mapModelLoading: true,
       savingMapModel: false,
       savingMapModelError: '',
-      editStyleComponent: <NoneStyle />
+      secondaryDrawerComponent: <NoneStyle />
     };
   }
 
@@ -135,7 +134,7 @@ export class MapEditor extends React.Component {
             >
               <Layers
                 layers={layers}
-                showStyleEditPanel={this.showStyleEditPanel.bind(this)}
+                showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
               />
 
               <DataSources />
@@ -143,18 +142,18 @@ export class MapEditor extends React.Component {
                 title={
                   this.state.secondaryDrawerTitle +
                   " - " +
-                  this.state.editingStyleType
+                  this.state.secondaryDrawerSubTitle
                 }
                 width="360px"
                 placement="left"
-                visible={this.state.styleEditPanelVisible}
+                visible={this.state.secondaryDrawerVisible}
                 closable={false}
                 style={{ position: "absolute" }}
                 getContainer={"#content"}
-                onClose={this.showStyleEditPanel.bind(this, false)}
+                onClose={this.showSecondaryDrawer.bind(this, false)}
               >
                 <div style={{ paddingTop: 24 }}>
-                  {this.state.editStyleComponent}
+                  {this.state.secondaryDrawerComponent}
                 </div>
               </Drawer>
             </Drawer>
@@ -164,19 +163,19 @@ export class MapEditor extends React.Component {
     );
   }
 
-  showStyleEditPanel(
+  showSecondaryDrawer(
     visible = false,
-    editStyleComponent = null,
-    editingStyleType = "",
+    secondaryDrawerComponent = null,
+    secondaryDrawerSubTitle = "",
     secondaryDrawerTitle = "Edit Style"
   ) {
     if (!visible) {
-      this.setState({ styleEditPanelVisible: visible });
+      this.setState({ secondaryDrawerVisible: visible });
     } else {
       this.setState({
-        styleEditPanelVisible: visible,
-        editStyleComponent,
-        editingStyleType,
+        secondaryDrawerVisible: visible,
+        secondaryDrawerComponent,
+        secondaryDrawerSubTitle,
         secondaryDrawerTitle
       });
     }
