@@ -1,3 +1,4 @@
+import "../../index.css";
 import _ from "lodash";
 import React from "react";
 import { Layout, Drawer, Spin, Popover, Icon, Modal, Button } from "antd";
@@ -5,25 +6,11 @@ import Logo from "../header/Logo";
 import { Layers } from "../sidebar";
 import { NoneStyle } from "../styles";
 import { LaunchButton } from "../header/LaunchButton";
-import "../../index.css";
 import { MapsService } from "../../services/MapsService";
 import { DataSources } from "../sidebar/DataSources";
+import { SideBarHeader } from '../sidebar';
 
 const { Header, Content } = Layout;
-
-const SideBarHeader = props => {
-  return (
-    <div className="sidebar-title">
-      <span>Resources</span>
-      <span>
-        <Spin size="small" spinning={props.loading}></Spin>
-        <Button shape="circle" size="small">
-          <Icon type="plus" />
-        </Button>
-      </span>
-    </div>
-  );
-};
 
 export class MapEditor extends React.Component {
   constructor(props) {
@@ -49,56 +36,7 @@ export class MapEditor extends React.Component {
       this.setState({ mapModel, mapModelLoading: false });
     }
 
-    const that = this;
-    window.ginkgoch = {
-      savingTimeoutID: null,
-      saveCurrentMapModel: () => {
-        if (this.savingTimerID) {
-          clearTimeout(this.savingTimerID);
-        }
-        this.savingTimerID = setTimeout(async () => {
-          this.savingTimerID = null;
-          try {
-            await MapsService.updateMap(that.state.mapModel);
-          }
-          catch (ex) {
-            that.setState({
-              savingMapModelError: ex.toString()
-            })
-            const errorModal = Modal.error({
-              title: 'Save Map Failed',
-              content: (
-                <div>
-                  <div>Latest map status is not synchronized with server with following err. Click &nbsp;
-                    <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>here</a> to save again or refresh current page to sync with latest state.</div>
-                  <p style={{marginTop: 8}}>{that.state.savingMapModelError}</p>
-                </div>
-              )
-            })
-          }
-        }, 1000);
-      }
-    }
-  }
-
-  async onReSaveButtonClick(e, errorModal) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      console.log(this);
-      this.setState({savingMapModel: true, savingMapModelError: ''});
-      const response = await MapsService.updateMap(this.state.mapModel);
-      if (response.status === 200) {
-        errorModal.destroy();
-      }
-    }
-    catch (ex) {
-      this.setState({savingMapModelError: ex.toString()});
-    }
-    finally {
-      this.setState({savingMapModel: false});
-    }
+    this.initSaveMapModelHandler();
   }
 
   render() {
@@ -163,6 +101,26 @@ export class MapEditor extends React.Component {
     );
   }
 
+  async onReSaveButtonClick(e, errorModal) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      console.log(this);
+      this.setState({savingMapModel: true, savingMapModelError: ''});
+      const response = await MapsService.updateMap(this.state.mapModel);
+      if (response.status === 200) {
+        errorModal.destroy();
+      }
+    }
+    catch (ex) {
+      this.setState({savingMapModelError: ex.toString()});
+    }
+    finally {
+      this.setState({savingMapModel: false});
+    }
+  }
+
   showSecondaryDrawer(
     visible = false,
     secondaryDrawerComponent = null,
@@ -193,6 +151,39 @@ export class MapEditor extends React.Component {
         "name": "Default",
         "visible": true
       }];
+    }
+  }
+
+  initSaveMapModelHandler() {
+    const that = this;
+    window.ginkgoch = {
+      savingTimeoutID: null,
+      saveCurrentMapModel: () => {
+        if (this.savingTimerID) {
+          clearTimeout(this.savingTimerID);
+        }
+        this.savingTimerID = setTimeout(async () => {
+          this.savingTimerID = null;
+          try {
+            await MapsService.updateMap(that.state.mapModel);
+          }
+          catch (ex) {
+            that.setState({
+              savingMapModelError: ex.toString()
+            })
+            const errorModal = Modal.error({
+              title: 'Save Map Failed',
+              content: (
+                <div>
+                  <div>Latest map status is not synchronized with server with following err. Click &nbsp;
+                    <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>here</a> to save again or refresh current page to sync with latest state.</div>
+                  <p style={{marginTop: 8}}>{that.state.savingMapModelError}</p>
+                </div>
+              )
+            })
+          }
+        }, 1000);
+      }
     }
   }
 }
