@@ -124,7 +124,7 @@ export class MapEditor extends React.Component {
 
   onAddLayerClick() {
     this.showSecondaryDrawer(true, 
-      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} />), 
+      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} onCancel={() => this.showSecondaryDrawer(false)} />), 
       'New Layer', 
       'Data Sources');
   }
@@ -160,7 +160,7 @@ export class MapEditor extends React.Component {
     secondaryDrawerTitle = "Edit Style"
   ) {
     if (!visible) {
-      this.setState({ secondaryDrawerVisible: visible });
+      this.setState({ secondaryDrawerVisible: visible, secondaryDrawerChild });
     } else {
       this.setState({
         secondaryDrawerVisible: visible,

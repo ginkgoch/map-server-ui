@@ -25,13 +25,13 @@ export class DataSources extends Component {
                 <List header="Select following data sources to add onto map."
                     footer={
                         <div style={{textAlign: 'right', marginTop: 24}}>
-                            <Button>Cancel</Button> <Button type="primary" onClick={this.addToMap()} disabled={!selected}>Add to Map</Button>
+                            <Button onClick={() => this.props.onCancel()}>Cancel</Button> <Button type="primary" onClick={this.addToMap()} disabled={!selected}>Add to Map</Button>
                         </div>
                     }
                     dataSource={this.state.dataSources}
                     renderItem={item => (
                         <List.Item key={item.path} actions={[
-                            (<Checkbox defaultChecked={item.selected} onChange={e => this.itemSelected(e, item)} />)
+                            (<Checkbox defaultChecked={false} onChange={e => this.itemSelected(e, item)} />)
                         ]}>
                             <List.Item.Meta title={item.name} description={
                                 <div>{this.sourceTypeAbbr(item.sourceType)} | {item.geomType.toLowerCase()} | {item.count}</div>
