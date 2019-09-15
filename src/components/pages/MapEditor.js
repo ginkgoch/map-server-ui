@@ -10,6 +10,7 @@ import { MapsService } from "../../services/MapsService";
 import { DataSources } from "../sidebar/DataSources";
 import { SideBarHeader } from '../sidebar';
 import { LayerTemplates } from "../../templates";
+import { MapView } from "../map/MapView";
 
 const { Header, Content } = Layout;
 
@@ -61,6 +62,9 @@ export class MapEditor extends React.Component {
         </Header>
         <Content>
           <div id="content" style={{ position: "relative", height: "100%" }}>
+            <div style={{width: '100%', height: '100%', paddingLeft: 280}}>
+              <MapView />
+            </div>
             <Drawer
               placement="left"
               title={<SideBarHeader loading={this.state.mapModelLoading} onAddLayerClick={() => this.onAddLayerClick()} />}
@@ -76,7 +80,6 @@ export class MapEditor extends React.Component {
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
               />
 
-              {/* <DataSources /> */}
               <Drawer
                 title={
                   this.state.secondaryDrawerTitle +
@@ -107,7 +110,6 @@ export class MapEditor extends React.Component {
     e.stopPropagation();
 
     try {
-      console.log(this);
       this.setState({savingMapModel: true, savingMapModelError: ''});
       const response = await MapsService.updateMap(this.state.mapModel);
       if (response.status === 200) {

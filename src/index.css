@@ -1,4 +1,6 @@
 @import '~antd/dist/antd.css';
+@import '~leaflet/dist/leaflet.css';
+
 html, body, #container, .ant-layout {
     height: 100%;
     margin: 0px;
@@ -97,4 +99,8 @@ html, body, #container, .ant-layout {
 .sidebar-title {
     display: flex;
     justify-content: space-between;
+}
+
+.leaflet-container {
+    height: 100%;
 }
