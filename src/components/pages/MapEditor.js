@@ -23,7 +23,7 @@ export class MapEditor extends React.Component {
       mapModelLoading: true,
       savingMapModel: false,
       savingMapModelError: '',
-      secondaryDrawerComponent: <NoneStyle />
+      secondaryDrawerChild: <NoneStyle />
     };
   }
 
@@ -91,7 +91,7 @@ export class MapEditor extends React.Component {
                 onClose={this.showSecondaryDrawer.bind(this, false)}
               >
                 <div style={{ paddingTop: 24 }}>
-                  {this.state.secondaryDrawerComponent}
+                  {this.state.secondaryDrawerChild}
                 </div>
               </Drawer>
             </Drawer>
@@ -123,7 +123,7 @@ export class MapEditor extends React.Component {
 
   showSecondaryDrawer(
     visible = false,
-    secondaryDrawerComponent = null,
+    secondaryDrawerChild = null,
     secondaryDrawerSubTitle = "",
     secondaryDrawerTitle = "Edit Style"
   ) {
@@ -132,7 +132,7 @@ export class MapEditor extends React.Component {
     } else {
       this.setState({
         secondaryDrawerVisible: visible,
-        secondaryDrawerComponent,
+        secondaryDrawerChild,
         secondaryDrawerSubTitle,
         secondaryDrawerTitle
       });
