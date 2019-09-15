@@ -21,8 +21,8 @@ export class DataSources extends Component {
         const selected = this.state.dataSources.some(d => d.selected);
 
         return (
-            <div style={{ padding: 10 }}>
-                <List header={<h3>Data Sources</h3>}
+            <div style={{ paddingLeft: 10, paddingRight: 10 }}>
+                <List header="Select following data sources to add onto map."
                     footer={
                         <div style={{textAlign: 'right', marginTop: 24}}>
                             <Button>Cancel</Button> <Button type="primary" onClick={this.addToMap()} disabled={!selected}>Add to Map</Button>
@@ -53,7 +53,8 @@ export class DataSources extends Component {
 
     addToMap() {
         return async () => {
-            console.log(this.state.dataSources.filter(ds => ds.selected));
+            const newLayers = this.state.dataSources.filter(ds => ds.selected);
+            this.props.onConfirm(newLayers);
         };
     }
 

@@ -7,7 +7,7 @@ export const SideBarHeader = props => {
         <span>Resources</span>
         <span>
           <Spin size="small" spinning={props.loading}></Spin>
-          <Button shape="circle" size="small">
+          <Button shape="circle" size="small" onClick={props.onAddLayerClick}>
             <Icon type="plus" />
           </Button>
         </span>

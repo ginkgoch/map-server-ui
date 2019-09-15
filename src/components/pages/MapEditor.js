@@ -62,7 +62,7 @@ export class MapEditor extends React.Component {
           <div id="content" style={{ position: "relative", height: "100%" }}>
             <Drawer
               placement="left"
-              title={<SideBarHeader loading={this.state.mapModelLoading} />}
+              title={<SideBarHeader loading={this.state.mapModelLoading} onAddLayerClick={() => this.onAddLayerClick()} />}
               width="280px"
               visible={true}
               mask={false}
@@ -75,7 +75,7 @@ export class MapEditor extends React.Component {
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
               />
 
-              <DataSources />
+              {/* <DataSources /> */}
               <Drawer
                 title={
                   this.state.secondaryDrawerTitle +
@@ -90,7 +90,7 @@ export class MapEditor extends React.Component {
                 getContainer={"#content"}
                 onClose={this.showSecondaryDrawer.bind(this, false)}
               >
-                <div style={{ paddingTop: 24 }}>
+                <div style={{ paddingTop: 16 }}>
                   {this.state.secondaryDrawerChild}
                 </div>
               </Drawer>
@@ -119,6 +119,17 @@ export class MapEditor extends React.Component {
     finally {
       this.setState({savingMapModel: false});
     }
+  }
+
+  onAddLayerClick() {
+    this.showSecondaryDrawer(true, 
+      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} />), 
+      'New Layer', 
+      'Data Sources');
+  }
+
+  onAddLayerConfirm(newLayers) {
+
   }
 
   showSecondaryDrawer(
