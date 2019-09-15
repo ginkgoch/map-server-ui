@@ -25,6 +25,10 @@ html, body, #container, .ant-layout {
     padding-left: 6px;
 }
 
+.ant-menu-item {
+    margin-top: 0px;
+}
+
 .ant-menu-inline {
     line-height: 34px;
 }

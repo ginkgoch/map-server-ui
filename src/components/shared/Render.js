@@ -41,12 +41,17 @@ export class Render {
     static _renderStyle(style, canvas, x = undefined, y = undefined, w = undefined, h = undefined) {
         const ctx = canvas.getContext('2d');
         ctx.antialias = 'none';
-        _.assign(ctx, style);
+
+        let styleType = 'Unknown';
+        if (style !== undefined) {
+            _.assign(ctx, style);
+            styleType = style.type;
+        }
 
         w = w || canvas.width;
         h = h || canvas.height;
 
-        switch (style.type) {
+        switch (styleType) {
             case 'fill-style':
             case 'general-style':
                 this._renderFillStyle(ctx, w, h, x, y);

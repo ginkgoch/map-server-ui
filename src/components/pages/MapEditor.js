@@ -9,6 +9,7 @@ import { LaunchButton } from "../header/LaunchButton";
 import { MapsService } from "../../services/MapsService";
 import { DataSources } from "../sidebar/DataSources";
 import { SideBarHeader } from '../sidebar';
+import { LayerTemplates } from "../../templates";
 
 const { Header, Content } = Layout;
 
@@ -128,8 +129,28 @@ export class MapEditor extends React.Component {
       'Data Sources');
   }
 
-  onAddLayerConfirm(newLayers) {
+  onAddLayerConfirm(newLayersDef) {
+    if (!newLayersDef || newLayersDef.length === 0) {
+      return;
+    }
 
+    const mapModel = this.state.mapModel;
+    const newLayers = newLayersDef.map(def => {
+      const source = LayerTemplates.getFeatureSource(def.sourceType, def.name, def.path, def.srs);
+      const layer = LayerTemplates.getFeatureLayer(def.name, source);
+      return layer;
+    });
+
+    const group = mapModel.content.groups[0];
+    if (group.layers === undefined) {
+      group.layers = [];
+    }
+
+    group.layers.push(...newLayers);
+
+    this.setState({ mapModel });
+    this.showSecondaryDrawer(false);
+    window.ginkgoch.saveCurrentMapModel();
   }
 
   showSecondaryDrawer(
@@ -157,11 +178,7 @@ export class MapEditor extends React.Component {
     }
 
     if (!map.groups) {
-      map.groups = [{
-        "type": "layer-group",
-        "name": "Default",
-        "visible": true
-      }];
+      map.groups = [LayerTemplates.getGroup()];
     }
   }
 
