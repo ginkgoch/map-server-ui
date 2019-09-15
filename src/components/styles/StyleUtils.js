@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from 'react';
-import { uuid, randomColor } from "../shared";
 import { FillStyleFormItems, LineStyleFormItems, PointStyleFormItems } from '.';
+import { StyleTemplates } from "../../templates";
 
 const styleTypes = new Map([
     ['fill-style', 'Fill Style'],
@@ -26,47 +26,20 @@ export class StyleUtils {
     }
 
     static defaultStyle(type) {
-        const general = {
-            "visible": true,
-            "id": "style-" + uuid(),
-            "type": type,
-            "name": "",
-            "maximumScale": 10000000000,
-            "minimumScale": 0
-        };
-
+        const styleBase = StyleTemplates.getStyleBase(type);
         switch (type) {
             case 'fill-style':
-                return _.assign(general, {
-                    fillStyle: randomColor(),
-                    strokeStyle: randomColor(),
-                    lineWidth: 1
-                });
+                return StyleTemplates.assignFillStyle(styleBase);
             case 'line-style':
-                return _.assign(general, {
-                    strokeStyle: randomColor(),
-                    lineWidth: 1
-                });
+                return StyleTemplates.assignLineStyle(styleBase);
             case 'point-style':
-                return _.assign(general, {
-                    symbol: 'circle',
-                    fillStyle: randomColor(),
-                    strokeStyle: randomColor(),
-                    lineWidth: 1,
-                    radius: 20
-                });
+                return StyleTemplates.assignPointStyle(styleBase);
             case 'class-break-style':
-                return _.assign(general, {
-                    field: '',
-                    classBreaks: []
-                });
+                return StyleTemplates.assignClassBreakStyle(styleBase);
             case 'value-style':
-                return _.assign(general, {
-                    field: '',
-                    items: []
-                });
+                return StyleTemplates.assignValueStyle(styleBase);
             default:
-                return general;
+                return styleBase;
         }
     }
 
