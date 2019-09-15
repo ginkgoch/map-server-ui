@@ -3,6 +3,7 @@ import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
+import { StyleTemplates } from '../../templates';
 
 class ValueStyleForm extends StyleBaseForm {
     renderContent() {
@@ -75,10 +76,7 @@ class ValueStyleForm extends StyleBaseForm {
 
     newValueItem(type) {
         const newStyle = StyleUtils.defaultStyle(type);
-        const newItem = {
-            "value": "",
-            "style": newStyle
-        };
+        const newItem = StyleTemplates.getValueItem('', newStyle);
 
         return this._showValueItemModal(newItem, cb => {
             this.state.style.items.push(cb);

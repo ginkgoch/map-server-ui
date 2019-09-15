@@ -1,4 +1,4 @@
-import { Requests } from "../shared/Requests";
+import { Requests } from "./shared/Requests";
 
 export class MapsService {
     static async create(name, crs, description) {

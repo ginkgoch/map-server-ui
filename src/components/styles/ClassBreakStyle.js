@@ -3,6 +3,7 @@ import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
+import { StyleTemplates } from '../../templates/StyleTemplates';
 
 class ClassBreakStyleForm extends StyleBaseForm {
     renderContent() {
@@ -75,11 +76,7 @@ class ClassBreakStyleForm extends StyleBaseForm {
 
     newClassBreak(type) {
         const newStyle = StyleUtils.defaultStyle(type);
-        const newClassBreak = {
-            "minimum": 0,
-            "maximum": 100,
-            "style": newStyle
-        };
+        const newClassBreak = StyleTemplates.getClassBreak(0, 100, newStyle);
 
         return this._showClassBreakModal(newClassBreak, cb => {
             this.state.style.classBreaks.push(cb);
