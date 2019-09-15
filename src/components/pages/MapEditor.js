@@ -136,7 +136,7 @@ export class MapEditor extends React.Component {
 
     const mapModel = this.state.mapModel;
     const newLayers = newLayersDef.map(def => {
-      const source = LayerTemplates.getFeatureSource(def.sourceType, def.name, def.path, def.srs);
+      const source = LayerTemplates.getFeatureSource(def.sourceType, def.name, def.path, def.srs, mapModel.content.srs.projection);
       const layer = LayerTemplates.getFeatureLayer(def.name, source);
       return layer;
     });
