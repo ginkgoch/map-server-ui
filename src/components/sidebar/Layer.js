@@ -78,7 +78,7 @@ export class Layer extends Component {
     const onNewStyleSubmit = (newStyle => {
       layer.styles.push(newStyle);
       this.setState(this.state);
-      this.saveMapModal();
+      GKGlobal.saveCurrentMapModel();
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
     }).bind(this);
 
@@ -111,9 +111,5 @@ export class Layer extends Component {
 
   getStyleTypeName(style) {
     return StyleUtils.styleTypeName(style);
-  }
-
-  saveMapModal() {
-    window.ginkgoch.saveCurrentMapModel();
   }
 }
