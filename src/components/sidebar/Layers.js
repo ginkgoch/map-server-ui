@@ -45,7 +45,7 @@ export class Layers extends React.Component {
       ModalUtils.promptRemoveModal("layer", () => {
         _.remove(layers, layer => layer.id === layerId);
         this.setState({ layers });
-        window.ginkgoch.saveCurrentMapModel();
+        GKGlobal.saveCurrentMapModel();
       });
     };
   }

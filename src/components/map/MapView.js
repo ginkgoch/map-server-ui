@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Map, TileLayer } from "react-leaflet";
-import { Config } from "../../config";
+import { Config } from "../../shared";
 
 export class MapView extends Component {
     constructor(props) {
