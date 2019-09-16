@@ -13,7 +13,12 @@ export class Render {
                 break;
             default:
                 const styles = this._flatStylesInLayer(layer);
-                this.renderStyles(styles, canvas);
+                if (styles.length === 1) {
+                    this.renderStyle(styles[0], canvas);
+                }
+                else if (styles.length > 1) {
+                    this.renderStyles(styles, canvas);
+                }
                 break;
         }
     }
