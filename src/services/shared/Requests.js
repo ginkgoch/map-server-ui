@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { Config } from '../../config';
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = Config.serviceRoot;
 
 export class Requests {
     static get baseURL() {
