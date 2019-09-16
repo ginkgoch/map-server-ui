@@ -61,7 +61,7 @@ export class Layer extends Component {
         layer.styles[index] = newStyle;
   
         this.setState(this.state);
-        this.saveMapModal();
+        GKGlobal.saveCurrentMapModel();
         this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
       }).bind(this);
 
