@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, TileLayer } from "react-leaflet";
+import { Config } from "../../config";
 
 export class MapView extends Component {
     constructor(props) {
@@ -14,8 +15,8 @@ export class MapView extends Component {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
             />
-            <TileLayer
-                url="http://localhost:3000/maps/1/image/xyz/{z}/{x}/{y}"
+            <TileLayer ref={el => this.props.assignTileLayer(el)}
+                url={Config.serviceUrl('maps/1/image/xyz/{z}/{x}/{y}')}
             />
         </Map>
         );

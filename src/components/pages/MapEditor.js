@@ -11,6 +11,7 @@ import { DataSources } from "../sidebar/DataSources";
 import { SideBarHeader } from '../sidebar';
 import { LayerTemplates } from "../../templates";
 import { MapView } from "../map/MapView";
+import { Config } from "../../config";
 
 const { Header, Content } = Layout;
 
@@ -27,6 +28,8 @@ export class MapEditor extends React.Component {
       savingMapModelError: '',
       secondaryDrawerChild: <NoneStyle />
     };
+
+    window.ginkgoch = {};
   }
 
   async componentDidMount() {
@@ -63,7 +66,7 @@ export class MapEditor extends React.Component {
         <Content>
           <div id="content" style={{ position: "relative", height: "100%" }}>
             <div style={{width: '100%', height: '100%', paddingLeft: 280}}>
-              <MapView />
+              <MapView assignTileLayer={el => window.ginkgoch = Object.assign(window.ginkgoch, { tileLayer: el })} />
             </div>
             <Drawer
               placement="left"
@@ -186,7 +189,7 @@ export class MapEditor extends React.Component {
 
   initSaveMapModelHandler() {
     const that = this;
-    window.ginkgoch = {
+    window.ginkgoch = Object.assign(window.ginkgoch, {
       savingTimeoutID: null,
       saveCurrentMapModel: () => {
         if (this.savingTimerID) {
@@ -196,6 +199,10 @@ export class MapEditor extends React.Component {
           this.savingTimerID = null;
           try {
             await MapsService.updateMap(that.state.mapModel);
+            if (window.ginkgoch.tileLayer) {
+              const newURL = Config.serviceUrl('maps/1/image/xyz/{z}/{x}/{y}?q=' + +(new Date()))
+              window.ginkgoch.tileLayer.leafletElement.setUrl(newURL);
+            }
           }
           catch (ex) {
             that.setState({
@@ -214,6 +221,6 @@ export class MapEditor extends React.Component {
           }
         }, 1000);
       }
-    }
+    });
   }
 }
