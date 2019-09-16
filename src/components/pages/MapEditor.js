@@ -92,7 +92,7 @@ export class MapEditor extends React.Component {
                 closable={false}
                 style={{ position: "absolute" }}
                 getContainer={"#content"}
-                onClose={this.showSecondaryDrawer.bind(this, false)}
+                onClose={() => this.showSecondaryDrawer(false)}
               >
                 <div style={{ paddingTop: 16 }}>
                   {this.state.secondaryDrawerChild}
