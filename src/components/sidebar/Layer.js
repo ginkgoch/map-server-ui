@@ -49,7 +49,7 @@ export class Layer extends Component {
       ModalUtils.promptRemoveModal("style", () => {
         _.remove(layer.styles, s => s.id === id);
         this.setState({ layer });
-        this.saveMapModal();
+        GKGlobal.saveCurrentMapModel();
       });
     };
   }
