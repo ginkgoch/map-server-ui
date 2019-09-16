@@ -91,7 +91,7 @@ export class Layer extends Component {
   }
 
   getStyleComponent(style, layer, onSubmitHandler) {
-    const onEditStyleCanceled = this.props.showStyleEditPanel.bind(this, false);
+    const onEditStyleCanceled = () => this.props.showStyleEditPanel(false);
 
     switch (style.type) {
       case 'fill-style':
