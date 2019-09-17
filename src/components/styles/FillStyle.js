@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, InputNumber } from "antd";
 import ColorPicker from "rc-color-picker";
-import { hexColor } from './KnownColors';
+import { hexColorWithAlpha } from './KnownColors';
 import { StyleBaseForm } from './StyleBase';
 
 class FillStyleForm extends StyleBaseForm {
@@ -15,12 +15,15 @@ class FillStyleForm extends StyleBaseForm {
 }
 
 export const FillStyleFormItems = props => {
+    const fillStyleHex = hexColorWithAlpha(props.style.fillStyle);
+    const strokeStyleHex = hexColorWithAlpha(props.style.strokeStyle);
+
     return <>
         <Form.Item label="Fill">
-            <ColorPicker color={hexColor(props.style.fillStyle)} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
+            <ColorPicker color={fillStyleHex.hex} alpha={fillStyleHex.alpha} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke">
-            <ColorPicker color={hexColor(props.style.strokeStyle)} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
+            <ColorPicker color={strokeStyleHex.hex} alpha={strokeStyleHex.alpha} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke Width">
             <InputNumber min={0} defaultValue={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>

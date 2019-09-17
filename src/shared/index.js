@@ -1,3 +1,3 @@
 export * from './UUID';
-export * from './RandomColor';
+export * from './Colors';
 export * from './Config';
