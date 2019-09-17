@@ -98,4 +98,16 @@ export class StyleUtils {
         };
         return this.configureItems(style, props);
     }
+
+    static getScaleMarks() {
+        const markLabelStyle = { transform: 'rotate(25deg)', marginTop: 10, fontSize: 10 };
+        const marks = {
+            1: { style: markLabelStyle, label: 'The Earth', },
+            4: { style: markLabelStyle, label: 'Continent', },
+            7: { style: markLabelStyle, label: 'Large Rivers', },
+            11: { style: markLabelStyle, label: 'Large Roads', },
+            16: { style: markLabelStyle, label: 'Buildings' },
+        };
+        return marks;
+    }
 }
