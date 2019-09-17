@@ -2,6 +2,7 @@ import 'rc-color-picker/assets/index.css';
 import React, { Component } from 'react';
 import { Form, Input, Button } from "antd";
 import { StylePreview } from '../shared';
+import { hexToRgba } from '../../shared';
 
 export class StyleBaseForm extends Component {
     constructor(props) {
@@ -90,7 +91,7 @@ export class StyleBaseForm extends Component {
     }
 
     onFillStyleChange(color) {
-        this.state.style.fillStyle = color.color;
+        this.state.style.fillStyle = this.getColor(color);
         this.setState(this.state.style);
     }
 
@@ -108,6 +109,15 @@ export class StyleBaseForm extends Component {
         const name = e.target.value;
         this.state.style.name = name;
         this.setState(this.state);
+    }
+
+    getColor(color) {
+        if (color.alpha === 100) {
+            return color.color;
+        }
+        else {
+            return hexToRgba(color.color, color.alpha);
+        }
     }
 }
 

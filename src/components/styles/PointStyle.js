@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleBaseForm } from './StyleBase';
 import { Form, Select, InputNumber } from 'antd';
 import ColorPicker from "rc-color-picker";
-import { hexColor } from './KnownColors';
+import { hexColorWithAlpha } from './KnownColors';
 
 class PointStyleForm extends StyleBaseForm {
     renderContent() {
@@ -21,6 +21,9 @@ class PointStyleForm extends StyleBaseForm {
 }
 
 export const PointStyleFormItems = props => {
+    const fillStyleHex = hexColorWithAlpha(props.style.fillStyle);
+    const strokeStyleHex = hexColorWithAlpha(props.style.strokeStyle);
+
     return <>
         <Form.Item label="Symbol">
             <Select defaultValue={props.style.symbol} onChange={props.onSymbolChanged}>
@@ -30,10 +33,10 @@ export const PointStyleFormItems = props => {
             </Select>
         </Form.Item>
         <Form.Item label="Fill">
-            <ColorPicker color={hexColor(props.style.fillStyle)} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
+            <ColorPicker color={fillStyleHex.hex} alpha={fillStyleHex.alpha} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke">
-            <ColorPicker color={hexColor(props.style.strokeStyle)} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
+            <ColorPicker color={strokeStyleHex.hex} alpha={strokeStyleHex.alpha} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke Width">
             <InputNumber min={0} defaultValue={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
