@@ -33,10 +33,10 @@ export const PointStyleFormItems = props => {
             </Select>
         </Form.Item>
         <Form.Item label="Fill">
-            <ColorPicker color={fillStyleHex.hex} alpha={fillStyleHex.alpha} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
+            <ColorPicker defaultColor={fillStyleHex.hex} defaultAlpha={fillStyleHex.alpha} className="color-picker" onChange={props.onFillStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke">
-            <ColorPicker color={strokeStyleHex.hex} alpha={strokeStyleHex.alpha} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
+            <ColorPicker defaultColor={strokeStyleHex.hex} defaultAlpha={strokeStyleHex.alpha} className="color-picker" onChange={props.onStrokeStyleChange}></ColorPicker>
         </Form.Item>
         <Form.Item label="Stroke Width">
             <InputNumber min={0} defaultValue={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
