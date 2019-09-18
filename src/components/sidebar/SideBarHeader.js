@@ -6,7 +6,7 @@ export const SideBarHeader = props => {
       <div className="sidebar-title">
         <span>Resources</span>
         <span>
-          <Spin size="small" spinning={props.loading}></Spin>
+          <Spin size="small" spinning={props.loading} style={{paddingRight: 6}}></Spin>
           <Button shape="circle" size="small" onClick={props.onAddLayerClick}>
             <Icon type="plus" />
           </Button>

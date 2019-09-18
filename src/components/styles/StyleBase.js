@@ -1,15 +1,15 @@
 import 'rc-color-picker/assets/index.css';
 import React, { Component } from 'react';
-import { Form, Input, Button, Slider } from "antd";
+import { Form, Input, Button } from "antd";
 import { StylePreview } from '../shared';
 import { hexToRgba } from '../../shared';
-import { StyleUtils } from './StyleUtils';
+import { LevelRange } from './LevelRange';
 
 export class StyleBaseForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { style: props.style }
+        this.state = { style: props.style, maximumScale: props.style.maximumScale, minimumScale: props.style.minimumScale };
     }
 
     static getDerivedStateFromProps(nextProps, preState) {
@@ -52,12 +52,15 @@ export class StyleBaseForm extends Component {
                     this.renderContent()
                 }
                 <Form.Item label="Visible Range">
-                    <small>Lower level means larger scale.</small>
+                    <span>1:{Math.round(this.state.maximumScale)} - 1:{this.state.minimumScale < 1 ? 1 : Math.round(this.state.minimumScale)}</span>
                 </Form.Item>
                 <Form.Item labelCol={{ xs: { span: 4 } }} wrapperCol={{ xs: { span: 20, offset: 2 } }}>
-                    <Slider marks={StyleUtils.getScaleMarks()} min={1} max={20} defaultValue={[1, 20]} range />
+                    <LevelRange style={this.state.style} onScaleRangeChange={(upperScale, lowerScale) => {
+                        this.state.style.maximumScale = upperScale;
+                        this.state.style.minimumScale = lowerScale;
+                        this.setState({ maximumScale: upperScale, minimumScale: lowerScale });
+                    }} />
                 </Form.Item>
-
                 {
                     this.renderPreview()
                 }
