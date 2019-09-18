@@ -7,3 +7,4 @@ export * from './PointStyle';
 export * from './ClassBreakStyle';
 export * from './ValueStyle';
 export * from './StyleUtils';
+export * from './LevelRange';
