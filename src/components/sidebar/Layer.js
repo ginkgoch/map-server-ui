@@ -38,7 +38,15 @@ export class Layer extends Component {
           <LayerPreview layer={l} /> {l.name}
         </span>
         <div>
-          <EditButtons hideEditButton={true} hideStyleButton={false} onCloseButtonClick={this.props.removingLayer} onNewStyleMenuItemClick={this.newStyle(l)} />
+          <EditButtons visible={l.visible === undefined ? true : l.visible}
+            hideEditButton={true}
+            hideStyleButton={false}
+            onCloseButtonClick={this.props.removingLayer}
+            onNewStyleMenuItemClick={this.newStyle(l)}
+            onVisibleChange={visible => {
+              l.visible = visible;
+              GKGlobal.saveCurrentMapModel();
+            }} />
         </div>
       </div>
     );
@@ -59,7 +67,7 @@ export class Layer extends Component {
       const onEditStyleSubmit = (newStyle => {
         const index = layer.styles.findIndex(s => s.id === newStyle.id);
         layer.styles[index] = newStyle;
-  
+
         this.setState(this.state);
         GKGlobal.saveCurrentMapModel();
         this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
@@ -103,7 +111,7 @@ export class Layer extends Component {
       case 'class-break-style':
         return <ClassBreakStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'value-style':
-          return <ValueStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+        return <ValueStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       default:
         return <NoneStyle />
     }

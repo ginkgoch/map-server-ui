@@ -37,7 +37,14 @@ export class Style extends React.Component {
           <span className="style-label">{style.name}</span>
         </div>
         <div>
-          <EditButtons hideStyleButton={true} onCloseButtonClick={onCloseButtonClick} onEditButtonClick={this.props.onEditButtonClick} />
+          <EditButtons visible={style.visible === undefined ? true : style.visible}
+            hideStyleButton={true}
+            onCloseButtonClick={onCloseButtonClick}
+            onEditButtonClick={this.props.onEditButtonClick}
+            onVisibleChange={visible => {
+              style.visible = visible;
+              GKGlobal.saveCurrentMapModel();
+            }} />
         </div>
       </div>
     );
