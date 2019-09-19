@@ -3,6 +3,12 @@ import { Button, Icon, Menu, Dropdown } from "antd";
 import { StyleUtils } from "../styles";
 
 export class EditButtons extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { visible: props.visible };
+  }
+
   render() {
     const iconStyle = {
       marginRight: 0
@@ -13,6 +19,16 @@ export class EditButtons extends React.Component {
     };
 
     let btns = [];
+    btns.push({
+      type: this.state.visible ? 'eye': 'eye-invisible',
+      click: e => {
+        e.stopPropagation();
+        const newVisible = !this.state.visible;
+        this.setState({ visible: newVisible });
+        this.props.onVisibleChange && this.props.onVisibleChange(newVisible);
+      }
+    });
+
     if (!this.props.hideEditButton) {
       btns.push({
         type: "edit",
