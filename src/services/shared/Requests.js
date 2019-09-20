@@ -13,7 +13,9 @@ export class Requests {
     }
 
     static async get(url, params)  {
-        const response = await axios.get(url, { params: params || {} });
+        const response = await axios.get(url, { params: params || {}, paramsSerializer: pms => {
+            return QS.stringify(pms, { arrayFormat: 'comma' });
+        } });
         return response;
     }
 

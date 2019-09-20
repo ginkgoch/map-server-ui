@@ -42,6 +42,7 @@
     "leaflet": "^1.5.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "qs": "^6.8.0",
     "rc-color-picker": "^1.2.6",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
