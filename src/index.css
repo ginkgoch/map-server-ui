@@ -104,3 +104,22 @@ html, body, #container, .ant-layout {
 .leaflet-container {
     height: 100%;
 }
+
+.column-filter-group {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.column-filter-group>label {
+    display: block;
+    padding: 4px;
+}
+
+.confirm-btn-container {
+    text-align: right;
+    padding: 12px 0 6px 0;
+}
+
+.confirm-btn-container>button {
+    margin-left: 4px;
+}

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import QS from 'qs';
 import { Config } from '../../shared';
 
 axios.defaults.baseURL = Config.serviceRoot;
