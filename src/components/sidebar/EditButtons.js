@@ -29,6 +29,16 @@ export class EditButtons extends React.Component {
       }
     });
 
+    if(this.props.showDataTableButton) {
+      btns.push({
+        type: 'table',
+        click: e => {
+          e.stopPropagation();
+          this.props.onShowDataTable();
+        }
+      })
+    }
+
     if (!this.props.hideEditButton) {
       btns.push({
         type: "edit",

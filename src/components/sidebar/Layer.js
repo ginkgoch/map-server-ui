@@ -39,8 +39,10 @@ export class Layer extends Component {
         </span>
         <div>
           <EditButtons visible={l.visible === undefined ? true : l.visible}
+            showDataTableButton={true}
             hideEditButton={true}
             hideStyleButton={false}
+            onShowDataTable={() => this.props.showDataTablePanel(l.id)}
             onCloseButtonClick={this.props.removingLayer}
             onNewStyleMenuItemClick={this.newStyle(l)}
             onVisibleChange={visible => {

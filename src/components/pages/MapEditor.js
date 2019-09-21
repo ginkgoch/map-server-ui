@@ -42,8 +42,7 @@ export class MapEditor extends React.Component {
       this.setState({ mapModel, mapModelLoading: false });
     }
 
-    this.setState({ dataTableModel: { mapID, groupID: 'Default', layerID: 'layer-vyrwgp22' }, dataTableDrawerVisible: true })
-
+    this.setState({ dataTableModel: { mapID, groupID: 'Default' } });
     this.initSaveMapModelHandler();
   }
 
@@ -76,7 +75,7 @@ export class MapEditor extends React.Component {
                 height={360}
                 visible={this.state.dataTableDrawerVisible}
                 mask={false}
-                style={{ position: 'absolute', overflow: 'hidden' }}
+                style={{ position: 'absolute' }}
                 bodyStyle={{ paddingLeft: mapContainerLeftPadding }}
                 onClose={() => this.setState({dataTableDrawerVisible: false})}>
                 <DataTable layerID={this.state.dataTableModel.layerID}
@@ -98,6 +97,7 @@ export class MapEditor extends React.Component {
               <Layers
                 layers={layers}
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
+                showDataTablePanel={layerID => this.showDataTablePanel(layerID)}
               />
 
               <Drawer
@@ -191,6 +191,11 @@ export class MapEditor extends React.Component {
         secondaryDrawerTitle
       });
     }
+  }
+
+  showDataTablePanel(layerID) {
+    const newDataTableModel = Object.assign(this.state.dataTableModel, { layerID });
+    this.setState({ dataTableModel: newDataTableModel, dataTableDrawerVisible: true });
   }
 
   normalizeGroups(mapModel) {
