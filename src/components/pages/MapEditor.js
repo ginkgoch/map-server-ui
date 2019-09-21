@@ -42,7 +42,7 @@ export class MapEditor extends React.Component {
       this.setState({ mapModel, mapModelLoading: false });
     }
 
-    this.setState({ dataTableModel: { mapID, groupID: 'Default', layerID: 'layer-vyrwgp22' } })
+    this.setState({ dataTableModel: { mapID, groupID: 'Default', layerID: 'layer-vyrwgp22' }, dataTableDrawerVisible: true })
 
     this.initSaveMapModelHandler();
   }
@@ -71,18 +71,18 @@ export class MapEditor extends React.Component {
           <div id="content" style={{ position: "relative", height: "100%" }}>
             <div id="mapContainer" style={{ width: '100%', height: '100%', paddingLeft: mapContainerLeftPadding }}>
               <MapView assignTileLayer={el => GKGlobal = Object.assign(GKGlobal, { tileLayer: el })} />
-              <div id="dataContainer">
-                <Drawer placement="bottom"
-                  getContainer={"#dataContainer"}
-                  height={360}
-                  visible={true}
-                  mask={false}
-                  style={{ position: 'absolute' }}>
-                  <DataTable layerID={this.state.dataTableModel.layerID}
-                    groupID={this.state.dataTableModel.groupID}
-                    mapID={this.state.dataTableModel.mapID} />
-                </Drawer>
-              </div>
+              <Drawer placement="bottom"
+                getContainer={"#mapContainer"}
+                height={360}
+                visible={this.state.dataTableDrawerVisible}
+                mask={false}
+                style={{ position: 'absolute', overflow: 'hidden' }}
+                bodyStyle={{ paddingLeft: mapContainerLeftPadding }}
+                onClose={() => this.setState({dataTableDrawerVisible: false})}>
+                <DataTable layerID={this.state.dataTableModel.layerID}
+                  groupID={this.state.dataTableModel.groupID}
+                  mapID={this.state.dataTableModel.mapID} />
+              </Drawer>
 
             </div>
             <Drawer

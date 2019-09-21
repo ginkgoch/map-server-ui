@@ -18,7 +18,8 @@ export class DataTable extends Component {
             return Object.assign(preState, { layerID: nextProps.layerID, 
                 groupID: nextProps.groupID, 
                 mapID: nextProps.mapID,
-                reload: true
+                reload: true,
+                properties: [], columns: [], visibleColumns: []
             })
         }
 
