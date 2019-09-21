@@ -60,23 +60,24 @@ export class DataTable extends Component {
         }
 
         this.setState({ loading: true });
-
-        this.dataSource = await this.getDataSource();
-        const columns = this.dataSource.fields.map(f => {
-            return {
-                title: f.name,
-                dataIndex: f.name,
-                width: 120
-            };
-        });
-
-        delete columns[columns.length - 1].width;
-        this.setState({
-            properties: this.dataSource.properties,
-            columns,
-            visibleColumns: columns,
-            loading: false
-        });
+        setTimeout(async () => {
+            this.dataSource = await this.getDataSource();
+            const columns = this.dataSource.fields.map(f => {
+                return {
+                    title: f.name,
+                    dataIndex: f.name,
+                    width: 120
+                };
+            });
+    
+            delete columns[columns.length - 1].width;
+            this.setState({
+                properties: this.dataSource.properties,
+                columns,
+                visibleColumns: columns,
+                loading: false
+            });
+        }, 150);
     }
 
     async getDataSource() {

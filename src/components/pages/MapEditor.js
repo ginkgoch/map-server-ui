@@ -68,21 +68,21 @@ export class MapEditor extends React.Component {
         </Header>
         <Content>
           <div id="content" style={{ position: "relative", height: "100%" }}>
-            <div id="mapContainer" style={{ width: '100%', height: '100%', paddingLeft: mapContainerLeftPadding }}>
+            <div id="mapContainer" style={{ width: '100%', height: '100%', paddingLeft: mapContainerLeftPadding, overflowY: 'hidden' }}>
               <MapView assignTileLayer={el => GKGlobal = Object.assign(GKGlobal, { tileLayer: el })} />
-              <Drawer placement="bottom"
-                getContainer={"#mapContainer"}
-                height={360}
-                visible={this.state.dataTableDrawerVisible}
-                mask={false}
-                style={{ position: 'absolute' }}
-                bodyStyle={{ paddingLeft: mapContainerLeftPadding }}
-                onClose={() => this.setState({dataTableDrawerVisible: false})}>
-                <DataTable layerID={this.state.dataTableModel.layerID}
-                  groupID={this.state.dataTableModel.groupID}
-                  mapID={this.state.dataTableModel.mapID} />
-              </Drawer>
-
+              <div id="tableContainer" style={{ height: 0, bottom: 0, left: mapContainerLeftPadding, right: 0, position: 'absolute' }}>
+                <Drawer placement="bottom"
+                  getContainer={"#tableContainer"}
+                  height={360}
+                  visible={this.state.dataTableDrawerVisible}
+                  mask={false}
+                  destroyOnClose={true}
+                  onClose={() => this.setState({ dataTableDrawerVisible: false })}>
+                  <DataTable layerID={this.state.dataTableModel.layerID}
+                    groupID={this.state.dataTableModel.groupID}
+                    mapID={this.state.dataTableModel.mapID} />
+                </Drawer>
+              </div>
             </div>
             <Drawer
               placement="left"
@@ -92,8 +92,7 @@ export class MapEditor extends React.Component {
               mask={false}
               closable={false}
               getContainer={"#content"}
-              style={{ position: "absolute" }}
-            >
+              style={{ position: "absolute" }}>
               <Layers
                 layers={layers}
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
