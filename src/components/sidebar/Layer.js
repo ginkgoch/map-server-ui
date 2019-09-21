@@ -15,7 +15,7 @@ export class Layer extends Component {
 
   render() {
     const layer = this.state.layer;
-    const passThroughProps = _.omit(this.props, ['removingLayer', 'showStyleEditPanel']);
+    const passThroughProps = _.omit(this.props, ['removingLayer', 'showStyleEditPanel', 'showDataTablePanel']);
     return (
       <SubMenu key={layer.id} title={this.layerTitle(layer)} {...passThroughProps}>
         {layer.styles.map(s => (
@@ -39,8 +39,10 @@ export class Layer extends Component {
         </span>
         <div>
           <EditButtons visible={l.visible === undefined ? true : l.visible}
+            showDataTableButton={true}
             hideEditButton={true}
             hideStyleButton={false}
+            onShowDataTable={() => this.props.showDataTablePanel(l.id)}
             onCloseButtonClick={this.props.removingLayer}
             onNewStyleMenuItemClick={this.newStyle(l)}
             onVisibleChange={visible => {

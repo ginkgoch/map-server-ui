@@ -12,6 +12,7 @@ import { SideBarHeader } from '../sidebar';
 import { LayerTemplates } from "../../templates";
 import { MapView } from "../map/MapView";
 import { Config } from "../../shared";
+import { DataTable } from "../properties";
 
 const { Header, Content } = Layout;
 
@@ -26,7 +27,9 @@ export class MapEditor extends React.Component {
       mapModelLoading: true,
       savingMapModel: false,
       savingMapModelError: '',
-      secondaryDrawerChild: <NoneStyle />
+      secondaryDrawerChild: <NoneStyle />,
+      dataTableModel: {},
+      dataTableDrawerVisible: false
     };
   }
 
@@ -39,6 +42,7 @@ export class MapEditor extends React.Component {
       this.setState({ mapModel, mapModelLoading: false });
     }
 
+    this.setState({ dataTableModel: { mapID, groupID: 'Default' } });
     this.initSaveMapModelHandler();
   }
 
@@ -46,6 +50,7 @@ export class MapEditor extends React.Component {
     const layers = this.state.mapModel ? this.state.mapModel.content.groups[0].layers : [];
     const title = this.state.mapModel ? this.state.mapModel.name : "Unknown";
     const description = (<div style={{ width: 480 }}>{this.state.mapModel ? this.state.mapModel.description : ''}</div>);
+    const mapContainerLeftPadding = 280;
 
     return (
       <Layout>
@@ -63,8 +68,21 @@ export class MapEditor extends React.Component {
         </Header>
         <Content>
           <div id="content" style={{ position: "relative", height: "100%" }}>
-            <div style={{width: '100%', height: '100%', paddingLeft: 280}}>
+            <div id="mapContainer" style={{ width: '100%', height: '100%', paddingLeft: mapContainerLeftPadding, overflowY: 'hidden' }}>
               <MapView assignTileLayer={el => GKGlobal = Object.assign(GKGlobal, { tileLayer: el })} />
+              <div id="tableContainer" style={{ height: 0, bottom: 0, left: mapContainerLeftPadding, right: 0, position: 'absolute' }}>
+                <Drawer placement="bottom"
+                  getContainer={"#tableContainer"}
+                  height={360}
+                  visible={this.state.dataTableDrawerVisible}
+                  mask={false}
+                  destroyOnClose={true}
+                  onClose={() => this.setState({ dataTableDrawerVisible: false })}>
+                  <DataTable layerID={this.state.dataTableModel.layerID}
+                    groupID={this.state.dataTableModel.groupID}
+                    mapID={this.state.dataTableModel.mapID} />
+                </Drawer>
+              </div>
             </div>
             <Drawer
               placement="left"
@@ -74,11 +92,11 @@ export class MapEditor extends React.Component {
               mask={false}
               closable={false}
               getContainer={"#content"}
-              style={{ position: "absolute" }}
-            >
+              style={{ position: "absolute" }}>
               <Layers
                 layers={layers}
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
+                showDataTablePanel={layerID => this.showDataTablePanel(layerID)}
               />
 
               <Drawer
@@ -111,24 +129,24 @@ export class MapEditor extends React.Component {
     e.stopPropagation();
 
     try {
-      this.setState({savingMapModel: true, savingMapModelError: ''});
+      this.setState({ savingMapModel: true, savingMapModelError: '' });
       const response = await MapsService.updateMap(this.state.mapModel);
       if (response.status === 200) {
         errorModal.destroy();
       }
     }
     catch (ex) {
-      this.setState({savingMapModelError: ex.toString()});
+      this.setState({ savingMapModelError: ex.toString() });
     }
     finally {
-      this.setState({savingMapModel: false});
+      this.setState({ savingMapModel: false });
     }
   }
 
   onAddLayerClick() {
-    this.showSecondaryDrawer(true, 
-      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} onCancel={() => this.showSecondaryDrawer(false)} />), 
-      'New Layer', 
+    this.showSecondaryDrawer(true,
+      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} onCancel={() => this.showSecondaryDrawer(false)} />),
+      'New Layer',
       'Data Sources');
   }
 
@@ -174,6 +192,11 @@ export class MapEditor extends React.Component {
     }
   }
 
+  showDataTablePanel(layerID) {
+    const newDataTableModel = Object.assign(this.state.dataTableModel, { layerID });
+    this.setState({ dataTableModel: newDataTableModel, dataTableDrawerVisible: true });
+  }
+
   normalizeGroups(mapModel) {
     const map = _.result(mapModel, 'content');
     if (map === undefined) {
@@ -212,7 +235,7 @@ export class MapEditor extends React.Component {
                 <div>
                   <div>Latest map status is not synchronized with server with following err. Click &nbsp;
                     <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>here</a> to save again or refresh current page to sync with latest state.</div>
-                  <p style={{marginTop: 8}}>{that.state.savingMapModelError}</p>
+                  <p style={{ marginTop: 8 }}>{that.state.savingMapModelError}</p>
                 </div>
               )
             })

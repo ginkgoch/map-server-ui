@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon, Menu, Dropdown } from "antd";
+import { Button, Icon, Menu, Dropdown, Tooltip } from "antd";
 import { StyleUtils } from "../styles";
 
 export class EditButtons extends React.Component {
@@ -20,7 +20,8 @@ export class EditButtons extends React.Component {
 
     let btns = [];
     btns.push({
-      type: this.state.visible ? 'eye': 'eye-invisible',
+      type: this.state.visible ? 'eye' : 'eye-invisible',
+      tips: 'Visibility',
       click: e => {
         e.stopPropagation();
         const newVisible = !this.state.visible;
@@ -29,9 +30,21 @@ export class EditButtons extends React.Component {
       }
     });
 
+    if (this.props.showDataTableButton) {
+      btns.push({
+        type: 'table',
+        tips: 'Show data',
+        click: e => {
+          e.stopPropagation();
+          this.props.onShowDataTable();
+        }
+      })
+    }
+
     if (!this.props.hideEditButton) {
       btns.push({
         type: "edit",
+        tips: 'Edit',
         click: e => {
           e.stopPropagation();
           this.props.onEditButtonClick && this.props.onEditButtonClick(e);
@@ -42,6 +55,7 @@ export class EditButtons extends React.Component {
     if (!this.props.hideStyleButton) {
       btns.push({
         type: 'bg-colors',
+        tips: 'Set style',
         click: e => {
           e.stopPropagation();
           this.props.onStyleButtonClick && this.props.onStyleButtonClick(e);
@@ -51,6 +65,7 @@ export class EditButtons extends React.Component {
 
     btns.push({
       type: "close",
+      tips: 'Remove',
       click: e => {
         e.stopPropagation();
         this.props.onCloseButtonClick && this.props.onCloseButtonClick(e);
@@ -81,15 +96,15 @@ export class EditButtons extends React.Component {
   }
 
   _getButton(btn, btnStyle, iconStyle) {
-    return <Button
-      key={btn.type}
-      shape="circle"
-      size="small"
-      style={btnStyle}
-      onClick={btn.click}
-    >
-      <Icon type={btn.type} size="small" style={iconStyle} />
-    </Button>
+    return <Tooltip title={btn.tips} key={btn.type}>
+      <Button
+        shape="circle"
+        size="small"
+        style={btnStyle}
+        onClick={btn.click}>
+        <Icon type={btn.type} size="small" style={iconStyle} />
+      </Button>
+    </Tooltip>
   }
 
   getNewStyleMenu() {

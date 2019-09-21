@@ -34,6 +34,7 @@ export class Layers extends React.Component {
             layer={layer}
             removingLayer={this.removeLayer(layer.id, this.state.layers)}
             showStyleEditPanel={this.props.showStyleEditPanel}
+            showDataTablePanel={this.props.showDataTablePanel}
           />
         ))}
       </Menu>

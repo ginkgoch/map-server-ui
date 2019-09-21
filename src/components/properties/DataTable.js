@@ -7,31 +7,34 @@ export class DataTable extends Component {
     constructor(props) {
         super(props);
 
-        this.layerID = props.layerID;
-        this.mapID = props.mapID;
-        this.groupID = props.groupID || "Default";
+        this.state = { loading: false, 
+            properties: [], columns: [], visibleColumns: [], 
+            layerID: props.layerID, groupID: props.groupID, mapID: props.mapID 
+        };
+    }
 
-        this.state = { loading: false, properties: [], columns: [], visibleColumns: [] };
+    static getDerivedStateFromProps(nextProps, preState) {
+        if (nextProps.layerID !== preState.layerID || nextProps.groupID !== preState.groupID || nextProps.mapID != preState.mapID) {
+            return Object.assign(preState, { layerID: nextProps.layerID, 
+                groupID: nextProps.groupID, 
+                mapID: nextProps.mapID,
+                reload: true,
+                properties: [], columns: [], visibleColumns: []
+            })
+        }
+
+        return null;
     }
 
     async componentDidMount() {
-        this.setState({ loading: true });
-        this.dataSource = await this.getDataSource();
-        const columns = this.dataSource.fields.map(f => {
-            return {
-                title: f.name,
-                dataIndex: f.name,
-                width: 120
-            };
-        });
+        await this.reloadDataTable();
+    }
 
-        delete columns[columns.length - 1].width;
-        this.setState({
-            properties: this.dataSource.properties,
-            columns,
-            visibleColumns: columns,
-            loading: false
-        });
+    async componentDidUpdate() {
+        if (this.state.reload) {
+            this.state.reload = false;
+            await this.reloadDataTable();
+        }
     }
 
     render() {
@@ -51,6 +54,32 @@ export class DataTable extends Component {
         );
     }
 
+    async reloadDataTable() {
+        if (!this.checkRequestIsReady()) {
+            return;
+        }
+
+        this.setState({ loading: true });
+        setTimeout(async () => {
+            this.dataSource = await this.getDataSource();
+            const columns = this.dataSource.fields.map(f => {
+                return {
+                    title: f.name,
+                    dataIndex: f.name,
+                    width: 120
+                };
+            });
+    
+            delete columns[columns.length - 1].width;
+            this.setState({
+                properties: this.dataSource.properties,
+                columns,
+                visibleColumns: columns,
+                loading: false
+            });
+        }, 150);
+    }
+
     async getDataSource() {
         return await Promise.all([this.getFields(), this.getProperties()]).then(
             values => {
@@ -64,9 +93,9 @@ export class DataTable extends Component {
 
     async getFields() {
         const response = await MapsService.getFields(
-            this.layerID,
-            this.groupID,
-            this.mapID,
+            this.state.layerID,
+            this.state.groupID,
+            this.state.mapID,
             { fields: ["name", "type"] }
         );
         return response.data;
@@ -74,9 +103,9 @@ export class DataTable extends Component {
 
     async getProperties() {
         const response = await MapsService.getProperties(
-            this.layerID,
-            this.groupID,
-            this.mapID
+            this.state.layerID,
+            this.state.groupID,
+            this.state.mapID
         );
         return response.data.map((rec, i) => Object.assign(rec, { key: i }));
     }
@@ -92,6 +121,10 @@ export class DataTable extends Component {
 
         delete visibleColumns[visibleColumns.length - 1].width;
         this.setState({ visibleColumns: visibleColumns });
+    }
+
+    checkRequestIsReady() {
+        return this.state.layerID !== undefined && this.state.groupID !== undefined && this.state.mapID !== undefined;
     }
 }
 

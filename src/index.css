@@ -123,3 +123,7 @@ html, body, #container, .ant-layout {
 .confirm-btn-container>button {
     margin-left: 4px;
 }
+
+#tableContainer .ant-drawer-content-wrapper {
+    padding-left: 280px;
+}
