@@ -4,7 +4,7 @@ import React from "react";
 import { Layout, Drawer, Spin, Popover, Icon, Modal, Button } from "antd";
 import Logo from "../header/Logo";
 import { Layers } from "../sidebar";
-import { NoneStyle } from "../styles";
+import { NoneStyle, StyleUtils } from "../styles";
 import { LaunchButton } from "../header/LaunchButton";
 import { MapsService } from "../../services/MapsService";
 import { DataSources } from "../sidebar/DataSources";
@@ -159,6 +159,9 @@ export class MapEditor extends React.Component {
     const newLayers = newLayersDef.map(def => {
       const source = LayerTemplates.getFeatureSource(def.sourceType, def.name, def.path, def.srs, mapModel.content.srs.projection);
       const layer = LayerTemplates.getFeatureLayer(def.name, source);
+      const style = StyleUtils.getStyleByGeomType(def.geomType, true);
+      style !== null && layer.styles.push(style);
+
       return layer;
     });
 

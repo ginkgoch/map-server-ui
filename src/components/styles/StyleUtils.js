@@ -47,6 +47,43 @@ export class StyleUtils {
         }
     }
 
+    /**
+     * 
+     * @param {string} geomType Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon.
+     * @returns {any|null}
+     */
+    static getStyleByGeomType(geomType, assignName = false) {
+        let styleType = undefined;
+        let styleName = undefined;
+        switch (geomType.toLowerCase()) {
+            case 'polygon':
+            case 'multipolygon':
+                styleType = 'fill-style';
+                styleName = 'Fill Style 1';
+                break;
+            case 'linestring':
+            case 'multilinestring':
+                styleType = 'line-style';
+                styleName = 'Line Style 1';
+                break;
+            case 'point':
+            case 'multipoint':
+                styleType = 'point-style';
+                styleName = 'Point Style 1';
+                break;
+        }
+
+        if (styleType === undefined) {
+            return null;
+        }
+
+        const style = this.defaultStyle(styleType);
+        if (styleName && assignName) {
+            style.name = styleName;
+        }
+        return style;
+    }
+
     static configureItems(style, props = undefined) {
         if (props === undefined) {
             props = {
