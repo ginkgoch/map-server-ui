@@ -8,7 +8,7 @@ import { NoneStyle, StyleUtils } from "../styles";
 import { LaunchButton } from "../header/LaunchButton";
 import { MapsService } from "../../services/MapsService";
 import { DataSources } from "../sidebar/DataSources";
-import { SideBarHeader } from '../sidebar';
+import { SideBarHeader } from "../sidebar";
 import { LayerTemplates } from "../../templates";
 import { MapView } from "../map/MapView";
 import { Config } from "../../shared";
@@ -26,10 +26,11 @@ export class MapEditor extends React.Component {
       mapModel: null,
       mapModelLoading: true,
       savingMapModel: false,
-      savingMapModelError: '',
+      savingMapModelError: "",
       secondaryDrawerChild: <NoneStyle />,
       dataTableModel: {},
-      dataTableDrawerVisible: false
+      dataTableDrawerVisible: false,
+      highlights: LayerTemplates.getFeatureCollection()
     };
   }
 
@@ -38,18 +39,22 @@ export class MapEditor extends React.Component {
     const response = await MapsService.getMapByID(mapID);
     if (response.status === 200) {
       const mapModel = response.data;
-      this.normalizeGroups(mapModel)
+      this.normalizeGroups(mapModel);
       this.setState({ mapModel, mapModelLoading: false });
     }
 
-    this.setState({ dataTableModel: { mapID, groupID: 'Default' } });
+    this.setState({ dataTableModel: { mapID, groupID: "Default" } });
     this.initSaveMapModelHandler();
   }
 
   render() {
     const layers = this.state.mapModel ? this.state.mapModel.content.groups[0].layers : [];
     const title = this.state.mapModel ? this.state.mapModel.name : "Unknown";
-    const description = (<div style={{ width: 480 }}>{this.state.mapModel ? this.state.mapModel.description : ''}</div>);
+    const description = (
+      <div style={{ width: 480 }}>
+        {this.state.mapModel ? this.state.mapModel.description : ""}
+      </div>
+    );
     const mapContainerLeftPadding = 280;
 
     return (
@@ -68,31 +73,65 @@ export class MapEditor extends React.Component {
         </Header>
         <Content>
           <div id="content" style={{ position: "relative", height: "100%" }}>
-            <div id="mapContainer" style={{ width: '100%', height: '100%', paddingLeft: mapContainerLeftPadding, overflowY: 'hidden' }}>
-              <MapView assignTileLayer={el => GKGlobal = Object.assign(GKGlobal, { tileLayer: el })} />
-              <div id="tableContainer" style={{ height: 0, bottom: 0, left: mapContainerLeftPadding, right: 0, position: 'absolute' }}>
-                <Drawer placement="bottom"
+            <div
+              id="mapContainer"
+              style={{
+                width: "100%",
+                height: "100%",
+                paddingLeft: mapContainerLeftPadding,
+                overflowY: "hidden"
+              }}
+            >
+              <MapView
+                assignTileLayer={el => (GKGlobal = Object.assign(GKGlobal, { tileLayer: el }))}
+                assignHighlightLayer={el => (GKGlobal = Object.assign(GKGlobal, { highlightLayer: el })) }
+                highlights={this.state.highlights}
+                onClick={e => this.onMapViewClick(e)}
+              />
+              <div
+                id="tableContainer"
+                style={{
+                  height: 0,
+                  bottom: 0,
+                  left: mapContainerLeftPadding,
+                  right: 0,
+                  position: "absolute"
+                }}
+              >
+                <Drawer
+                  placement="bottom"
                   getContainer={"#tableContainer"}
                   height={360}
                   visible={this.state.dataTableDrawerVisible}
                   mask={false}
                   destroyOnClose={true}
-                  onClose={() => this.setState({ dataTableDrawerVisible: false })}>
-                  <DataTable layerID={this.state.dataTableModel.layerID}
+                  onClose={() =>
+                    this.setState({ dataTableDrawerVisible: false })
+                  }
+                >
+                  <DataTable
+                    layerID={this.state.dataTableModel.layerID}
                     groupID={this.state.dataTableModel.groupID}
-                    mapID={this.state.dataTableModel.mapID} />
+                    mapID={this.state.dataTableModel.mapID}
+                  />
                 </Drawer>
               </div>
             </div>
             <Drawer
               placement="left"
-              title={<SideBarHeader loading={this.state.mapModelLoading} onAddLayerClick={() => this.onAddLayerClick()} />}
+              title={
+                <SideBarHeader
+                  loading={this.state.mapModelLoading}
+                  onAddLayerClick={() => this.onAddLayerClick()}
+                />
+              }
               width="280px"
               visible={true}
               mask={false}
               closable={false}
               getContainer={"#content"}
-              style={{ position: "absolute" }}>
+              style={{ position: "absolute" }}
+            >
               <Layers
                 layers={layers}
                 showStyleEditPanel={this.showSecondaryDrawer.bind(this)}
@@ -129,25 +168,28 @@ export class MapEditor extends React.Component {
     e.stopPropagation();
 
     try {
-      this.setState({ savingMapModel: true, savingMapModelError: '' });
+      this.setState({ savingMapModel: true, savingMapModelError: "" });
       const response = await MapsService.updateMap(this.state.mapModel);
       if (response.status === 200) {
         errorModal.destroy();
       }
-    }
-    catch (ex) {
+    } catch (ex) {
       this.setState({ savingMapModelError: ex.toString() });
-    }
-    finally {
+    } finally {
       this.setState({ savingMapModel: false });
     }
   }
 
   onAddLayerClick() {
-    this.showSecondaryDrawer(true,
-      (<DataSources onConfirm={newLayers => this.onAddLayerConfirm(newLayers)} onCancel={() => this.showSecondaryDrawer(false)} />),
-      'New Layer',
-      'Data Sources');
+    this.showSecondaryDrawer(
+      true,
+      <DataSources
+        onConfirm={newLayers => this.onAddLayerConfirm(newLayers)}
+        onCancel={() => this.showSecondaryDrawer(false)}
+      />,
+      "New Layer",
+      "Data Sources"
+    );
   }
 
   onAddLayerConfirm(newLayersDef) {
@@ -157,7 +199,13 @@ export class MapEditor extends React.Component {
 
     const mapModel = this.state.mapModel;
     const newLayers = newLayersDef.map(def => {
-      const source = LayerTemplates.getFeatureSource(def.sourceType, def.name, def.path, def.srs, mapModel.content.srs.projection);
+      const source = LayerTemplates.getFeatureSource(
+        def.sourceType,
+        def.name,
+        def.path,
+        def.srs,
+        mapModel.content.srs.projection
+      );
       const layer = LayerTemplates.getFeatureLayer(def.name, source);
       const style = StyleUtils.getStyleByGeomType(def.geomType, true);
       style !== null && layer.styles.push(style);
@@ -175,6 +223,22 @@ export class MapEditor extends React.Component {
     this.setState({ mapModel });
     this.showSecondaryDrawer(false);
     GKGlobal.saveCurrentMapModel();
+  }
+
+  async onMapViewClick(e) {
+    const response = await MapsService.getIntersection([e.latlng.lng, e.latlng.lat], 'WGS84', e.target.getZoom(), this.state.mapModel.id, 'WGS84');
+    if (response.status === 200) {
+      const features = _.flatMap(response.data, l => l.features);
+      if (features.length > 0) {
+        const featureCollection = LayerTemplates.getFeatureCollection(features);
+        GKGlobal.highlightLayer.leafletElement.clearLayers();
+        GKGlobal.highlightLayer.leafletElement.addData(featureCollection);
+        const highlights = GKGlobal.highlightLayer.leafletElement.getLayers();
+        if (highlights.length > 0) {
+          highlights[0].openPopup();
+        }
+      }
+    }
   }
 
   showSecondaryDrawer(
@@ -197,11 +261,14 @@ export class MapEditor extends React.Component {
 
   showDataTablePanel(layerID) {
     const newDataTableModel = Object.assign(this.state.dataTableModel, { layerID });
-    this.setState({ dataTableModel: newDataTableModel, dataTableDrawerVisible: true });
+    this.setState({
+      dataTableModel: newDataTableModel,
+      dataTableDrawerVisible: true
+    });
   }
 
   normalizeGroups(mapModel) {
-    const map = _.result(mapModel, 'content');
+    const map = _.result(mapModel, "content");
     if (map === undefined) {
       return;
     }
@@ -224,24 +291,33 @@ export class MapEditor extends React.Component {
           try {
             await MapsService.updateMap(that.state.mapModel);
             if (GKGlobal.tileLayer) {
-              const newURL = Config.serviceUrl('maps/1/image/xyz/{z}/{x}/{y}?q=' + +(new Date()))
+              const newURL = Config.serviceUrl("maps/1/image/xyz/{z}/{x}/{y}?q=" + +new Date());
               GKGlobal.tileLayer.leafletElement.setUrl(newURL);
             }
-          }
+          } 
           catch (ex) {
             that.setState({
               savingMapModelError: ex.toString()
-            })
+            });
             const errorModal = Modal.error({
-              title: 'Save Map Failed',
+              title: "Save Map Failed",
               content: (
                 <div>
-                  <div>Latest map status is not synchronized with server with following err. Click &nbsp;
-                    <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>here</a> to save again or refresh current page to sync with latest state.</div>
-                  <p style={{ marginTop: 8 }}>{that.state.savingMapModelError}</p>
+                  <div>
+                    Latest map status is not synchronized with server with
+                    following err. Click &nbsp;
+                    <a onClick={e => that.onReSaveButtonClick(e, errorModal)}>
+                      here
+                    </a>{" "}
+                    to save again or refresh current page to sync with latest
+                    state.
+                  </div>
+                  <p style={{ marginTop: 8 }}>
+                    {that.state.savingMapModelError}
+                  </p>
                 </div>
               )
-            })
+            });
           }
         }, 1000);
       }

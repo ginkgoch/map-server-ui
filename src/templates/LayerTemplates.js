@@ -48,5 +48,23 @@ export class LayerTemplates {
             "visible": true,
             "layers": []
         };
+    } 
+    
+    static getFeatureCollection(features = []) {
+        return {
+            "type": "FeatureCollection",
+            "features": features
+        };
+    }
+
+    static getFeaturePopupContent(feature) {
+        if (feature.properties) {
+            return `<table class="popup-content">
+                ${ Object.keys(feature.properties).map(k => `<tr><td class="title">${k}</td><td>${feature.properties[k]}</td></tr>`).join('') }
+            </table>`;
+        }
+        else {
+            return 'No Content...';
+        }
     }
 }

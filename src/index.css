@@ -127,3 +127,15 @@ html, body, #container, .ant-layout {
 #tableContainer .ant-drawer-content-wrapper {
     padding-left: 280px;
 }
+
+table.popup-content tr:nth-child(odd) {
+    background-color: #f0f1f2;
+}
+
+table.popup-content td.title {
+    font-weight: bold;
+}
+
+table.popup-content td {
+    padding: 4px 6px 4px 2px;
+}
