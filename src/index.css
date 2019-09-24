@@ -56,6 +56,22 @@ html, body, #container, .ant-layout {
     height: 34px;
 }
 
+.color-picker-sm {
+    width: 30%;
+    margin-right: 20px;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+.color-picker-sm>span {
+    height: 30px;
+    width: 100%;
+}
+
+.color-picker-space {
+    padding: 0 20px;
+}
+
 .ant-drawer-content-wrapper {
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15) !important;
     -webkit-box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);

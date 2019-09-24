@@ -11,7 +11,7 @@ export class Playground extends Component {
         return (
             // <DataTable layerID="layer-vyrwgp22" groupID="Default" mapID="1" />
             <div style={{width: 600, margin: '10px auto'}}>
-                <ValueItems></ValueItems>
+                <ValueItems layerID="layer-vyrwgp22" groupID="Default" mapID="1"></ValueItems>
             </div>
         );
     }
