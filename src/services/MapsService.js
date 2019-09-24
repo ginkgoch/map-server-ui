@@ -59,9 +59,9 @@ export class MapsService {
         const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/fields`, filter);
         return response;
     }
-
-    static async getPropertyByField(field, layerID, groupID, mapID) {
-        const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/properties/${field}`);
+    
+    static async getPropertyByField(field, layerID, groupID, mapID, aggregators = []) {
+        const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/properties/${field}`, { aggregators } );
         return response;
     }
 
