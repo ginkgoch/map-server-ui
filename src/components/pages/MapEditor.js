@@ -11,7 +11,7 @@ import { DataSources } from "../sidebar/DataSources";
 import { SideBarHeader } from "../sidebar";
 import { LayerTemplates } from "../../templates";
 import { MapView } from "../map/MapView";
-import { Config, GKGlobalData } from "../../shared";
+import { Config, GKGlobal, GKGlobalUtils } from "../../shared";
 import { DataTable } from "../properties";
 
 const { Header, Content } = Layout;
@@ -84,8 +84,8 @@ export class MapEditor extends React.Component {
               }}
             >
               <MapView
-                assignTileLayer={el => (GKGlobal = Object.assign(GKGlobal, { tileLayer: el }))}
-                assignHighlightLayer={el => (GKGlobal = Object.assign(GKGlobal, { highlightLayer: el }))}
+                assignTileLayer={el => GKGlobal.assign({ tileLayer: el })}
+                assignHighlightLayer={el => GKGlobal.assign({ highlightLayer: el })}
                 highlights={this.state.highlights}
                 onClick={e => this.onMapViewClick(e)}
               />
@@ -223,9 +223,9 @@ export class MapEditor extends React.Component {
 
     this.setState({ mapModel });
     this.showSecondaryDrawer(false);
-    GKGlobal.saveCurrentMapModel(async () => {
+    GKGlobal.state.saveCurrentMapModel(async () => {
       const layerInfos = await MapsService.getLayersInfo(newLayers.map(l => l.id), 'Default', mapModel.id);
-      GKGlobalData.updateLayerInfos(layerInfos);
+      GKGlobalUtils.updateLayerInfos(layerInfos);
     });
   }
 
@@ -235,9 +235,9 @@ export class MapEditor extends React.Component {
       const features = _.flatMap(response.data, l => l.features);
       if (features.length > 0) {
         const featureCollection = LayerTemplates.getFeatureCollection(features);
-        GKGlobal.highlightLayer.leafletElement.clearLayers();
-        GKGlobal.highlightLayer.leafletElement.addData(featureCollection);
-        const highlights = GKGlobal.highlightLayer.leafletElement.getLayers();
+        GKGlobal.state.highlightLayer.leafletElement.clearLayers();
+        GKGlobal.state.highlightLayer.leafletElement.addData(featureCollection);
+        const highlights = GKGlobal.state.highlightLayer.leafletElement.getLayers();
         if (highlights.length > 0) {
           highlights[0].openPopup();
         }
@@ -284,7 +284,7 @@ export class MapEditor extends React.Component {
 
   initSaveMapModelHandler() {
     const that = this;
-    GKGlobal = Object.assign(GKGlobal, {
+    GKGlobal.assign({
       savingTimeoutID: null,
       saveCurrentMapModel: (saveCompleted = null) => {
         if (this.savingTimerID) {
@@ -298,9 +298,9 @@ export class MapEditor extends React.Component {
               await saveCompleted();
             }
 
-            if (GKGlobal.tileLayer) {
+            if (GKGlobal.state.tileLayer) {
               const newURL = Config.serviceUrl("maps/1/image/xyz/{z}/{x}/{y}?q=" + +new Date());
-              GKGlobal.tileLayer.leafletElement.setUrl(newURL);
+              GKGlobal.state.tileLayer.leafletElement.setUrl(newURL);
             }
           }
           catch (ex) {
@@ -335,6 +335,6 @@ export class MapEditor extends React.Component {
   async initLayersInfo(mapModel) {
     const layerIDs = _.flatMap(mapModel.content.groups, g => g.layers).map(l => l.id);
     const layerInfos = await MapsService.getLayersInfo(layerIDs, 'Default', mapModel.id);
-    GKGlobal = Object.assign(GKGlobal, { layerInfos });
+    GKGlobal.assign({ layerInfos });
   }
 }

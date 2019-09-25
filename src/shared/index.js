@@ -1,4 +1,5 @@
 export * from './UUID';
 export * from './Colors';
 export * from './Config';
-export * from './GKGlobalData';
+export * from './GKGlobal';
+export * from './GKGlobalUtils';
