@@ -16,31 +16,4 @@ export class GKGlobal {
     static assign(options) {
         this.state.GKGlobalData = Object.assign(this.state.GKGlobalData, options);
     }
-
-    static getLayerInfo(layerID) {
-        return this.current.layerInfos.find(layerInfo => layerInfo.id === layerID)
-    }
-
-    static updateLayerInfo(layerInfo) {
-        let layerIndex = _.findIndex(this.current.layerInfos, l => l.id === layerInfo.id);
-        if (layerIndex < 0) {
-            this.current.layerInfos.push(layerInfo);
-        }
-        else {
-            this.current.layerInfos.splice(layerIndex, 1, layerInfo);
-        }
-    }
-
-    static updateLayerInfos(layerInfos) {
-        if (layerInfos.length > 0) {
-            layerInfos.forEach(layerInfo => this.updateLayerInfo(layerInfo));
-        }
-    }
-
-    static removeLayerInfo(layerID) {
-        let layerIndex = _.findIndex(this.current.layerInfos, l => l.id === layerID);
-        if (layerIndex >= 0) {
-            this.current.layerInfos.splice(layerIndex, 1);
-        }
-    }
 }

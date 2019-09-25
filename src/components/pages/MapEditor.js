@@ -11,7 +11,7 @@ import { DataSources } from "../sidebar/DataSources";
 import { SideBarHeader } from "../sidebar";
 import { LayerTemplates } from "../../templates";
 import { MapView } from "../map/MapView";
-import { Config, GKGlobal } from "../../shared";
+import { Config, GKGlobal, GKGlobalUtils } from "../../shared";
 import { DataTable } from "../properties";
 
 const { Header, Content } = Layout;
@@ -225,7 +225,7 @@ export class MapEditor extends React.Component {
     this.showSecondaryDrawer(false);
     GKGlobal.current.saveCurrentMapModel(async () => {
       const layerInfos = await MapsService.getLayersInfo(newLayers.map(l => l.id), 'Default', mapModel.id);
-      GKGlobal.updateLayerInfos(layerInfos);
+      GKGlobalUtils.updateLayerInfos(layerInfos);
     });
   }
 
