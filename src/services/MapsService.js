@@ -59,9 +59,9 @@ export class MapsService {
         const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/fields`, filter);
         return response;
     }
-    
+
     static async getPropertyByField(field, layerID, groupID, mapID, aggregators = []) {
-        const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/properties/${field}`, { aggregators } );
+        const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}/properties/${field}`, { aggregators });
         return response;
     }
 
@@ -93,5 +93,37 @@ export class MapsService {
         });
 
         return response;
+    }
+
+    /**
+     * 
+     * @param {string | number} layerID The layer ID.
+     * @param {string | number} groupID The parent group ID.
+     * @param {string | number} mapID The parent map ID.
+     * @param {string[]} fields The fields to include in the response.
+     * @returns {any} The layer info.
+     */
+    static async getLayerInfo(layerID, groupID, mapID, fields = []) {
+        const response = await Requests.get(`/maps/${mapID}/groups/${groupID}/layers/${layerID}`, { fields });
+        if (response.status === 200) {
+            return response.data;
+        }
+        else {
+            throw new Error(response.data);
+        }
+    }
+
+    /**
+     * 
+     * @param {string[] | number[]} layerIDs The layer IDs.
+     * @param {string | number} groupID The parent group ID.
+     * @param {string | number} mapID The parent map ID.
+     * @param {string[]} fields The fields to include in the response.
+     * @returns {Promise<any[]>} The layer info.
+     */
+    static async getLayersInfo(layerIDs, groupID, mapID, fields = ['id', 'name', 'type', 'envelope', 'geomType']) {
+        return await Promise.all(layerIDs.map(layerID => {
+            return this.getLayerInfo(layerID, groupID, mapID, fields);
+        }))
     }
 }
