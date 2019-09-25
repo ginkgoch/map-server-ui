@@ -6,9 +6,7 @@ import { MapEditor, MapList, Playground } from './components/pages';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Config, GKGlobalData } from "./shared";
 
-window.GKGlobal = Object.assign({}, Config);
-GKGlobalData.state = window;
-
+GKGlobalData.init();
 ReactDOM.render(
   <BrowserRouter>
     <Route exact path="/" component={MapList} />

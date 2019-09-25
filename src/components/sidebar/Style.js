@@ -3,6 +3,7 @@ import React from "react";
 import { StylePreview, ModalUtils } from "../shared";
 import { EditButtons } from ".";
 import { Menu } from "antd";
+import { GKGlobalData } from "../../shared";
 
 const { SubMenu } = Menu;
 export class Style extends React.Component {
@@ -43,7 +44,7 @@ export class Style extends React.Component {
             onEditButtonClick={this.props.onEditButtonClick}
             onVisibleChange={visible => {
               style.visible = visible;
-              GKGlobal.saveCurrentMapModel();
+              GKGlobalData.current.saveCurrentMapModel();
             }} />
         </div>
       </div>

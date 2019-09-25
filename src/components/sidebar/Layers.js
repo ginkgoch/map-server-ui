@@ -3,6 +3,7 @@ import React from "react";
 import { Menu } from "antd";
 import { Layer } from ".";
 import { ModalUtils } from "../shared";
+import { GKGlobalData } from "../../shared";
 
 export class Layers extends React.Component {
   constructor(props) {
@@ -46,7 +47,7 @@ export class Layers extends React.Component {
       ModalUtils.promptRemoveModal("layer", () => {
         _.remove(layers, layer => layer.id === layerId);
         this.setState({ layers });
-        GKGlobal.saveCurrentMapModel(() => GKGlobalData.removeLayerInfo(layerId));
+        GKGlobalData.current.saveCurrentMapModel(() => GKGlobalData.removeLayerInfo(layerId));
       });
     };
   }
