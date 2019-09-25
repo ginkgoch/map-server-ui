@@ -4,7 +4,7 @@ import { Menu } from "antd";
 import { LayerPreview, ModalUtils } from "../shared";
 import { EditButtons, Style } from ".";
 import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle, StyleUtils, ValueStyle } from "../styles";
-import { GKGlobalData } from "../../shared";
+import { GKGlobal } from "../../shared";
 
 const { SubMenu } = Menu;
 
@@ -48,7 +48,7 @@ export class Layer extends Component {
             onNewStyleMenuItemClick={this.newStyle(l)}
             onVisibleChange={visible => {
               l.visible = visible;
-              GKGlobalData.current.saveCurrentMapModel();
+              GKGlobal.current.saveCurrentMapModel();
             }} />
         </div>
       </div>
@@ -60,7 +60,7 @@ export class Layer extends Component {
       ModalUtils.promptRemoveModal("style", () => {
         _.remove(layer.styles, s => s.id === id);
         this.setState({ layer });
-        GKGlobalData.current.saveCurrentMapModel();
+        GKGlobal.current.saveCurrentMapModel();
       });
     };
   }
@@ -72,7 +72,7 @@ export class Layer extends Component {
         layer.styles[index] = newStyle;
 
         this.setState(this.state);
-        GKGlobalData.current.saveCurrentMapModel();
+        GKGlobal.current.saveCurrentMapModel();
         this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
       }).bind(this);
 
@@ -89,7 +89,7 @@ export class Layer extends Component {
     const onNewStyleSubmit = (newStyle => {
       layer.styles.push(newStyle);
       this.setState(this.state);
-      GKGlobalData.current.saveCurrentMapModel();
+      GKGlobal.current.saveCurrentMapModel();
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
     }).bind(this);
 

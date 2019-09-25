@@ -4,9 +4,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { MapEditor, MapList, Playground } from './components/pages';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { Config, GKGlobalData } from "./shared";
+import { GKGlobal } from "./shared";
 
-GKGlobalData.init();
+GKGlobal.init();
 ReactDOM.render(
   <BrowserRouter>
     <Route exact path="/" component={MapList} />
