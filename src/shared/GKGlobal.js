@@ -3,17 +3,17 @@ import { Config } from ".";
 
 export class GKGlobal {
     static init(root = undefined) {
-        GKGlobal.state = root || window;
-        GKGlobal.state.GKGlobalData = {};
+        GKGlobal.root = root || window;
+        GKGlobal.root.GKGlobalData = {};
         this.assign(Config);
         this.assign({ layerInfos: [] });
     }
 
-    static get current() {
-        return this.state.GKGlobalData;
+    static get state() {
+        return this.root.GKGlobalData;
     }
 
     static assign(options) {
-        this.state.GKGlobalData = Object.assign(this.state.GKGlobalData, options);
+        this.root.GKGlobalData = Object.assign(this.root.GKGlobalData, options);
     }
 }

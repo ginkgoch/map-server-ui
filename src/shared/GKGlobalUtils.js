@@ -3,16 +3,16 @@ import { GKGlobal } from ".";
 
 export class GKGlobalUtils {
     static getLayerInfo(layerID) {
-        return GKGlobal.current.layerInfos.find(layerInfo => layerInfo.id === layerID)
+        return GKGlobal.state.layerInfos.find(layerInfo => layerInfo.id === layerID)
     }
 
     static updateLayerInfo(layerInfo) {
-        let layerIndex = _.findIndex(GKGlobal.current.layerInfos, l => l.id === layerInfo.id);
+        let layerIndex = _.findIndex(GKGlobal.state.layerInfos, l => l.id === layerInfo.id);
         if (layerIndex < 0) {
-            GKGlobal.current.layerInfos.push(layerInfo);
+            GKGlobal.state.layerInfos.push(layerInfo);
         }
         else {
-            GKGlobal.current.layerInfos.splice(layerIndex, 1, layerInfo);
+            GKGlobal.state.layerInfos.splice(layerIndex, 1, layerInfo);
         }
     }
 
@@ -23,9 +23,9 @@ export class GKGlobalUtils {
     }
 
     static removeLayerInfo(layerID) {
-        let layerIndex = _.findIndex(GKGlobal.current.layerInfos, l => l.id === layerID);
+        let layerIndex = _.findIndex(GKGlobal.state.layerInfos, l => l.id === layerID);
         if (layerIndex >= 0) {
-            GKGlobal.current.layerInfos.splice(layerIndex, 1);
+            GKGlobal.state.layerInfos.splice(layerIndex, 1);
         }
     }
 }

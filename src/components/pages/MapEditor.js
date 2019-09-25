@@ -223,7 +223,7 @@ export class MapEditor extends React.Component {
 
     this.setState({ mapModel });
     this.showSecondaryDrawer(false);
-    GKGlobal.current.saveCurrentMapModel(async () => {
+    GKGlobal.state.saveCurrentMapModel(async () => {
       const layerInfos = await MapsService.getLayersInfo(newLayers.map(l => l.id), 'Default', mapModel.id);
       GKGlobalUtils.updateLayerInfos(layerInfos);
     });
@@ -235,9 +235,9 @@ export class MapEditor extends React.Component {
       const features = _.flatMap(response.data, l => l.features);
       if (features.length > 0) {
         const featureCollection = LayerTemplates.getFeatureCollection(features);
-        GKGlobal.current.highlightLayer.leafletElement.clearLayers();
-        GKGlobal.current.highlightLayer.leafletElement.addData(featureCollection);
-        const highlights = GKGlobal.current.highlightLayer.leafletElement.getLayers();
+        GKGlobal.state.highlightLayer.leafletElement.clearLayers();
+        GKGlobal.state.highlightLayer.leafletElement.addData(featureCollection);
+        const highlights = GKGlobal.state.highlightLayer.leafletElement.getLayers();
         if (highlights.length > 0) {
           highlights[0].openPopup();
         }
@@ -298,9 +298,9 @@ export class MapEditor extends React.Component {
               await saveCompleted();
             }
 
-            if (GKGlobal.current.tileLayer) {
+            if (GKGlobal.state.tileLayer) {
               const newURL = Config.serviceUrl("maps/1/image/xyz/{z}/{x}/{y}?q=" + +new Date());
-              GKGlobal.current.tileLayer.leafletElement.setUrl(newURL);
+              GKGlobal.state.tileLayer.leafletElement.setUrl(newURL);
             }
           }
           catch (ex) {

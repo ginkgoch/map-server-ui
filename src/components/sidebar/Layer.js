@@ -48,7 +48,7 @@ export class Layer extends Component {
             onNewStyleMenuItemClick={this.newStyle(l)}
             onVisibleChange={visible => {
               l.visible = visible;
-              GKGlobal.current.saveCurrentMapModel();
+              GKGlobal.state.saveCurrentMapModel();
             }} />
         </div>
       </div>
@@ -60,7 +60,7 @@ export class Layer extends Component {
       ModalUtils.promptRemoveModal("style", () => {
         _.remove(layer.styles, s => s.id === id);
         this.setState({ layer });
-        GKGlobal.current.saveCurrentMapModel();
+        GKGlobal.state.saveCurrentMapModel();
       });
     };
   }
@@ -72,7 +72,7 @@ export class Layer extends Component {
         layer.styles[index] = newStyle;
 
         this.setState(this.state);
-        GKGlobal.current.saveCurrentMapModel();
+        GKGlobal.state.saveCurrentMapModel();
         this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
       }).bind(this);
 
@@ -89,7 +89,7 @@ export class Layer extends Component {
     const onNewStyleSubmit = (newStyle => {
       layer.styles.push(newStyle);
       this.setState(this.state);
-      GKGlobal.current.saveCurrentMapModel();
+      GKGlobal.state.saveCurrentMapModel();
       this.props.showStyleEditPanel && this.props.showStyleEditPanel(false, null);
     }).bind(this);
 

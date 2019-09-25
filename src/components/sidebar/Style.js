@@ -44,7 +44,7 @@ export class Style extends React.Component {
             onEditButtonClick={this.props.onEditButtonClick}
             onVisibleChange={visible => {
               style.visible = visible;
-              GKGlobal.current.saveCurrentMapModel();
+              GKGlobal.state.saveCurrentMapModel();
             }} />
         </div>
       </div>
