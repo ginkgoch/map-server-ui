@@ -13,7 +13,7 @@ export class Layers extends React.Component {
 
   static getDerivedStateFromProps(nextProps, preState) {
     if (nextProps.layers !== preState.layers) {
-      return {...preState, layers: nextProps.layers};
+      return { ...preState, layers: nextProps.layers };
     }
 
     return null;
@@ -46,7 +46,7 @@ export class Layers extends React.Component {
       ModalUtils.promptRemoveModal("layer", () => {
         _.remove(layers, layer => layer.id === layerId);
         this.setState({ layers });
-        GKGlobal.saveCurrentMapModel();
+        GKGlobal.saveCurrentMapModel(() => GKGlobalData.removeLayerInfo(layerId));
       });
     };
   }
