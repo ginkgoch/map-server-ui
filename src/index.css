@@ -48,6 +48,10 @@ html, body, #container, .ant-layout {
     display: block;
 }
 
+.sidebar-menu-item-label {
+    margin-left: 4px;
+}
+
 .color-picker, .color-picker>span {
     width: 100%;
 }

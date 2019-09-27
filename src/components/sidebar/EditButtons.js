@@ -10,20 +10,72 @@ export class EditButtons extends React.Component {
   }
 
   render() {
-    const iconStyle = {
-      marginRight: 0
-    };
+    const menuItemSource = this.getMenuItemSource();
 
-    const btnStyle = {
-      marginLeft: 4
-    };
+    return (
+      <div onClick={e => e.stopPropagation() }>
+        <Dropdown overlay={this.renderMenu(menuItemSource)} trigger={['click']}>
+          <Icon type="more" />
+        </Dropdown>
+      </div>
+    );
+  }
 
-    let btns = [];
-    btns.push({
+  renderMenu(btns) {
+    return (
+      <Menu>
+        {
+          btns.map(btn => this.renderMenuItem(btn))
+        }
+      </Menu>
+    );
+  }
+
+  renderMenuItem(btn) {
+    if (btn.key === 'style') {
+      return (
+        <Menu.SubMenu key={btn.key} title={<React.Fragment><Icon type={btn.type} size="small" /> {btn.tips}</React.Fragment>}>
+          {
+            this.renderNewStyleMenuItem()
+          }
+        </Menu.SubMenu>
+      );
+    }
+    else {    
+      return (
+        <Menu.Item key={btn.key} onClick={btn.click}>
+          <Icon type={btn.type} size="small" />
+          <span className="sidebar-menu-item-label">{btn.tips}</span>
+        </Menu.Item>
+      );
+    }
+  }
+
+  renderNewStyleMenuItem() {
+    const allStyleTypes = StyleUtils.allStyleTypes();
+    return allStyleTypes.map(type => (
+          <Menu.Item key={type} onClick={e => this.newStyle(type, e)()}>
+            {StyleUtils.styleTypeName(type)}
+          </Menu.Item>
+        ));
+  }
+
+  newStyle(styleType, e) {
+    return () => {
+      e.domEvent.stopPropagation();
+      this.props.onNewStyleMenuItemClick && this.props.onNewStyleMenuItemClick(styleType);
+    }
+  }
+
+  getMenuItemSource() {
+    let menuItemSource = [];
+    menuItemSource.push({
+      key: MenuItemActions.visible,
       type: this.state.visible ? 'eye' : 'eye-invisible',
       tips: 'Visibility',
       click: e => {
-        e.stopPropagation();
+        e.domEvent.stopPropagation();
+
         const newVisible = !this.state.visible;
         this.setState({ visible: newVisible });
         this.props.onVisibleChange && this.props.onVisibleChange(newVisible);
@@ -31,99 +83,59 @@ export class EditButtons extends React.Component {
     });
 
     if (this.props.showDataTableButton) {
-      btns.push({
+      menuItemSource.push({
+        key: MenuItemActions.datatable,
         type: 'table',
         tips: 'Show data',
         click: e => {
-          e.stopPropagation();
-          this.props.onShowDataTable();
+          e.domEvent.stopPropagation();
+          this.props.onShowDataTable && this.props.onShowDataTable();
         }
       })
     }
 
     if (!this.props.hideEditButton) {
-      btns.push({
+      menuItemSource.push({
+        key: MenuItemActions.edit,
         type: "edit",
         tips: 'Edit',
         click: e => {
-          e.stopPropagation();
-          this.props.onEditButtonClick && this.props.onEditButtonClick(e);
+          e.domEvent.stopPropagation();
+          this.props.onEditButtonClick && this.props.onEditButtonClick(e.domEvent);
         }
       });
     }
 
     if (!this.props.hideStyleButton) {
-      btns.push({
+      menuItemSource.push({
+        key: MenuItemActions.style,
         type: 'bg-colors',
         tips: 'Set style',
         click: e => {
-          e.stopPropagation();
-          this.props.onStyleButtonClick && this.props.onStyleButtonClick(e);
+          e.domEvent.stopPropagation();
+          this.props.onStyleButtonClick && this.props.onStyleButtonClick(e.domEvent);
         }
       });
     }
 
-    btns.push({
+    menuItemSource.push({
+      key: MenuItemActions.remove,
       type: "close",
       tips: 'Remove',
       click: e => {
-        e.stopPropagation();
-        this.props.onCloseButtonClick && this.props.onCloseButtonClick(e);
+        e.domEvent.stopPropagation();
+        this.props.onCloseButtonClick && this.props.onCloseButtonClick(e.domEvent);
       }
     });
 
-    btns = btns.map(btn => (
-      this.getButton(btn, btnStyle, iconStyle)
-    ));
-
-    return (
-      <React.Fragment>
-        <div className="edit-buttons">{btns}</div>
-      </React.Fragment>
-    );
+    return menuItemSource;
   }
+}
 
-  getButton(btn, btnStyle, iconStyle) {
-    if (btn.type === 'bg-colors') {
-      return (
-        <Dropdown key={btn.type} overlay={this.getNewStyleMenu()} trigger={['click']}>
-          {this._getButton(btn, btnStyle, iconStyle)}
-        </Dropdown>
-      );
-    } else {
-      return this._getButton(btn, btnStyle, iconStyle);
-    }
-  }
-
-  _getButton(btn, btnStyle, iconStyle) {
-    return <Tooltip title={btn.tips} key={btn.type}>
-      <Button
-        shape="circle"
-        size="small"
-        style={btnStyle}
-        onClick={btn.click}>
-        <Icon type={btn.type} size="small" style={iconStyle} />
-      </Button>
-    </Tooltip>
-  }
-
-  getNewStyleMenu() {
-    const allStyleTypes = StyleUtils.allStyleTypes();
-    return <Menu>
-      {
-        allStyleTypes.map(type => (
-          <Menu.Item key={type} onClick={e => this.newStyle(type, e)()}>
-            {StyleUtils.styleTypeName(type)}
-          </Menu.Item>
-        ))
-      }
-    </Menu>
-  }
-
-  newStyle(styleType, e) {
-    return () => {
-      this.props.onNewStyleMenuItemClick && this.props.onNewStyleMenuItemClick(styleType);
-      e.domEvent.stopPropagation();
-    }
-  }
+const MenuItemActions = {
+  'visible': 'visible',
+  'datatable': 'show-data-table',
+  'edit': 'edit',
+  'style': 'style',
+  'remove': 'remove',
 }
