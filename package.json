@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "./node_modules/.bin/webpack-dev-server",
+    "build": "./node_modules/.bin/webpack",
     "test": "./node_modules/.bin/jest"
   },
   "babel": {
@@ -25,6 +26,7 @@
     "@types/antd": "^1.0.0",
     "@types/jest": "^24.0.18",
     "babel-loader": "^8.0.5",
+    "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",

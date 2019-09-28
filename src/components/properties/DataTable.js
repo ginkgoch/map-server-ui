@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Table } from "antd";
 import { MapsService } from "../../services/MapsService";
 import { DataTableTitle } from './DataTableTitle';
+import { GKGlobalUtils } from "../../shared";
 
 export class DataTable extends Component {
     constructor(props) {
@@ -38,7 +39,11 @@ export class DataTable extends Component {
     }
 
     render() {
-        const title = () => (<DataTableTitle columns={this.state.columns} properties={this.state.properties} onFilterConfirm={columns => this.resetVisibleColumns(columns)} />)
+        const layerID = this.state.layerID;
+        const layerInfo = GKGlobalUtils.getLayerInfo(layerID);
+        const layerName = layerInfo ? layerInfo.name : 'Unknown';
+
+        const title = () => (<DataTableTitle name={layerName} columns={this.state.columns} properties={this.state.properties} onFilterConfirm={columns => this.resetVisibleColumns(columns)} />)
         return (
             <Fragment>
                 <Table
