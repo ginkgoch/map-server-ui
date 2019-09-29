@@ -1,5 +1,6 @@
+import _ from "lodash";
 import React from "react";
-import { Button, Icon, Menu, Dropdown, Tooltip } from "antd";
+import { Icon, Menu, Dropdown } from "antd";
 import { StyleUtils } from "../styles";
 
 export class EditButtons extends React.Component {
@@ -13,7 +14,7 @@ export class EditButtons extends React.Component {
     const menuItemSource = this.getMenuItemSource();
 
     return (
-      <div onClick={e => e.stopPropagation() }>
+      <div onClick={e => e.stopPropagation()}>
         <Dropdown overlay={this.renderMenu(menuItemSource)} trigger={['click']}>
           <Icon type="more" />
         </Dropdown>
@@ -41,7 +42,7 @@ export class EditButtons extends React.Component {
         </Menu.SubMenu>
       );
     }
-    else {    
+    else {
       return (
         <Menu.Item key={btn.key} onClick={btn.click}>
           <Icon type={btn.type} size="small" />
@@ -54,10 +55,11 @@ export class EditButtons extends React.Component {
   renderNewStyleMenuItem() {
     const allStyleTypes = StyleUtils.allStyleTypes();
     return allStyleTypes.map(type => (
-          <Menu.Item key={type} onClick={e => this.newStyle(type, e)()}>
-            {StyleUtils.styleTypeName(type)}
-          </Menu.Item>
-        ));
+      <Menu.Item key={type} onClick={e => this.newStyle(type, e)()}
+        disabled={!StyleUtils.isStyleAvailableForGeomType(type, this.props.geomType || 'unknown')}>
+        {StyleUtils.styleTypeName(type)}
+      </Menu.Item>
+    ));
   }
 
   newStyle(styleType, e) {

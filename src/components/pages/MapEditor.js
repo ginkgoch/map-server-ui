@@ -40,10 +40,10 @@ export class MapEditor extends React.Component {
     if (response.status === 200) {
       const mapModel = response.data;
       this.normalizeGroups(mapModel);
-      this.setState({ mapModel, mapModelLoading: false });
-
-      this.setState({ dataTableModel: { mapID, groupID: "Default" } });
       await this.initLayersInfo(mapModel);
+
+      this.setState({ mapModel, mapModelLoading: false });
+      this.setState({ dataTableModel: { mapID, groupID: "Default" } });
       this.initSaveMapModelHandler();
     }
   }

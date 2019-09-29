@@ -122,6 +122,22 @@ export class StyleUtils {
         return [...this.simpleStyleTypes(), 'class-break-style', 'value-style'];
     }
 
+    static isStyleAvailableForGeomType(styleType, geomType) {
+        switch (geomType.toLowerCase()) {
+            case 'polygon':
+            case 'multipolygon':
+                return _.includes(['fill-style', 'class-break-style', 'value-style'], styleType);
+            case 'linestring':
+            case 'multilinestring':
+                return _.includes(['line-style', 'class-break-style', 'value-style'], styleType);
+            case 'point':
+            case 'multipoint':
+                return _.includes(['point-style', 'class-break-style', 'value-style'], styleType)
+            default:
+                return true;
+        }
+    }
+
     static getConfiguringFormItems(style) {
         const props = {
             onFillStyleChange: color => {
@@ -180,7 +196,7 @@ export class StyleUtils {
         return levelID;
     }
 
-    static _getLevelScales(levelCount, maximumScale)  {
+    static _getLevelScales(levelCount, maximumScale) {
         const scales = [];
 
         let currentScale = maximumScale;
