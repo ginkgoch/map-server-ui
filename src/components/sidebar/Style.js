@@ -39,7 +39,7 @@ export class Style extends React.Component {
         </div>
         <div>
           <EditButtons visible={style.visible === undefined ? true : style.visible}
-            hideStyleButton={true}
+            editFor="style"
             onCloseButtonClick={onCloseButtonClick}
             onEditButtonClick={this.props.onEditButtonClick}
             onVisibleChange={visible => {

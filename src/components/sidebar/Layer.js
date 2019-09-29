@@ -1,10 +1,11 @@
 import _ from "lodash";
+import L from 'leaflet';
 import React, { Component } from "react";
 import { Menu } from "antd";
 import { LayerPreview, ModalUtils } from "../shared";
 import { EditButtons, Style } from ".";
 import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle, StyleUtils, ValueStyle } from "../styles";
-import { GKGlobal } from "../../shared";
+import { GKGlobal, GKGlobalUtils } from "../../shared";
 
 const { SubMenu } = Menu;
 
@@ -40,12 +41,11 @@ export class Layer extends Component {
         </span>
         <div>
           <EditButtons visible={l.visible === undefined ? true : l.visible}
-            showDataTableButton={true}
-            hideEditButton={true}
-            hideStyleButton={false}
+            editFor="layer"
             onShowDataTable={() => this.props.showDataTablePanel(l.id)}
             onCloseButtonClick={this.props.removingLayer}
             onNewStyleMenuItemClick={this.newStyle(l)}
+            onZoomToLayer={this.zoomToLayer(l)}
             onVisibleChange={visible => {
               l.visible = visible;
               GKGlobal.state.saveCurrentMapModel();
@@ -122,5 +122,17 @@ export class Layer extends Component {
 
   getStyleTypeName(style) {
     return StyleUtils.styleTypeName(style);
+  }
+
+  zoomToLayer(l) {
+    return () => {
+      const layerInfo = GKGlobalUtils.getLayerInfo(l.id);
+      const pointLL = L.point(layerInfo.envelope.minx, layerInfo.envelope.miny);
+      const pointUR = L.point(layerInfo.envelope.maxx, layerInfo.envelope.maxy);
+      const latlngLL = L.Projection.SphericalMercator.unproject(pointLL);
+      const latlngUR = L.Projection.SphericalMercator.unproject(pointUR);
+      const latlngBounds = L.latLngBounds(latlngLL, latlngUR);
+      GKGlobal.state.map.leafletElement.fitBounds(latlngBounds);
+    };
   }
 }
