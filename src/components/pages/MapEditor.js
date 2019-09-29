@@ -49,7 +49,9 @@ export class MapEditor extends React.Component {
   }
 
   render() {
-    const layers = this.state.mapModel ? this.state.mapModel.content.groups[0].layers : [];
+    const layers = this.state.mapModel
+      ? this.state.mapModel.content.groups[0].layers
+      : [];
     const title = this.state.mapModel ? this.state.mapModel.name : "Unknown";
     const description = (
       <div style={{ width: 480 }}>
@@ -84,8 +86,11 @@ export class MapEditor extends React.Component {
               }}
             >
               <MapView
+                assignMap={el => GKGlobal.assign({ map: el })}
                 assignTileLayer={el => GKGlobal.assign({ tileLayer: el })}
-                assignHighlightLayer={el => GKGlobal.assign({ highlightLayer: el })}
+                assignHighlightLayer={el =>
+                  GKGlobal.assign({ highlightLayer: el })
+                }
                 highlights={this.state.highlights}
                 onClick={e => this.onMapViewClick(e)}
               />
@@ -224,13 +229,23 @@ export class MapEditor extends React.Component {
     this.setState({ mapModel });
     this.showSecondaryDrawer(false);
     GKGlobal.state.saveCurrentMapModel(async () => {
-      const layerInfos = await MapsService.getLayersInfo(newLayers.map(l => l.id), 'Default', mapModel.id);
+      const layerInfos = await MapsService.getLayersInfo(
+        newLayers.map(l => l.id),
+        "Default",
+        mapModel.id
+      );
       GKGlobalUtils.updateLayerInfos(layerInfos);
     });
   }
 
   async onMapViewClick(e) {
-    const response = await MapsService.getIntersection([e.latlng.lng, e.latlng.lat], 'WGS84', e.target.getZoom(), this.state.mapModel.id, 'WGS84');
+    const response = await MapsService.getIntersection(
+      [e.latlng.lng, e.latlng.lat],
+      "WGS84",
+      e.target.getZoom(),
+      this.state.mapModel.id,
+      "WGS84"
+    );
     if (response.status === 200) {
       const features = _.flatMap(response.data, l => l.features);
       if (features.length > 0) {
@@ -264,7 +279,9 @@ export class MapEditor extends React.Component {
   }
 
   showDataTablePanel(layerID) {
-    const newDataTableModel = Object.assign(this.state.dataTableModel, { layerID });
+    const newDataTableModel = Object.assign(this.state.dataTableModel, {
+      layerID
+    });
     this.setState({
       dataTableModel: newDataTableModel,
       dataTableDrawerVisible: true
@@ -299,11 +316,12 @@ export class MapEditor extends React.Component {
             }
 
             if (GKGlobal.state.tileLayer) {
-              const newURL = Config.serviceUrl("maps/1/image/xyz/{z}/{x}/{y}?q=" + +new Date());
+              const newURL = Config.serviceUrl(
+                "maps/1/image/xyz/{z}/{x}/{y}?q=" + +new Date()
+              );
               GKGlobal.state.tileLayer.leafletElement.setUrl(newURL);
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             that.setState({
               savingMapModelError: ex.toString()
             });
@@ -333,8 +351,14 @@ export class MapEditor extends React.Component {
   }
 
   async initLayersInfo(mapModel) {
-    const layerIDs = _.flatMap(mapModel.content.groups, g => g.layers).map(l => l.id);
-    const layerInfos = await MapsService.getLayersInfo(layerIDs, 'Default', mapModel.id);
+    const layerIDs = _.flatMap(mapModel.content.groups, g => g.layers).map(
+      l => l.id
+    );
+    const layerInfos = await MapsService.getLayersInfo(
+      layerIDs,
+      "Default",
+      mapModel.id
+    );
     GKGlobal.assign({ layerInfos });
   }
 }

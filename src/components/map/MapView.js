@@ -11,7 +11,7 @@ export class MapView extends Component {
     render() {
         const position = [51.505, -0.09]
         return (
-            <Map center={position} zoom={3} onClick={e => this.onClick(e)}>
+            <Map center={position} zoom={3} onClick={e => this.onClick(e)} ref={el => this.props.assignMap(el)}>
                 <LayersControl position="topright" collapsed={false}>
                     <LayersControl.Overlay checked name="Open Street Map">
                         <TileLayer
@@ -25,7 +25,7 @@ export class MapView extends Component {
                         />
                     </LayersControl.Overlay>
                     <LayersControl.Overlay checked name="Highlights">
-                        <GeoJSON style={f => ({ fillColor: 'red' })} 
+                        <GeoJSON style={f => ({ fillColor: 'red' })}
                             onEachFeature={(feature, layer) => {
                                 if (feature.properties) {
                                     layer.bindPopup(LayerTemplates.getFeaturePopupContent(feature));

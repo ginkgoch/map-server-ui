@@ -82,7 +82,20 @@ export class EditButtons extends React.Component {
       }
     });
 
-    if (this.props.showDataTableButton) {
+    if (this.props.editFor === 'layer') {
+      menuItemSource.push({
+        key: MenuItemActions.zoomToLayer,
+        type: 'fullscreen-exit',
+        tips: 'Zoom to layer',
+        click: e => {
+          e.domEvent.stopPropagation();
+
+          this.props.onZoomToLayer && this.props.onZoomToLayer();
+        }
+      });
+    }
+
+    if (this.props.editFor === 'layer') {
       menuItemSource.push({
         key: MenuItemActions.datatable,
         type: 'table',
@@ -94,7 +107,7 @@ export class EditButtons extends React.Component {
       })
     }
 
-    if (!this.props.hideEditButton) {
+    if (this.props.editFor === 'style') {
       menuItemSource.push({
         key: MenuItemActions.edit,
         type: "edit",
@@ -106,7 +119,7 @@ export class EditButtons extends React.Component {
       });
     }
 
-    if (!this.props.hideStyleButton) {
+    if (this.props.editFor === 'layer') {
       menuItemSource.push({
         key: MenuItemActions.style,
         type: 'bg-colors',
@@ -138,4 +151,5 @@ const MenuItemActions = {
   'edit': 'edit',
   'style': 'style',
   'remove': 'remove',
+  'zoomToLayer': 'zoomToLayer'
 }
