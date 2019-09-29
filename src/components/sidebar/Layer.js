@@ -34,6 +34,7 @@ export class Layer extends Component {
   }
 
   layerTitle(l) {
+    const geomType = this.getGeomTypeByLayer(l);
     return (
       <div className="sidebar-item">
         <span>
@@ -41,6 +42,7 @@ export class Layer extends Component {
         </span>
         <div>
           <EditButtons visible={l.visible === undefined ? true : l.visible}
+            geomType={geomType}
             editFor="layer"
             onShowDataTable={() => this.props.showDataTablePanel(l.id)}
             onCloseButtonClick={this.props.removingLayer}
@@ -103,6 +105,7 @@ export class Layer extends Component {
 
   getStyleComponent(style, layer, onSubmitHandler) {
     const onEditStyleCanceled = () => this.props.showStyleEditPanel(false);
+    const geomType = this.getGeomTypeByLayer(layer);
 
     switch (style.type) {
       case 'fill-style':
@@ -112,9 +115,9 @@ export class Layer extends Component {
       case 'point-style':
         return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'class-break-style':
-        return <ClassBreakStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+        return <ClassBreakStyle style={style} geomType={geomType} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'value-style':
-        return <ValueStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+        return <ValueStyle style={style} geomType={geomType} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       default:
         return <NoneStyle />
     }
@@ -122,6 +125,12 @@ export class Layer extends Component {
 
   getStyleTypeName(style) {
     return StyleUtils.styleTypeName(style);
+  }
+
+  getGeomTypeByLayer(layer) {
+    const layerInfo = GKGlobalUtils.getLayerInfo(layer.id);
+    const geomType = layerInfo ? layerInfo.geomType : 'unknown';
+    return geomType;
   }
 
   zoomToLayer(l) {

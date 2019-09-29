@@ -64,12 +64,15 @@ class ClassBreakStyleForm extends StyleBaseForm {
 
     newStyleOptions() {
         return (
-            <Menu>
-                {
-                    StyleUtils.simpleStyleTypes().map(type => (
-                        <Menu.Item key={type} onClick={this.newClassBreak(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
-                    ))
-                }
+            <Menu>{
+                StyleUtils.simpleStyleTypes().map(type => (
+                    <Menu.Item key={type}
+                        disabled={!StyleUtils.isStyleAvailableForGeomType(type, this.props.geomType)}
+                        onClick={this.newClassBreak(type)}>
+                        {StyleUtils.styleTypeName(type)}
+                    </Menu.Item>
+                ))
+            }
             </Menu>
         );
     }
@@ -136,4 +139,4 @@ class ClassBreakStyleForm extends StyleBaseForm {
     }
 }
 
-export const ClassBreakStyle = Form.create({name: 'ClassBreakStyle'})(ClassBreakStyleForm);
+export const ClassBreakStyle = Form.create({ name: 'ClassBreakStyle' })(ClassBreakStyleForm);

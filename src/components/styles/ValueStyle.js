@@ -64,12 +64,15 @@ class ValueStyleForm extends StyleBaseForm {
 
     newStyleOptions() {
         return (
-            <Menu>
-                {
-                    StyleUtils.simpleStyleTypes().map(type => (
-                        <Menu.Item key={type} onClick={this.newValueItem(type)}>{StyleUtils.styleTypeName(type)}</Menu.Item>
-                    ))
-                }
+            <Menu>{
+                StyleUtils.simpleStyleTypes().map(type => (
+                    <Menu.Item key={type}
+                        disabled={!StyleUtils.isStyleAvailableForGeomType(type, this.props.geomType)}
+                        onClick={this.newValueItem(type)}>
+                        {StyleUtils.styleTypeName(type)}
+                    </Menu.Item>
+                ))
+            }
             </Menu>
         );
     }
@@ -134,4 +137,4 @@ class ValueStyleForm extends StyleBaseForm {
     }
 }
 
-export const ValueStyle = Form.create({name: 'ValueStyle'})(ValueStyleForm);
+export const ValueStyle = Form.create({ name: 'ValueStyle' })(ValueStyleForm);
