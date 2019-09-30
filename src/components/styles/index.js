@@ -6,5 +6,6 @@ export * from './StyleBase';
 export * from './PointStyle';
 export * from './ClassBreakStyle';
 export * from './ValueStyle';
+export * from './ValueItems';
 export * from './StyleUtils';
 export * from './LevelRange';

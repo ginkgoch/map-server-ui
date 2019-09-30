@@ -22,7 +22,7 @@ export class StyleTemplates {
 
     static getFillStyle(fillStyle, strokeStyle, lineWidth, maximumScale = 1e10, minimumScale = 0) {
         let styleBase = this.getStyleBase(STYLE_TYPE_FILL, maximumScale, minimumScale);
-        let style = this.getFillStyleFromStyleBase(fillStyle, strokeStyle, lineWidth, styleBase);
+        let style = this.assignFillStyle(styleBase, fillStyle, strokeStyle, lineWidth);
         return style;
     }
 
