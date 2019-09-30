@@ -17,9 +17,8 @@ export class ValueItems extends Component {
       layerID: props.layerID,
       groupID: props.groupID,
       mapID: props.mapID,
-      fields: [],
-      layerIDUpdated: false,
-      selectedField: undefined,
+      fields: props.fields,
+      selectedField: props.selectedField,
       fillColor1: randomColor(),
       fillColor2: randomColor(),
       strokeColor1: randomColor(),
@@ -30,33 +29,24 @@ export class ValueItems extends Component {
     };
   }
 
-  async componentDidMount() {
-    this.setState({ layerIDUpdated: true });
-  }
-
   static getDerivedStateFromProps(nextProps, preState) {
     if (
       nextProps.layerID !== preState.layerID ||
       nextProps.groupID !== preState.groupID ||
-      nextProps.mapID !== preState.mapID
+      nextProps.mapID !== preState.mapID ||
+      nextProps.fields !== preState.fields ||
+      nextProps.selectedField !== preState.selectedField
     ) {
       return {
         ...this.state,
-        fields: [],
-        selectedField: undefined,
-        layerIDUpdated: true,
+        fields: nextProps.fields,
+        selectedField: nextProps.selectedField,
         layerID: nextProps.layerID,
         groupID: nextProps.groupID,
         mapID: nextProps.mapID
       };
     } else {
       return null;
-    }
-  }
-
-  async componentDidUpdate() {
-    if (this.state.layerIDUpdated) {
-      await this.reloadFields();
     }
   }
 
@@ -78,6 +68,7 @@ export class ValueItems extends Component {
             placeholder="Select field"
             value={this.state.selectedField}
             onChange={e => this.setState({ selectedField: e })}
+            disabled
           >
             {this.state.fields.map(f => (
               <Select.Option key={f} value={f}>
@@ -135,7 +126,7 @@ export class ValueItems extends Component {
             bordered={true}
             itemLayout="horizontal"
             loading={this.state.loading}
-            style={{ height: 400, overflow: "auto" }}
+            style={{ height: 280, overflow: "auto" }}
             renderItem={item => (
               <List.Item
                 actions={[
@@ -159,29 +150,6 @@ export class ValueItems extends Component {
         </Item>
       </Form>
     );
-  }
-
-  async reloadFields() {
-    const response = await MapsService.getFields(
-      this.state.layerID,
-      this.state.groupID,
-      this.state.mapID,
-      {
-        fields: ["name", "type"]
-      }
-    );
-    if (response.status === 200) {
-      const fields = response.data.map(f => f.name);
-      let selectedField = fields.length > 0 ? fields[0] : undefined;
-      this.setState({ fields, selectedField, layerIDUpdated: false });
-    } else {
-      console.error(response.data);
-      this.setState({
-        fields: [],
-        selectedField: undefined,
-        layerIDUpdated: false
-      });
-    }
   }
 
   setColor(newRCColor, colorKey) {
