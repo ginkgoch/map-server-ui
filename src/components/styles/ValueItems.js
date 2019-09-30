@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Form, Select, Button, List, Icon, InputNumber } from "antd";
+import { Form, Select, Button, List, InputNumber } from "antd";
 import ColorPicker from "rc-color-picker";
 import { MapsService } from "../../services";
 import { randomColor, normalizeRCColor } from "../../shared";
 import { hexColorWithAlpha } from "./KnownColors";
 import { UtilitiesService } from "../../services/UtilitiesService";
+import { StyleTemplates } from "../../templates";
+import { GeomUtils } from "../shared/GeomUtils";
 
 const { Item } = Form;
 export class ValueItems extends Component {
@@ -115,7 +117,7 @@ export class ValueItems extends Component {
           />
         </Item>
         <Item label="Stroke Width" {...formItemProps}>
-            <InputNumber defaultValue={this.state.strokeWidth} min={0} onChange={v => this.setState({ strokeWidth: v })} />
+          <InputNumber defaultValue={this.state.strokeWidth} min={0} onChange={v => this.setState({ strokeWidth: v })} />
         </Item>
         <Item wrapperCol={{ sm: { span: 16, offset: 6 }, xs: { span: 24 } }}>
           <Button
@@ -211,10 +213,11 @@ export class ValueItems extends Component {
         const fillColors = await UtilitiesService.getBreakDownColors(this.state.fillColor1, this.state.fillColor2, distinctFields.distinct.length);
         let strokeColors = [];
         if (this.state.strokeWidth > 0) {
-            strokeColors = await UtilitiesService.getBreakDownColors(this.state.strokeColor1, this.state.strokeColor2, distinctFields.distinct.length);
+          strokeColors = await UtilitiesService.getBreakDownColors(this.state.strokeColor1, this.state.strokeColor2, distinctFields.distinct.length);
         }
 
         const newValueItems = _.zip(distinctFields.distinct, fillColors.data, strokeColors.data);
+        this.resetValueItemsResult(newValueItems);
         this.setState({ valueItems: newValueItems });
       } else {
         this.setState({ valueItems: [] });
@@ -222,5 +225,28 @@ export class ValueItems extends Component {
     } finally {
       this.setState({ loading: false });
     }
+  }
+
+  resetValueItemsResult(valueItems) {
+    this.props.valueItems.length = 0;
+    valueItems.map(item => {
+      let style = null;
+      if (GeomUtils.isAreaGeometry(this.props.geomType)) {
+        style = StyleTemplates.getFillStyle(item[1], item[2], this.state.strokeWidth);
+      }
+      else if (GeomUtils.isLineGeometry(this.props.geomType)) {
+        style = StyleTemplates.getLineStyle(item[2], this.state.strokeWidth);
+      }
+      else if (GeomUtils.isPointGeometry(this.props.geomType)) {
+        style = StyleTemplates.getPointStyle('circle', item[1], item[2], this.state.strokeWidth, 40);
+      }
+      else {
+        console.error(`Geometry type: ${this.props.geomType} is not area, line or point based.`);
+        return null;
+      }
+
+      style.name = item[0];
+      return StyleTemplates.getValueItem(item[0], style);
+    }).filter(item => item !== null).forEach(v => this.props.valueItems.push(v));
   }
 }

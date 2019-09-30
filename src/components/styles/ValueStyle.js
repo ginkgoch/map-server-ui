@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
-import { StyleUtils } from '.'
+import { StyleUtils, ValueItems } from '.'
 import { StyleTemplates } from '../../templates';
 
 class ValueStyleForm extends StyleBaseForm {
@@ -51,12 +51,15 @@ class ValueStyleForm extends StyleBaseForm {
     }
 
     mainActions() {
-        const btnProps = { shape: "circle", size: "small" };
+        const btnProps = { shape: "circle", size: "small", style: { marginLeft: 4 } };
         return <div>
+            <Button {...btnProps} onClick={e => this.openAutoValueItemsModal(e)}>
+                <Icon type="android" />
+            </Button>
             <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
                 <Button {...btnProps}><Icon type="plus" /></Button>
             </Dropdown>
-            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={this.state.style.items.length === 0}>
+            <Button {...btnProps} onClick={this.clean.bind(this)} disabled={this.state.style.items.length === 0}>
                 <Icon type="delete" />
             </Button>
         </div>
@@ -115,6 +118,26 @@ class ValueStyleForm extends StyleBaseForm {
                 }
             });
         };
+    }
+
+    openAutoValueItemsModal(e) {
+        e.stopPropagation();
+
+        const valueItems = [];
+        Modal.confirm({
+            title: 'Value Items Generator',
+            width: 540,
+            content: <ValueItems layerID={this.props.layerID} 
+                groupID={this.props.groupID} 
+                mapID={this.props.mapID}
+                geomType={this.props.geomType}
+                valueItems={valueItems} />,
+            onOk: () => {
+                this.state.style.items.length = 0;
+                this.state.style.items.push(...valueItems);
+                this.setState(this.state);
+            }
+        });
     }
 
     clean() {

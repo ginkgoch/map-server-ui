@@ -106,6 +106,11 @@ export class Layer extends Component {
   getStyleComponent(style, layer, onSubmitHandler) {
     const onEditStyleCanceled = () => this.props.showStyleEditPanel(false);
     const geomType = this.getGeomTypeByLayer(layer);
+    const layerIdentifyProps = {
+      layerID: layer.id,
+      groupID: 'Default',
+      mapID: GKGlobal.state.mapModel.id
+    };
 
     switch (style.type) {
       case 'fill-style':
@@ -117,7 +122,12 @@ export class Layer extends Component {
       case 'class-break-style':
         return <ClassBreakStyle style={style} geomType={geomType} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'value-style':
-        return <ValueStyle style={style} geomType={geomType} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+        return <ValueStyle style={style} 
+          geomType={geomType} 
+          onEditStyleCanceled={onEditStyleCanceled} 
+          onEditStyleSubmit={onSubmitHandler} 
+          {...layerIdentifyProps}
+          />
       default:
         return <NoneStyle />
     }

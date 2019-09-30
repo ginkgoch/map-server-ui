@@ -40,6 +40,8 @@ export class MapEditor extends React.Component {
     if (response.status === 200) {
       const mapModel = response.data;
       this.normalizeGroups(mapModel);
+      GKGlobal.assign({ mapModel });
+
       await this.initLayersInfo(mapModel);
 
       this.setState({ mapModel, mapModelLoading: false });
