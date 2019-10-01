@@ -5,6 +5,7 @@ export * from './LineStyle';
 export * from './StyleBase';
 export * from './PointStyle';
 export * from './ClassBreakStyle';
+export * from './ClassBreaks';
 export * from './ValueStyle';
 export * from './ValueItems';
 export * from './StyleUtils';

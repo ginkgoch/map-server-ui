@@ -46,14 +46,15 @@ class ValueStyleForm extends StyleBaseForm {
     renderContent() {
         this.state.hidePreview = true;
 
+        const fieldOptions = this.state.fields.map(field => (
+            <Select.Option key={field} value={field}>{field}</Select.Option>
+        ));
         return <>
             <Form.Item label="Field">
                 <Select placeholder="Select field"
                     value={this.state.selectedField}
                     onChange={e => this.onFieldChanged(e)}>
-                    {this.state.fields.map(field => (
-                        <Select.Option key={field} value={field}>{field}</Select.Option>
-                    ))}
+                    { fieldOptions }
                 </Select>
             </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>

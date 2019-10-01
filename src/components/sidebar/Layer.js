@@ -120,14 +120,17 @@ export class Layer extends Component {
       case 'point-style':
         return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'class-break-style':
-        return <ClassBreakStyle style={style} geomType={geomType} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+        return <ClassBreakStyle style={style}
+          geomType={geomType}
+          onEditStyleCanceled={onEditStyleCanceled}
+          onEditStyleSubmit={onSubmitHandler}
+          {...layerIdentifyProps} />
       case 'value-style':
-        return <ValueStyle style={style} 
-          geomType={geomType} 
-          onEditStyleCanceled={onEditStyleCanceled} 
-          onEditStyleSubmit={onSubmitHandler} 
-          {...layerIdentifyProps}
-          />
+        return <ValueStyle style={style}
+          geomType={geomType}
+          onEditStyleCanceled={onEditStyleCanceled}
+          onEditStyleSubmit={onSubmitHandler}
+          {...layerIdentifyProps} />
       default:
         return <NoneStyle />
     }
