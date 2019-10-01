@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleBaseForm } from './StyleBase';
 import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input, Select } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
-import { StyleUtils } from '.'
+import { StyleUtils, ClassBreaks } from '.'
 import { StyleTemplates } from '../../templates/StyleTemplates';
 import { MapsService } from "../../services";
 
@@ -167,6 +167,24 @@ class ClassBreakStyleForm extends StyleBaseForm {
 
     openAutoClassBreaksModal(e) {
         e.stopPropagation();
+
+        const classBreaks = [];
+        Modal.confirm({
+            title: 'Class Break Generator',
+            width: 540,
+            content: <ClassBreaks layerID={this.props.layerID}
+                selectedField={this.state.style.field}
+                groupID={this.props.groupID}
+                mapID={this.props.mapID}
+                fields={this.state.fields}
+                geomType={this.props.geomType}
+                classBreaks={classBreaks} />,
+            onOk: () => {
+                this.state.style.classBreaks.length = 0;
+                this.state.style.classBreaks.push(...classBreaks);
+                this.setState(this.state);
+            }
+        });
     }
 
     clean() {

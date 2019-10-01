@@ -7,7 +7,6 @@ import { hexColorWithAlpha } from "./KnownColors";
 import { UtilitiesService } from "../../services/UtilitiesService";
 import { StyleTemplates } from "../../templates";
 import { GeomUtils } from "../shared/GeomUtils";
-import { StyleUtils } from "./StyleUtils";
 
 const { Item } = Form;
 export class ClassBreaks extends Component {
@@ -138,8 +137,8 @@ export class ClassBreaks extends Component {
                 actions={[
                   <div
                     style={{
-                      backgroundColor: item[1],
-                      border: `solid ${this.state.strokeWidth}px ${item[2]}`,
+                      backgroundColor: item.style.fillStyle,
+                      border: `solid ${this.state.strokeWidth}px ${item.style.strokeStyle}`,
                       width: 60,
                       height: 28,
                       display: "inline-block",
@@ -149,7 +148,7 @@ export class ClassBreaks extends Component {
                   ></div>
                 ]}
               >
-                {item[0]}
+                {item.style.name}
               </List.Item>
             )}
           />
@@ -177,10 +176,13 @@ export class ClassBreaks extends Component {
     try {
       const fieldValueRange = await this.getFieldValueRange();
       const classBreaks = await this.getClassBreaks(fieldValueRange.minimum, fieldValueRange.maximum);
+      this.setState({ classBreaks });
+
       this.props.classBreaks.length = 0;
       this.props.classBreaks.push(...classBreaks);
     } 
-    catch {
+    catch (ex) {
+      console.error(ex);
       this.setState({ classBreaks: [] });
     }
     finally {
@@ -190,7 +192,7 @@ export class ClassBreaks extends Component {
 
   async getFieldValueRange() {
     const response = await MapsService.getPropertyByField(
-      this.state.style.field,
+      this.state.selectedField,
       this.state.layerID,
       this.state.groupID,
       this.state.mapID,
@@ -210,6 +212,9 @@ export class ClassBreaks extends Component {
       }
 
       return { minimum, maximum };
+    }
+    else {
+      console.error(response.data);
     }
     
     throw new Error(`Fetch field (${this.state.style.field}) value range failed.`);
@@ -248,6 +253,12 @@ export class ClassBreaks extends Component {
         const strokeWidth = this.state.strokeWidth;
         const style = StyleTemplates.getPointStyle('circle', fillColor, strokeColor, strokeWidth, 40);
         classBreak = Object.assign(classBreak, { style });
+      }
+
+      if (classBreak.style) {
+        const minimum = Math.round(classBreak.minimum);
+        const maximum = Math.round(classBreak.maximum);
+        classBreak.style.name = `${ minimum } - ${ maximum }`;
       }
 
       classBreaks.push(classBreak);
