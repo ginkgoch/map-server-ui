@@ -1,17 +1,60 @@
 import React from 'react';
 import { StyleBaseForm } from './StyleBase';
-import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input } from "antd";
+import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, Input, Select } from "antd";
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils } from '.'
 import { StyleTemplates } from '../../templates/StyleTemplates';
+import { MapsService } from "../../services";
 
 class ClassBreakStyleForm extends StyleBaseForm {
+    constructor(props) {
+        super(props);
+
+        this.state = Object.assign(this.state, {
+            fields: [],
+            layerID: props.layerID,
+            groupID: props.groupID,
+            mapID: props.mapID,
+            shouldReloadFields: false
+        });
+    }
+
+    componentDidMount() {
+        this.setState({ shouldReloadFields: true });
+    }
+
+    static getDerivedStateFromProps(nextProps, preState) {
+        if (nextProps.layerID !== preState.layerID) {
+            return Object.assign(preState, { 
+                shouldReloadFields: true, 
+                layerID: nextProps.layerID, 
+                groupID: nextProps.groupID,
+                mapID: nextProps.mapID
+            });
+        }
+
+        return null;
+    }
+    
+    async componentDidUpdate() {
+        if (this.state.shouldReloadFields) {
+            await this.reloadFields();
+        }
+    }
+
     renderContent() {
         this.state.hidePreview = true;
 
+        const fieldOptions = this.state.fields.map(f => (
+            <Select.Option key={f} value={f}>{f}</Select.Option>
+        ));
+
         return <>
             <Form.Item label="Field">
-                <Input defaultValue={this.state.style.field} onChange={this.updateField.bind(this)}></Input>
+                <Select value={this.state.style.field} 
+                    onChange={e => this.onFieldChanged(e)}>
+                    { fieldOptions }
+                </Select>
             </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -45,14 +88,17 @@ class ClassBreakStyleForm extends StyleBaseForm {
         ];
     }
 
-    updateField(e) {
-        this.state.style.field = e.target.value;
+    onFieldChanged(e) {
+        this.state.style.field = e;
         this.setState(this.state);
     }
 
     mainActions() {
         const btnProps = { shape: "circle", size: "small" };
         return <div>
+            <Button {...btnProps} onClick={e => this.openAutoClassBreaksModal(e)}>
+                <Icon type="android" />
+            </Button>
             <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
                 <Button {...btnProps}><Icon type="plus" /></Button>
             </Dropdown>
@@ -119,6 +165,10 @@ class ClassBreakStyleForm extends StyleBaseForm {
         };
     }
 
+    openAutoClassBreaksModal(e) {
+        e.stopPropagation();
+    }
+
     clean() {
         ModalUtils.promptModal('Are you sure to clean all the class break items?', () => {
             this.state.style.classBreaks.length = 0;
@@ -136,6 +186,31 @@ class ClassBreakStyleForm extends StyleBaseForm {
             this.state.style.classBreaks.splice(index, 1);
             this.setState(this.state);
         });
+    }
+
+    async reloadFields() {
+        const response = await MapsService.getFields(
+            this.props.layerID,
+            this.props.groupID,
+            this.props.mapID,
+            {
+                fields: ["name", "type"]
+            }
+        );
+
+        if (response.status === 200) {
+            const fields = response.data.filter(f => f.type === 'number').map(f => f.name);
+            let selectedField = fields.length > 0 ? fields[0] : undefined;
+            this.state.style.field = selectedField;
+            this.setState({ fields, style: this.state.style, shouldReloadFields: false });
+        } else {
+            console.error(response.data);
+            this.setState({
+                fields: [],
+                selectedField: undefined,
+                shouldReloadFields: false
+            });
+        }
     }
 }
 
