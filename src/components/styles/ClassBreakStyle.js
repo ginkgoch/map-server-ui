@@ -94,7 +94,7 @@ class ClassBreakStyleForm extends StyleBaseForm {
     }
 
     mainActions() {
-        const btnProps = { shape: "circle", size: "small" };
+        const btnProps = { shape: "circle", size: "small", style: { marginLeft: 4 } };
         return <div>
             <Button {...btnProps} onClick={e => this.openAutoClassBreaksModal(e)}>
                 <Icon type="android" />
@@ -102,7 +102,7 @@ class ClassBreakStyleForm extends StyleBaseForm {
             <Dropdown overlay={this.newStyleOptions()} trigger={["click"]}>
                 <Button {...btnProps}><Icon type="plus" /></Button>
             </Dropdown>
-            <Button {...btnProps} style={{ marginLeft: 4 }} onClick={this.clean.bind(this)} disabled={this.state.style.classBreaks.length === 0}>
+            <Button {...btnProps} onClick={this.clean.bind(this)} disabled={this.state.style.classBreaks.length === 0}>
                 <Icon type="delete" />
             </Button>
         </div>

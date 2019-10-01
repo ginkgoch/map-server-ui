@@ -158,7 +158,7 @@ export class ClassBreaks extends Component {
   }
 
   onClassBreakCountChange(e) {
-    this.setState({ classBreaksCount: e.target.value });
+    this.setState({ classBreaksCount: e });
   }
 
   setColor(newRCColor, colorKey) {
