@@ -26,7 +26,7 @@ export class StyleBaseForm extends Component {
                 xs: { span: 8 }
             },
             wrapperCol: {
-                xs: { span: 12 }
+                xs: { span: 14 }
             }
         };
 

@@ -159,3 +159,11 @@ table.popup-content td.title {
 table.popup-content td {
     padding: 4px 6px 4px 2px;
 }
+
+.preview-simple {
+    width: 20px;
+    height: 20px;
+    display: "inline-block";
+    border-radius: 4px;
+    margin-right: 4px;
+}
