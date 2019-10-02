@@ -250,9 +250,10 @@ export class MapEditor extends React.Component {
     );
     if (response.status === 200) {
       const features = _.flatMap(response.data, l => l.features);
+      GKGlobal.state.highlightLayer.leafletElement.clearLayers();
+      
       if (features.length > 0) {
         const featureCollection = LayerTemplates.getFeatureCollection(features);
-        GKGlobal.state.highlightLayer.leafletElement.clearLayers();
         GKGlobal.state.highlightLayer.leafletElement.addData(featureCollection);
         const highlights = GKGlobal.state.highlightLayer.leafletElement.getLayers();
         if (highlights.length > 0) {

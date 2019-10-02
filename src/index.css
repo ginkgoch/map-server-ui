@@ -148,6 +148,10 @@ html, body, #container, .ant-layout {
     padding-left: 280px;
 }
 
+table.popup-content {
+    width: 100%;
+}
+
 table.popup-content tr:nth-child(odd) {
     background-color: #f0f1f2;
 }

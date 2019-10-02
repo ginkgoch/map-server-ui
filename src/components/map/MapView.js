@@ -28,7 +28,11 @@ export class MapView extends Component {
                         <GeoJSON style={f => ({ fillColor: 'red' })}
                             onEachFeature={(feature, layer) => {
                                 if (feature.properties) {
-                                    layer.bindPopup(LayerTemplates.getFeaturePopupContent(feature));
+                                    layer.bindPopup(LayerTemplates.getFeaturePopupContent(feature), {
+                                        maxHeight: 400,
+                                        maxWidth: 280,
+                                        minWidth: 240
+                                    });
                                 }
                             }}
                             ref={el => this.props.assignHighlightLayer(el)} />
