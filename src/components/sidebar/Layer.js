@@ -67,15 +67,17 @@ export class Layer extends Component {
         switch (direction) {
           case 'up':
             index--;
-            if (index >= 0) {
-              layer.styles.splice(index, 0, ...movingLayers);
+            if (index < 0) { 
+              index = 0;
             }
+            layer.styles.splice(index, 0, ...movingLayers);
             break;
           case 'down':
             index++;
-            if (index <= layer.styles.length) {
-              layer.styles.splice(index, 0, ...movingLayers);
+            if (index > layer.styles.length) { 
+              index = layer.styles.length;
             }
+            layer.styles.splice(index, 0, ...movingLayers);
             break;
           case 'top':
             layer.styles.splice(0, 0, ...movingLayers);

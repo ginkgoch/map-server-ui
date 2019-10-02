@@ -60,15 +60,17 @@ export class Layers extends React.Component {
       switch (moveDirection) {
         case 'up':
           index--;
-          if (index >= 0) {
-            this.state.layers.splice(index, 0, ...movingLayers);
+          if (index < 0) { 
+            index = 0;
           }
+          this.state.layers.splice(index, 0, ...movingLayers);
           break;
         case 'down':
           index++;
-          if (index <= this.state.layers.length) {
-            this.state.layers.splice(index + 1, 0, ...movingLayers);
+          if (index > this.state.layers.length) {
+            index = this.state.layers.length;
           }
+          this.state.layers.splice(index + 1, 0, ...movingLayers);
           break;
         case 'top':
           this.state.layers.splice(0, 0, ...movingLayers);
