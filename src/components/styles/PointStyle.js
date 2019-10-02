@@ -11,6 +11,7 @@ class PointStyleForm extends StyleBaseForm {
             onFillStyleChange={this.onFillStyleChange.bind(this)}
             onStrokeStyleChange={this.onStrokeStyleChange.bind(this)}
             onLineWidthChange={this.onLineWidthChange.bind(this)}
+            onRadiusChange={this.onRadiusChange.bind(this)}
             />
     }
 
@@ -40,6 +41,9 @@ export const PointStyleFormItems = props => {
         </Form.Item>
         <Form.Item label="Stroke Width">
             <InputNumber min={0} defaultValue={props.style.lineWidth} onChange={props.onLineWidthChange}></InputNumber>
+        </Form.Item>
+        <Form.Item label="Radius">
+            <InputNumber min={1} defaultValue={props.style.radius} onChange={props.onRadiusChange}></InputNumber>
         </Form.Item>
     </>
 };

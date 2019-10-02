@@ -102,17 +102,22 @@ export class StyleBaseForm extends Component {
 
     onFillStyleChange(color) {
         this.state.style.fillStyle = this.getColor(color);
-        this.setState(this.state.style);
+        this.setState(this.state);
     }
 
     onStrokeStyleChange(color) {
         this.state.style.strokeStyle = color.color;
-        this.setState(this.state.style);
+        this.setState(this.state);
     }
 
     onLineWidthChange(lineWidth) {
         this.state.style.lineWidth = lineWidth;
-        this.setState(this.state.style);
+        this.setState(this.state);
+    }
+
+    onRadiusChange(radius) {
+        this.state.style.radius = radius;
+        this.setState(this.state);
     }
 
     onNameChange(e) {
