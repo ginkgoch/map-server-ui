@@ -33,8 +33,8 @@ export class EditButtons extends React.Component {
   }
 
   renderMenuItem(btn) {
-    if (btn.key === MenuItemActions.divider) {
-      return <Menu.Divider />
+    if (btn.type === MenuItemActions.divider) {
+      return <Menu.Divider key={btn.key} />
     }
     else if (btn.key === 'style') {
       return (
@@ -146,7 +146,7 @@ export class EditButtons extends React.Component {
       }
     });
 
-    menuItemSource.push({ key: MenuItemActions.divider })
+    menuItemSource.push({ key: 'move-divider', type: MenuItemActions.divider })
 
     menuItemSource.push({
       key: MenuItemActions.moveUp,
