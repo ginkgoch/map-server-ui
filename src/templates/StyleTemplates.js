@@ -69,7 +69,7 @@ export class StyleTemplates {
         fillStyle = undefined,
         strokeStyle = undefined,
         lineWidth = 1,
-        radius = 20) {
+        radius = 5) {
 
         fillStyle = fillStyle || randomColor();
         strokeStyle = strokeStyle || randomColor();
