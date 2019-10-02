@@ -17,7 +17,7 @@ export class Layer extends Component {
 
   render() {
     const layer = this.state.layer;
-    const passThroughProps = _.omit(this.props, ['removingLayer', 'showStyleEditPanel', 'showDataTablePanel']);
+    const passThroughProps = _.omit(this.props, ['removingLayer', 'moveLayer', 'showStyleEditPanel', 'showDataTablePanel']);
     return (
       <SubMenu key={layer.id} title={this.layerTitle(layer)} {...passThroughProps}>
         {layer.styles.map(s => (
@@ -25,6 +25,7 @@ export class Layer extends Component {
             key={s.id}
             style={s}
             layer={layer}
+            onMoveStyle={this.moveStyle(layer)}
             onCloseButtonClick={this.removeStyle(s.id, layer)}
             onEditButtonClick={this.editStyle(s.id, layer)}
           />
@@ -48,6 +49,7 @@ export class Layer extends Component {
             onCloseButtonClick={this.props.removingLayer}
             onNewStyleMenuItemClick={this.newStyle(l)}
             onZoomToLayer={this.zoomToLayer(l)}
+            onMove={moveDirection => this.props.moveLayer(l, moveDirection)}
             onVisibleChange={visible => {
               l.visible = visible;
               GKGlobal.state.saveCurrentMapModel();
@@ -55,6 +57,38 @@ export class Layer extends Component {
         </div>
       </div>
     );
+  }
+
+  moveStyle(layer) {
+    return (style, direction) => {
+      let index = layer.styles.indexOf(style);
+      if (index >= 0) {
+        const movingLayers = layer.styles.splice(index, 1);
+        switch (direction) {
+          case 'up':
+            index--;
+            if (index >= 0) {
+              layer.styles.splice(index, 0, ...movingLayers);
+            }
+            break;
+          case 'down':
+            index++;
+            if (index <= layer.styles.length) {
+              layer.styles.splice(index, 0, ...movingLayers);
+            }
+            break;
+          case 'top':
+            layer.styles.splice(0, 0, ...movingLayers);
+            break;
+          case 'bottom':
+            layer.styles.splice(layer.styles.length, 0, ...movingLayers);
+            break;
+        }
+      }
+
+      this.setState({ layer });
+      GKGlobal.state.saveCurrentMapModel();
+    };
   }
 
   removeStyle(id, layer) {

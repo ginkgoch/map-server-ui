@@ -33,7 +33,10 @@ export class EditButtons extends React.Component {
   }
 
   renderMenuItem(btn) {
-    if (btn.key === 'style') {
+    if (btn.key === MenuItemActions.divider) {
+      return <Menu.Divider />
+    }
+    else if (btn.key === 'style') {
       return (
         <Menu.SubMenu key={btn.key} title={<React.Fragment><Icon type={btn.type} size="small" /> {btn.tips}</React.Fragment>}>
           {
@@ -143,6 +146,48 @@ export class EditButtons extends React.Component {
       }
     });
 
+    menuItemSource.push({ key: MenuItemActions.divider })
+
+    menuItemSource.push({
+      key: MenuItemActions.moveUp,
+      type: 'up',
+      tips: 'Move up',
+      click: e => {
+        e.domEvent.stopPropagation();
+        this.props.onMove && this.props.onMove('up');
+      }
+    });
+
+    menuItemSource.push({
+      key: MenuItemActions.moveDown,
+      type: 'down',
+      tips: 'Move down',
+      click: e => {
+        e.domEvent.stopPropagation();
+        this.props.onMove && this.props.onMove('down');
+      }
+    });
+
+    menuItemSource.push({
+      key: MenuItemActions.moveToTop,
+      type: 'vertical-align-top',
+      tips: 'Move to top',
+      click: e => {
+        e.domEvent.stopPropagation();
+        this.props.onMove && this.props.onMove('top');
+      }
+    });
+
+    menuItemSource.push({
+      key: MenuItemActions.moveToBottom,
+      type: 'vertical-align-bottom',
+      tips: 'Move to bottom',
+      click: e => {
+        e.domEvent.stopPropagation();
+        this.props.onMove && this.props.onMove('bottom');
+      }
+    });
+
     return menuItemSource;
   }
 }
@@ -153,5 +198,10 @@ const MenuItemActions = {
   'edit': 'edit',
   'style': 'style',
   'remove': 'remove',
-  'zoomToLayer': 'zoomToLayer'
+  'zoomToLayer': 'zoomToLayer',
+  'divider': 'divider',
+  'moveUp': 'moveUp',
+  'moveDown': 'moveDown',
+  'moveToTop': 'moveToTop',
+  'moveToBottom': 'moveToBottom'
 }

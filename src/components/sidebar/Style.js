@@ -42,6 +42,7 @@ export class Style extends React.Component {
             editFor="style"
             onCloseButtonClick={onCloseButtonClick}
             onEditButtonClick={this.props.onEditButtonClick}
+            onMove={moveDirection => this.props.onMoveStyle(style, moveDirection)}
             onVisibleChange={visible => {
               style.visible = visible;
               GKGlobal.state.saveCurrentMapModel();
