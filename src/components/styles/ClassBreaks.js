@@ -7,6 +7,7 @@ import { hexColorWithAlpha } from "./KnownColors";
 import { UtilitiesService } from "../../services/UtilitiesService";
 import { StyleTemplates } from "../../templates";
 import { GeomUtils } from "../shared/GeomUtils";
+import { SimplePreview } from "../shared";
 
 const { Item } = Form;
 export class ClassBreaks extends Component {
@@ -79,8 +80,8 @@ export class ClassBreaks extends Component {
           </Select>
         </Item>
         <Item label="Break Count" {...formItemProps}>
-              <InputNumber defaultValue={this.state.classBreaksCount} 
-                onChange={e => this.onClassBreakCountChange(e)}></InputNumber>
+          <InputNumber defaultValue={this.state.classBreaksCount}
+            onChange={e => this.onClassBreakCountChange(e)}></InputNumber>
         </Item>
         <Item label="Fill Color" {...formItemProps}>
           <ColorPicker
@@ -135,17 +136,10 @@ export class ClassBreaks extends Component {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <div
-                    style={{
-                      backgroundColor: item.style.fillStyle,
-                      border: `solid ${this.state.strokeWidth}px ${item.style.strokeStyle}`,
-                      width: 60,
-                      height: 28,
-                      display: "inline-block",
-                      borderRadius: 8,
-                      marginRight: 6
-                    }}
-                  ></div>
+                  <SimplePreview fillColor={item.style.fillStyle}
+                    strokeColor={item.style.strokeStyle}
+                    strokeWidth={this.state.strokeWidth}
+                  />
                 ]}
               >
                 {item.style.name}
@@ -180,7 +174,7 @@ export class ClassBreaks extends Component {
 
       this.props.classBreaks.length = 0;
       this.props.classBreaks.push(...classBreaks);
-    } 
+    }
     catch (ex) {
       console.error(ex);
       this.setState({ classBreaks: [] });
@@ -216,7 +210,7 @@ export class ClassBreaks extends Component {
     else {
       console.error(response.data);
     }
-    
+
     throw new Error(`Fetch field (${this.state.style.field}) value range failed.`);
   }
 
@@ -229,9 +223,9 @@ export class ClassBreaks extends Component {
 
     const classBreaks = [];
     for (let i = 0; i < classBreakValues.length; i++) {
-      let classBreak = { 
-        minimum: classBreakValues[i].min, 
-        maximum: classBreakValues[i].max 
+      let classBreak = {
+        minimum: classBreakValues[i].min,
+        maximum: classBreakValues[i].max
       };
 
       if (GeomUtils.isAreaGeometry(this.props.geomType)) {
@@ -258,7 +252,7 @@ export class ClassBreaks extends Component {
       if (classBreak.style) {
         const minimum = Math.round(classBreak.minimum);
         const maximum = Math.round(classBreak.maximum);
-        classBreak.style.name = `${ minimum } - ${ maximum }`;
+        classBreak.style.name = `${minimum} - ${maximum}`;
       }
 
       classBreaks.push(classBreak);
@@ -283,7 +277,7 @@ export class ClassBreaks extends Component {
   async getClassBreakFillColors() {
     const count = this.state.classBreaksCount;
     const fillColors = await UtilitiesService.getBreakDownColors(this.state.fillColor1, this.state.fillColor2, count);
-    return fillColors;
+    return fillColors.data;
   }
 
   async getClassBreakStrokeColors() {
@@ -293,6 +287,6 @@ export class ClassBreaks extends Component {
     }
 
     const strokeColors = await UtilitiesService.getBreakDownColors(this.state.strokeColor1, this.state.strokeColor2, count);
-    return strokeColors;
+    return strokeColors.data;
   }
 }

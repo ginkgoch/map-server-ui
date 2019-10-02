@@ -56,12 +56,12 @@ class ClassBreakStyleForm extends StyleBaseForm {
                     { fieldOptions }
                 </Select>
             </Form.Item>
-            <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
+            <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 20, offset: 2 } }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h4>Class Break Items</h4> {this.mainActions()}
                 </div>
                 <Divider style={{ margin: "12px 0 12px 0" }} />
-                <List itemLayout="horizontal" dataSource={this.data()} renderItem={style => (
+                <List itemLayout="horizontal" size="small" dataSource={this.data()} renderItem={style => (
                     <List.Item key={style.id}>
                         <List.Item.Meta title={style.name}
                             avatar={<StylePreview style={style}></StylePreview>}

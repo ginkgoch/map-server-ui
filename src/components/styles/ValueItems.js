@@ -7,6 +7,7 @@ import { hexColorWithAlpha } from "./KnownColors";
 import { UtilitiesService } from "../../services/UtilitiesService";
 import { StyleTemplates } from "../../templates";
 import { GeomUtils } from "../shared/GeomUtils";
+import { SimplePreview } from "../shared";
 
 const { Item } = Form;
 export class ValueItems extends Component {
@@ -130,17 +131,10 @@ export class ValueItems extends Component {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <div
-                    style={{
-                      backgroundColor: item[1],
-                      border: `solid ${this.state.strokeWidth}px ${item[2]}`,
-                      width: 60,
-                      height: 28,
-                      display: "inline-block",
-                      borderRadius: 8,
-                      marginRight: 6
-                    }}
-                  ></div>
+                  <SimplePreview fillColor={item[1]}
+                    strokeColor={item[2]}
+                    strokeWidth={this.state.strokeWidth}
+                  />
                 ]}
               >
                 {item[0]}

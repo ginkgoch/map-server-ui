@@ -1,4 +1,5 @@
 export * from './ModalUtils';
-export * from './LayerPreview';
 export * from './Render';
+export * from './LayerPreview';
 export * from './StylePreview';
+export * from './SimplePreview';
