@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { DataTable } from '../properties';
 import { ValueItems } from '../styles/ValueItems';
-import { FontFamilySelect, FontStyleSelect, FontWeightSelect } from '../styles/fonts';
+import { FontFamilySelect, FontStyleSelect, FontWeightSelect, FontPreview } from '../styles/fonts';
+import { FontSizeInput } from '../styles/fonts/FontSizeInput';
 
 export class Playground extends Component {
     constructor(props) {
@@ -19,7 +20,8 @@ export class Playground extends Component {
                 <FontFamilySelect font={this.state.font} onFontChange={font => this.setState({ font })} />
                 <FontStyleSelect font={this.state.font} onFontChange={font => this.setState({ font })} />
                 <FontWeightSelect font={this.state.font} onFontChange={font => this.setState({ font })} />
-                <div>{this.state.font}</div>
+                <FontSizeInput font={this.state.font} onFontChange={font => this.setState({ font })} />
+                <FontPreview font={this.state.font} content="DEMO" />
             </div>
         );
     }
