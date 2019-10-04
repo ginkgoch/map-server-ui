@@ -171,3 +171,7 @@ table.popup-content td {
     border-radius: 4px;
     margin-right: 4px;
 }
+
+.select-option-item {
+    text-transform: capitalize;
+}
