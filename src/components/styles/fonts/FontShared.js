@@ -9,30 +9,37 @@ export const defaultFontWeights = ['normal', 'bold', 'bolder', 'light'];
 const defaultFontComponents = {fontStyle: 'normal', fontWeight: 'normal', fontSize: 12, fontFamily: 'Arial' };
 export const parseFontComponents = function (font) {
     const result = Object.assign({}, defaultFontComponents);
-    
-    const fontSegments = font ? font.split(/\s+/g) : [];
-    const segmentCount = fontSegments.length;
-    if (segmentCount === 0) {
-        return result;
+
+    if (!font) return result;
+
+    const replaceSpace = s => s.replace(/\s+/g, ' ');
+    const fontStyleReg = /(normal|italic|oblique)\s+/g;
+    const fontStyle = font.match(fontStyleReg);
+    if (fontStyle && fontStyle.length > 0) {
+        result.fontStyle = fontStyle[0].trim();
+        font = font.replace(fontStyleReg, '');
+        font = replaceSpace(font);
     }
 
-    if (segmentCount > 0) {
-        result.fontFamily = fontSegments[segmentCount - 1];
+    const fontWeightReg = /(normal|bold|bolder|light)\s+/g;
+    const fontWeight = font.match(fontWeightReg);
+    if (fontWeight && fontWeight.length > 0) {
+        result.fontWeight = fontWeight[0].trim();
+        font = font.replace(fontWeightReg, '');
+        font = replaceSpace(font);
     }
 
-    if (segmentCount > 1) {
-        const extraSegments = fontSegments.slice(0, segmentCount - 1);
-        for (let segment of extraSegments) {
-            if (/px$/g.test(segment)) {
-                result.fontSize = parseInt(segment);
-            }
-            else if (defaultFontStyles.includes(segment)) {
-                result.fontStyle = segment;
-            }
-            else if (defaultFontWeights.includes(segment)) {
-                result.fontWeight = segment;
-            }
-        }
+    const fontSizeReg = /\d+px/g;
+    const fontSize = font.match(fontSizeReg);
+    if (fontSize && fontSize.length > 0) {
+        result.fontSize = parseInt(fontSize[0]);
+        font = font.replace(fontSizeReg, '');
+        font = replaceSpace(font);
+    }
+
+    font = font.trim();
+    if (font.length > 0) {
+        result.fontFamily = font;
     }
 
     return result;
