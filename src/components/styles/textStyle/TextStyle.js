@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ColorPicker from "rc-color-picker";
 import { StyleBaseForm } from '../StyleBase';
-import { Form } from 'antd';
+import { Form, InputNumber } from 'antd';
 import { TextFieldSelect } from './TextFieldSelect';
 import { hexColorWithAlpha } from '../KnownColors';
 import { FontFamilySelect, FontSizeInput, FontStyleSelect, FontWeightSelect } from '../fonts';
@@ -47,7 +47,10 @@ export class TextStyleForm extends StyleBaseForm {
             fields={this.state.fields}
             onFontChange={this.onFontChange.bind(this)}
             onContentChange={this.onContentChange.bind(this)}
-            onTextColorChange={this.onTextColorChange.bind(this)} />
+            onFillStyleChange={this.onFillStyleChange.bind(this)}
+            onStrokeStyleChange={this.onStrokeStyleChange.bind(this)}
+            onLineWidthChange={this.onLineWidthChange.bind(this)}
+        />
     }
 
     onContentChange(newContent) {
@@ -55,7 +58,7 @@ export class TextStyleForm extends StyleBaseForm {
         this.setState({ style: this.props.style });
     }
 
-    onTextColorChange(newColor) {
+    onFillStyleChange(newColor) {
         this.props.style.fillStyle = this.getColor(newColor);
         this.setState({ style: this.props.style });
     }
@@ -67,7 +70,9 @@ export class TextStyleForm extends StyleBaseForm {
 }
 
 export const TextStyleFormItems = props => {
-    const textColor = hexColorWithAlpha(props.style.fillStyle);
+    const fillColor = hexColorWithAlpha(props.style.fillStyle);
+    const strokeColor = hexColorWithAlpha(props.style.strokeStyle);
+
     const fontProps = {
         font: props.style.font,
         onFontChange: newFont => props.onFontChange(newFont)
@@ -81,9 +86,9 @@ export const TextStyleFormItems = props => {
         </Form.Item>
         <Form.Item label="Text Color">
             <ColorPicker className="color-picker"
-                defaultColor={textColor.hex}
-                defaultAlpha={textColor.alpha}
-                onChange={newColor => props.onTextColorChange(newColor)}
+                defaultColor={fillColor.hex}
+                defaultAlpha={fillColor.alpha}
+                onChange={newColor => props.onFillStyleChange(newColor)}
             />
         </Form.Item>
         <Form.Item label="Font Family">
@@ -97,6 +102,16 @@ export const TextStyleFormItems = props => {
         </Form.Item>
         <Form.Item label="Font Weight">
             <FontWeightSelect {...fontProps} />
+        </Form.Item>
+        <Form.Item label="Outline Color">
+            <ColorPicker className="color-picker"
+                defaultColor={strokeColor.hex}
+                defaultAlpha={strokeColor.alpha}
+                onChange={newColor => props.onStrokeStyleChange(newColor)}
+            />
+        </Form.Item>
+        <Form.Item label="Outline Width">
+            <InputNumber defaultValue={props.style.lineWidth} onChange={newWidth => props.onLineWidthChange(newWidth)} />
         </Form.Item>
     </>
 }
