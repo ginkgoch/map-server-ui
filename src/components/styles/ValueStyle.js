@@ -4,7 +4,6 @@ import { List, Form, Icon, Button, Divider, Menu, Dropdown, Modal, Input, Select
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils, ValueItems } from '.'
 import { StyleTemplates } from '../../templates';
-import { MapsService } from "../../services";
 
 class ValueStyleForm extends StyleBaseForm {
     constructor(props) {
@@ -15,7 +14,6 @@ class ValueStyleForm extends StyleBaseForm {
             layerID: props.layerID,
             groupID: props.groupID,
             mapID: props.mapID,
-            selectedField: undefined,
             shouldReloadFields: false
         });
     }
@@ -26,9 +24,9 @@ class ValueStyleForm extends StyleBaseForm {
 
     static getDerivedStateFromProps(nextProps, preState) {
         if (nextProps.layerID !== preState.layerID) {
-            return Object.assign(preState, { 
-                shouldReloadFields: true, 
-                layerID: nextProps.layerID, 
+            return Object.assign(preState, {
+                shouldReloadFields: true,
+                layerID: nextProps.layerID,
                 groupID: nextProps.groupID,
                 mapID: nextProps.mapID
             });
@@ -39,7 +37,7 @@ class ValueStyleForm extends StyleBaseForm {
 
     async componentDidUpdate() {
         if (this.state.shouldReloadFields) {
-            await this.reloadFields();
+            await this.reloadFields(this.props.layerID, this.props.groupID, this.props.mapID);
         }
     }
 
@@ -52,9 +50,9 @@ class ValueStyleForm extends StyleBaseForm {
         return <>
             <Form.Item label="Field">
                 <Select placeholder="Select field"
-                    value={this.state.selectedField}
+                    value={this.state.style.field}
                     onChange={e => this.onFieldChanged(e)}>
-                    { fieldOptions }
+                    {fieldOptions}
                 </Select>
             </Form.Item>
             <Form.Item labelCol={{ xs: { span: 0 } }} wrapperCol={{ xs: { span: 16, offset: 4 } }}>
@@ -79,7 +77,7 @@ class ValueStyleForm extends StyleBaseForm {
 
     onFieldChanged(e) {
         this.state.style.field = e;
-        this.setState({ style: this.state.style, selectedField: e });
+        this.setState({ style: this.state.style });
     }
 
     data() {
@@ -175,7 +173,7 @@ class ValueStyleForm extends StyleBaseForm {
                 groupID={this.props.groupID}
                 mapID={this.props.mapID}
                 fields={this.state.fields}
-                selectedField={this.state.selectedField}
+                selectedField={this.state.style.field}
                 geomType={this.props.geomType}
                 valueItems={valueItems} />,
             onOk: () => {
@@ -203,29 +201,6 @@ class ValueStyleForm extends StyleBaseForm {
             this.state.style.items.splice(index, 1);
             this.setState(this.state);
         });
-    }
-
-    async reloadFields() {
-        const response = await MapsService.getFields(
-            this.props.layerID,
-            this.props.groupID,
-            this.props.mapID,
-            {
-                fields: ["name", "type"]
-            }
-        );
-        if (response.status === 200) {
-            const fields = response.data.map(f => f.name);
-            let selectedField = fields.length > 0 ? fields[0] : undefined;
-            this.setState({ fields, selectedField, shouldReloadFields: false });
-        } else {
-            console.error(response.data);
-            this.setState({
-                fields: [],
-                selectedField: undefined,
-                shouldReloadFields: false
-            });
-        }
     }
 }
 

@@ -4,7 +4,6 @@ import { List, Form, Icon, Button, Divider, Menu, Dropdown, InputNumber, Modal, 
 import { StylePreview, ModalUtils } from '../shared';
 import { StyleUtils, ClassBreaks } from '.'
 import { StyleTemplates } from '../../templates/StyleTemplates';
-import { MapsService } from "../../services";
 
 class ClassBreakStyleForm extends StyleBaseForm {
     constructor(props) {
@@ -38,7 +37,7 @@ class ClassBreakStyleForm extends StyleBaseForm {
     
     async componentDidUpdate() {
         if (this.state.shouldReloadFields) {
-            await this.reloadFields();
+            await this.reloadFields(this.props.layerID, this.props.groupID, this.props.mapID, field => field.type === 'number');
         }
     }
 
@@ -204,31 +203,6 @@ class ClassBreakStyleForm extends StyleBaseForm {
             this.state.style.classBreaks.splice(index, 1);
             this.setState(this.state);
         });
-    }
-
-    async reloadFields() {
-        const response = await MapsService.getFields(
-            this.props.layerID,
-            this.props.groupID,
-            this.props.mapID,
-            {
-                fields: ["name", "type"]
-            }
-        );
-
-        if (response.status === 200) {
-            const fields = response.data.filter(f => f.type === 'number').map(f => f.name);
-            let selectedField = fields.length > 0 ? fields[0] : undefined;
-            this.state.style.field = selectedField;
-            this.setState({ fields, style: this.state.style, shouldReloadFields: false });
-        } else {
-            console.error(response.data);
-            this.setState({
-                fields: [],
-                selectedField: undefined,
-                shouldReloadFields: false
-            });
-        }
     }
 }
 
