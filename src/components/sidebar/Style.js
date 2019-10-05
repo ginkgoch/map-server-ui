@@ -124,7 +124,7 @@ export class Style extends React.Component {
   }
 
   _passThroughProps() {
-    return _.omit(this.props, ["layer", "style", "onCloseButtonClick", "onEditButtonClick"]);
+    return _.omit(this.props, ["layer", "style", "onCloseButtonClick", "onEditButtonClick", "onMoveStyle"]);
   }
 
   _confirm(typeName, okHandler) {

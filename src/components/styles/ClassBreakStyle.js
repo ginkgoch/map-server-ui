@@ -153,7 +153,7 @@ class ClassBreakStyleForm extends StyleBaseForm {
                             <InputNumber min={0} defaultValue={classBreak.maximum} onChange={v => classBreak.maximum = v} />
                         </Form.Item>
                         {
-                            StyleUtils.configureItems(classBreak.style)
+                            StyleUtils.configureItems(classBreak.style, undefined, { fields: this.state.fields })
                         }
                     </Form>
                 ),

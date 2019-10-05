@@ -152,7 +152,7 @@ class ValueStyleForm extends StyleBaseForm {
                             <Input defaultValue={valueItem.value} onChange={e => valueItem.value = e.target.value} />
                         </Form.Item>
                         {
-                            StyleUtils.configureItems(valueItem.style)
+                            StyleUtils.configureItems(valueItem.style, undefined, { fields: this.state.fields })
                         }
                     </Form>
                 ),

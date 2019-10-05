@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from 'react';
-import { FillStyleFormItems, LineStyleFormItems, PointStyleFormItems } from '.';
+import { FillStyleFormItems, LineStyleFormItems, PointStyleFormItems, TextStyleFormItems } from '.';
 import { StyleTemplates } from "../../templates";
 
 const styleTypes = new Map([
@@ -9,7 +9,8 @@ const styleTypes = new Map([
     ['point-style', 'Point Style'],
     ['icon-style', 'Icon Style'],
     ['class-break-style', 'Class Break Style'],
-    ['value-style', 'Value Style']
+    ['value-style', 'Value Style'],
+    ['text-style', 'Text Style']
 ]);
 
 export class StyleUtils {
@@ -38,6 +39,8 @@ export class StyleUtils {
                 return StyleTemplates.assignLineStyle(styleBase);
             case 'point-style':
                 return StyleTemplates.assignPointStyle(styleBase);
+            case 'text-style':
+                return StyleTemplates.assignTextStyle(styleBase);
             case 'class-break-style':
                 return StyleTemplates.assignClassBreakStyle(styleBase);
             case 'value-style':
@@ -84,7 +87,7 @@ export class StyleUtils {
         return style;
     }
 
-    static configureItems(style, props = undefined) {
+    static configureItems(style, props = undefined, extra = undefined) {
         if (props === undefined) {
             props = {
                 onFillStyleChange: color => {
@@ -102,6 +105,10 @@ export class StyleUtils {
             };
         }
 
+        if (extra) {
+            props = _.assign(props, extra);
+        }
+
         switch (style.type) {
             case 'fill-style':
                 return <FillStyleFormItems style={style} {...props} />;
@@ -109,13 +116,15 @@ export class StyleUtils {
                 return <LineStyleFormItems style={style} {...props} />;
             case 'point-style':
                 return <PointStyleFormItems style={style} {...props} />;
+            case 'text-style':
+                return <TextStyleFormItems style={style} {...props} />;
             default:
                 return null;
         }
     }
 
     static simpleStyleTypes() {
-        return ['fill-style', 'line-style', 'point-style'];
+        return ['fill-style', 'line-style', 'point-style', 'text-style'];
     }
 
     static allStyleTypes() {
@@ -126,13 +135,13 @@ export class StyleUtils {
         switch (geomType.toLowerCase()) {
             case 'polygon':
             case 'multipolygon':
-                return _.includes(['fill-style', 'class-break-style', 'value-style'], styleType);
+                return _.includes(['fill-style', 'text-style', 'class-break-style', 'value-style'], styleType);
             case 'linestring':
             case 'multilinestring':
-                return _.includes(['line-style', 'class-break-style', 'value-style'], styleType);
+                return _.includes(['line-style', 'text-style', 'class-break-style', 'value-style'], styleType);
             case 'point':
             case 'multipoint':
-                return _.includes(['point-style', 'class-break-style', 'value-style'], styleType)
+                return _.includes(['point-style', 'text-style', 'class-break-style', 'value-style'], styleType)
             default:
                 return true;
         }

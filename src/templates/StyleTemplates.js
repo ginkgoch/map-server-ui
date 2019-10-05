@@ -20,6 +20,26 @@ export class StyleTemplates {
         };
     }
 
+    static getTextStyle(content, font, fillStyle, strokeStyle, lineWidth, textAlign, maximumScale = 1e10, minimumScale = 0) {
+        let styleBase = this.getStyleBase(STYLE_TYPE_FILL, maximumScale, minimumScale);
+        let style = this.assignTextStyle(styleBase, content, font, fillStyle, strokeStyle, lineWidth, textAlign);
+        return style;
+    }
+
+    static assignTextStyle(styleBase, content, font, fillStyle, strokeStyle, lineWidth, textAlign) {
+        content = content || '';
+        font = font || '12px Arial';
+        fillStyle = fillStyle || randomColor();
+        strokeStyle = strokeStyle || randomColor();
+        lineWidth = lineWidth === undefined ? 0 : lineWidth;
+        textAlign = textAlign || 'start';
+        const style = _.assign(styleBase, {
+            content, font, fillStyle, strokeStyle, lineWidth, textAlign
+        });
+
+        return style;
+    }
+
     static getFillStyle(fillStyle, strokeStyle, lineWidth, maximumScale = 1e10, minimumScale = 0) {
         let styleBase = this.getStyleBase(STYLE_TYPE_FILL, maximumScale, minimumScale);
         let style = this.assignFillStyle(styleBase, fillStyle, strokeStyle, lineWidth);
