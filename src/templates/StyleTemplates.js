@@ -32,7 +32,7 @@ export class StyleTemplates {
         fillStyle = fillStyle || randomColor();
         strokeStyle = strokeStyle || randomColor();
         lineWidth = lineWidth === undefined ? 0 : lineWidth;
-        textAlign = textAlign || 'start';
+        textAlign = textAlign || 'center';
         const style = _.assign(styleBase, {
             content, font, fillStyle, strokeStyle, lineWidth, textAlign
         });
