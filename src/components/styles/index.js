@@ -10,3 +10,4 @@ export * from './ValueStyle';
 export * from './ValueItems';
 export * from './StyleUtils';
 export * from './LevelRange';
+export * from './textStyle/TextFieldSelect';

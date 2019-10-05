@@ -3,6 +3,7 @@ import { DataTable } from '../properties';
 import { ValueItems } from '../styles/ValueItems';
 import { FontFamilySelect, FontStyleSelect, FontWeightSelect, FontPreview } from '../styles/fonts';
 import { FontSizeInput } from '../styles/fonts/FontSizeInput';
+import { TextFieldSelect } from '../styles';
 
 export class Playground extends Component {
     constructor(props) {
@@ -22,6 +23,8 @@ export class Playground extends Component {
                 <FontWeightSelect font={this.state.font} onFontChange={font => this.setState({ font })} />
                 <FontSizeInput font={this.state.font} onFontChange={font => this.setState({ font })} />
                 <FontPreview font={this.state.font} content="DEMO" />
+
+                <TextFieldSelect fields={['NAME', 'AGE', 'GENDER']} />
             </div>
         );
     }
