@@ -4,6 +4,7 @@ import { Form, Input, Button } from "antd";
 import { StylePreview } from '../shared';
 import { hexToRgba } from '../../shared';
 import { LevelRange } from './LevelRange';
+import { MapsService } from "../../services";
 
 export class StyleBaseForm extends Component {
     constructor(props) {
@@ -132,6 +133,28 @@ export class StyleBaseForm extends Component {
         }
         else {
             return hexToRgba(color.color, color.alpha);
+        }
+    }
+
+    async reloadFields(layerID, groupID, mapID, filterFunc = undefined) {
+        const response = await MapsService.getFields(layerID, groupID, mapID, { fields: ["name", "type"] });
+        if (response.status === 200) {
+            let fields = response.data;
+            if (filterFunc) {
+                fields = fields.filter(filterFunc);
+            }
+
+            fields = fields.map(f => f.name);
+
+            let selectedField = fields.length > 0 ? fields[0] : undefined;
+            this.state.style.field = selectedField;
+            this.setState({ fields, style: this.state.style, shouldReloadFields: false });
+        } else {
+            console.error(response.data);
+            this.setState({
+                fields: [],
+                shouldReloadFields: false
+            });
         }
     }
 }

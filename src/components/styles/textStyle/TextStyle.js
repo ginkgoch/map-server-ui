@@ -5,7 +5,6 @@ import { Form } from 'antd';
 import { TextFieldSelect } from './TextFieldSelect';
 import { hexColorWithAlpha } from '../KnownColors';
 import { FontFamilySelect, FontSizeInput, FontStyleSelect, FontWeightSelect } from '../fonts';
-import { MapsService } from "../../../services";
 
 export class TextStyleForm extends StyleBaseForm {
     constructor(props) {
@@ -26,9 +25,9 @@ export class TextStyleForm extends StyleBaseForm {
 
     static getDerivedStateFromProps(nextProps, preState) {
         if (nextProps.layerID !== preState.layerID) {
-            return Object.assign(preState, { 
-                shouldReloadFields: true, 
-                layerID: nextProps.layerID, 
+            return Object.assign(preState, {
+                shouldReloadFields: true,
+                layerID: nextProps.layerID,
                 groupID: nextProps.groupID,
                 mapID: nextProps.mapID
             });
@@ -39,7 +38,7 @@ export class TextStyleForm extends StyleBaseForm {
 
     async componentDidUpdate() {
         if (this.state.shouldReloadFields) {
-            await this.reloadFields();
+            await this.reloadFields(this.props.layerID, this.props.groupID, this.props.mapID);
         }
     }
 
@@ -64,29 +63,6 @@ export class TextStyleForm extends StyleBaseForm {
     onFontChange(newFont) {
         this.props.style.font = newFont;
         this.setState({ style: this.props.style });
-    }
-
-    async reloadFields() {
-        const response = await MapsService.getFields(
-            this.props.layerID,
-            this.props.groupID,
-            this.props.mapID,
-            {
-                fields: ["name", "type"]
-            }
-        );
-        if (response.status === 200) {
-            const fields = response.data.map(f => f.name);
-            let selectedField = fields.length > 0 ? fields[0] : undefined;
-            this.setState({ fields, selectedField, shouldReloadFields: false });
-        } else {
-            console.error(response.data);
-            this.setState({
-                fields: [],
-                selectedField: undefined,
-                shouldReloadFields: false
-            });
-        }
     }
 }
 
@@ -125,5 +101,5 @@ export const TextStyleFormItems = props => {
     </>
 }
 
-export const TextStyle = Form.create({name: 'TextStyle'})(TextStyleForm);
+export const TextStyle = Form.create({ name: 'TextStyle' })(TextStyleForm);
 
