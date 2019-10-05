@@ -53,14 +53,17 @@ export class TextStyleForm extends StyleBaseForm {
 
     onContentChange(newContent) {
         this.props.style.content = newContent;
+        this.setState({ style: this.props.style });
     }
 
     onTextColorChange(newColor) {
-        this.props.style.fillStyle = this.getColor(newColor)
+        this.props.style.fillStyle = this.getColor(newColor);
+        this.setState({ style: this.props.style });
     }
 
     onFontChange(newFont) {
         this.props.style.font = newFont;
+        this.setState({ style: this.props.style });
     }
 
     async reloadFields() {

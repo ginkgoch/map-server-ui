@@ -7,8 +7,8 @@ export class Render {
         this._clearCanvas(canvas);
 
         const styleCount = layer.styles.length;
-        switch(styleCount) {
-            case 0: 
+        switch (styleCount) {
+            case 0:
                 this._renderStyle(undefined, canvas);
                 break;
             default:
@@ -24,7 +24,7 @@ export class Render {
     }
 
     static renderStyles(styles, canvas) {
-        this._clearCanvas(canvas);        
+        this._clearCanvas(canvas);
 
         const count = styles.length > 4 ? 4 : styles.length;
         for (let i = 0; i < count; i++) {
@@ -39,7 +39,7 @@ export class Render {
 
     static renderStyle(style, canvas) {
         this._clearCanvas(canvas);
-         
+
         this._renderStyle(style, canvas);
     }
 
@@ -67,6 +67,9 @@ export class Render {
             case 'point-style':
                 this._renderPointStyle(ctx, w, h, style, x, y);
                 break;
+            case 'text-style':
+                this._renderTextStyle(ctx, w, h, style, x, y);
+                break;
             case 'class-break-style':
             case 'value-style':
                 this._renderComplexStyles(style, canvas);
@@ -84,7 +87,7 @@ export class Render {
     static _renderFillStyle(ctx, width, height, x = undefined, y = undefined) {
         this._renderPointRect(ctx, width, height, x, y);
     }
-    
+
     static _renderLineStyle(ctx, width, height, x = undefined, y = undefined) {
         x = x || width / 2;
         y = y || height / 2;
@@ -94,7 +97,7 @@ export class Render {
         const rectH = height - padding * 2;
         ctx.strokeRect(rectX, rectY, rectW, rectH);
     }
-    
+
     static _renderPointStyle(ctx, width, height, style, x = undefined, y = undefined) {
         if (style.symbol === 'rect' || style.symbol === 'square') {
             this._renderPointRect(ctx, width, height, x, y);
@@ -102,7 +105,25 @@ export class Render {
             this._renderPointCircle(ctx, width, height, x, y);
         }
     }
-    
+
+    static _renderTextStyle(ctx, width, height, style, x = undefined, y = undefined) {
+        style = _.assign({}, style, { textAlign: 'center', textBaseline: 'middle' });
+        if (style.font) {
+            style.font = style.font.replace(/\d+px/gi, `${width}px`);
+        }
+
+        ctx = _.assign(ctx, style);
+
+        x = x || width / 2;
+        y = y || height / 2;
+        const rectX = x - width / 2 + padding;
+        const rectY = y - height / 2 + padding;
+        const rectW = width - padding * 2;
+        const rectH = height - padding * 2;
+
+        ctx.fillText('T', x, y);
+    }
+
     static _renderPointRect(ctx, width, height, x = undefined, y = undefined) {
         x = x || width / 2;
         y = y || height / 2;
@@ -113,7 +134,7 @@ export class Render {
         ctx.fillRect(rectX, rectY, rectW, rectH);
         ctx.strokeRect(rectX, rectY, rectW, rectH);
     }
-    
+
     static _renderPointCircle(ctx, width, height, x = undefined, y = undefined) {
         x = x || width / 2;
         y = y || height / 2;
@@ -122,7 +143,7 @@ export class Render {
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
         ctx.closePath();
-    
+
         ctx.fill();
         ctx.stroke();
     }
@@ -135,13 +156,13 @@ export class Render {
     static _centerBy(i, width, height) {
         const bw = width / 2 + padding;
         const bh = height / 2 + padding;
-        switch(i) {
+        switch (i) {
             case 0:
                 return [bw / 2, bh / 2];
             case 1:
                 return [width / 2 - padding + bw / 2, bh / 2];
             case 2:
-                    return [bw / 2, height / 2 - padding + bh / 2];
+                return [bw / 2, height / 2 - padding + bh / 2];
             case 3:
             default:
                 return [width / 2 - padding + bw / 2, height / 2 - padding + bh / 2];

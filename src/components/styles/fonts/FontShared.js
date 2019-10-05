@@ -4,7 +4,7 @@ export const minSelectWidth = 180;
 
 export const defaultFontStyles = ['normal', 'italic', 'oblique'];
 
-export const defaultFontWeights = ['normal', 'bold', 'bolder', 'light'];
+export const defaultFontWeights = ['normal', 'bold', 'bolder', 'lighter'];
 
 const defaultFontComponents = {fontStyle: 'normal', fontWeight: 'normal', fontSize: 12, fontFamily: 'Arial' };
 export const parseFontComponents = function (font) {
@@ -21,7 +21,7 @@ export const parseFontComponents = function (font) {
         font = replaceSpace(font);
     }
 
-    const fontWeightReg = /(normal|bold|bolder|light)\s+/g;
+    const fontWeightReg = /(normal|bold|bolder|lighter)\s+/g;
     const fontWeight = font.match(fontWeightReg);
     if (fontWeight && fontWeight.length > 0) {
         result.fontWeight = fontWeight[0].trim();
