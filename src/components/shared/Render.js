@@ -109,17 +109,17 @@ export class Render {
     static _renderTextStyle(ctx, width, height, style, x = undefined, y = undefined) {
         style = _.assign({}, style, { textAlign: 'center', textBaseline: 'middle' });
         if (style.font) {
-            style.font = style.font.replace(/\d+px/gi, `${width}px`);
+            style.font = style.font.replace(/\d+px/gi, `${width - 2}px`);
         }
 
         ctx = _.assign(ctx, style);
 
         x = x || width / 2;
         y = y || height / 2;
-        const rectX = x - width / 2 + padding;
-        const rectY = y - height / 2 + padding;
-        const rectW = width - padding * 2;
-        const rectH = height - padding * 2;
+
+        if (style.lineWidth > 0) {
+            ctx.strokeText('T', x, y);
+        }
 
         ctx.fillText('T', x, y);
     }

@@ -101,6 +101,12 @@ export class StyleUtils {
                 },
                 onSymbolChanged: symbol => {
                     style.symbol = symbol;
+                },
+                onFontChange: font => {
+                    style.font = font;
+                },
+                onContentChange: content => {
+                    style.content = content;
                 }
             };
         }
