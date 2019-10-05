@@ -11,3 +11,4 @@ export * from './ValueItems';
 export * from './StyleUtils';
 export * from './LevelRange';
 export * from './textStyle/TextFieldSelect';
+export * from './textStyle/TextStyle';

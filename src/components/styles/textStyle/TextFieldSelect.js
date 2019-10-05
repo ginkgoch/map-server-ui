@@ -29,12 +29,14 @@ export class TextFieldSelect extends Component {
     }
 
     onFieldMenuClick(e) {
-        this.setState({ content: this.state.content + `[${e.key}]` });
-        this.props.onContentChange && this.props.onContentChange(this.state.content);
+        const newState = { content: this.state.content + `[${e.key}]` };
+        this.setState(newState);
+        this.props.onContentChange && this.props.onContentChange(newState.content);
     }
 
     onContentChange(e) {
-        this.setState({ content: e.target.value });
-        this.props.onContentChange && this.props.onContentChange(this.state.content);
+        const newState = { content: e.target.value };
+        this.setState(newState);
+        this.props.onContentChange && this.props.onContentChange(newState.content);
     }
 };

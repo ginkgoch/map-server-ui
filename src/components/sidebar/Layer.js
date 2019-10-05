@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { Menu } from "antd";
 import { LayerPreview, ModalUtils } from "../shared";
 import { EditButtons, Style } from ".";
-import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle, StyleUtils, ValueStyle } from "../styles";
+import { FillStyle, LineStyle, NoneStyle, PointStyle, ClassBreakStyle, StyleUtils, ValueStyle, TextStyle } from "../styles";
 import { GKGlobal, GKGlobalUtils } from "../../shared";
 
 const { SubMenu } = Menu;
@@ -155,6 +155,11 @@ export class Layer extends Component {
         return <LineStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
       case 'point-style':
         return <PointStyle style={style} onEditStyleCanceled={onEditStyleCanceled} onEditStyleSubmit={onSubmitHandler} />
+      case 'text-style':
+        return <TextStyle style={style} 
+          onEditStyleCanceled={onEditStyleCanceled} 
+          onEditStyleSubmit={onSubmitHandler} 
+          {...layerIdentifyProps} />
       case 'class-break-style':
         return <ClassBreakStyle style={style}
           geomType={geomType}
