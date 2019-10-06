@@ -1,35 +1,17 @@
+import "./index.css";
+import _ from 'lodash';
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button, Layout, Drawer } from "antd";
-import Logo from "./components/Logo";
-import "./index.css";
-import ResourceMenu from './components/ResourceMenu';
+import { MapEditor, MapList, Playground } from './components/pages';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { GKGlobal } from "./shared";
 
-const { Header, Content } = Layout;
-
-let HelloComponent = () => {
-  return (
-    <Layout>
-      <Header id="header">
-        <Logo />
-      </Header>
-      <Content>
-        <div id="content" style={{position: "relative", height: "100%"}}>
-          <Drawer
-            placement="left"
-            title="Resources"
-            visible={true}
-            mask={false}
-            closable={false}
-            getContainer={() => document.querySelector('#content')}
-            style={{ position: "absolute" }}
-          >
-            <ResourceMenu></ResourceMenu>
-          </Drawer>
-        </div>
-      </Content>
-    </Layout>
-  );
-};
-
-ReactDOM.render(<HelloComponent />, document.querySelector("#container"));
+GKGlobal.init();
+ReactDOM.render(
+  <BrowserRouter>
+    <Route exact path="/" component={MapList} />
+    <Route path="/maps/:mapID" component={MapEditor} />
+    <Route path="/playground" component={Playground} />
+  </BrowserRouter>,
+  document.querySelector("#container")
+);

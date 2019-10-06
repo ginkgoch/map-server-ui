@@ -1,4 +1,5 @@
 @import '~antd/dist/antd.css';
+@import '~leaflet/dist/leaflet.css';
 
 html, body, #container, .ant-layout {
     height: 100%;
@@ -10,15 +11,167 @@ html, body, #container, .ant-layout {
     box-shadow: 0 2px 8px #f0f1f2;
 }
 
+#header > .header-title {
+    display: flex; 
+    justify-content: center; 
+    width: 100%;
+    position: absolute;
+    margin-left: -50px;
+}
+
 .ant-drawer-body {
     padding: 4px;
 }
 
-/* #container {
-    display: grid;
-    grid-template-rows: 64px auto;
+.style-label {
+    padding-left: 6px;
 }
 
-.ant-layout-content {
-    display: grid;
-} */
+.ant-menu-item {
+    margin-top: 0px;
+}
+
+.ant-menu-inline {
+    line-height: 34px;
+}
+
+.sidebar-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar-item div div.edit-buttons {
+    display: none;
+}
+
+.sidebar-item:hover div div.edit-buttons {
+    display: block;
+}
+
+.sidebar-menu-item-label {
+    margin-left: 4px;
+}
+
+.color-picker, .color-picker>span {
+    width: 100%;
+}
+
+.color-picker>span {
+    height: 34px;
+}
+
+.color-picker-sm {
+    width: 30%;
+    margin-right: 20px;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+.color-picker-sm>span {
+    height: 30px;
+    width: 100%;
+}
+
+.color-picker-space {
+    padding: 0 20px;
+}
+
+.ant-drawer-content-wrapper {
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15) !important;
+    -webkit-box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.launch-button>span {
+    margin-left: 14px;
+}
+
+.map-list {
+    padding-top: 40px;
+}
+
+.map-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.map-list-item-title {
+    font-size: 16px;
+}
+
+.map-list-item-desc {
+    color: black;
+    margin: 16px 0 8px 0;
+}
+
+.map-list-header-item {
+    display: inline-block;
+}
+
+.map-list-item-extra {
+    margin-top: 0px;
+}
+
+.map-list-item-extra>span {
+    margin-right: 10px;
+}
+
+.sidebar-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaflet-container {
+    height: 100%;
+}
+
+.column-filter-group {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.column-filter-group>label {
+    display: block;
+    padding: 4px;
+}
+
+.confirm-btn-container {
+    text-align: right;
+    padding: 12px 0 6px 0;
+}
+
+.confirm-btn-container>button {
+    margin-left: 4px;
+}
+
+#tableContainer .ant-drawer-content-wrapper {
+    padding-left: 280px;
+}
+
+table.popup-content {
+    width: 100%;
+}
+
+table.popup-content tr:nth-child(odd) {
+    background-color: #f0f1f2;
+}
+
+table.popup-content td.title {
+    font-weight: bold;
+}
+
+table.popup-content td {
+    padding: 4px 6px 4px 2px;
+}
+
+.preview-simple {
+    width: 20px;
+    height: 20px;
+    display: "inline-block";
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+.select-option-item {
+    text-transform: capitalize;
+}

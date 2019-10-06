@@ -8,13 +8,35 @@
     "height": 256,
     "maximumScale": 10000000000,
     "minimumScale": 0,
-    "scales": [591659030.6768064, 295829515.3384032, 147914757.6692016, 73957378.8346008, 36978689.4173004, 18489344.7086502, 9244672.3543251, 4622336.17716255, 2311168.088581275, 1155584.0442906376, 577792.0221453188, 288896.0110726594, 144448.0055363297, 72224.00276816485, 36112.001384082425, 18056.000692041212, 9028.000346020606, 4514.000173010303, 2257.0000865051516, 1128.5000432525758],
+    "scales": [
+        591659030.6768064,
+        295829515.3384032,
+        147914757.6692016,
+        73957378.8346008,
+        36978689.4173004,
+        18489344.7086502,
+        9244672.3543251,
+        4622336.17716255,
+        2311168.088581275,
+        1155584.0442906376,
+        577792.0221453188,
+        288896.0110726594,
+        144448.0055363297,
+        72224.00276816485,
+        36112.001384082425,
+        18056.000692041212,
+        9028.000346020606,
+        4514.000173010303,
+        2257.0000865051516,
+        1128.5000432525758
+    ],
     "groups": [{
         "type": "layer-group",
-        "name": "Dynamic Layers",
+        "name": "Default",
         "visible": true,
         "layers": [{
             "type": "feature-layer",
+            "id": "layer-vyrwgp22",
             "name": "USStates",
             "source": {
                 "type": "shapefile-feature-source",
@@ -31,49 +53,208 @@
                 "filePath": "./tests/data/layers/USStates.shp"
             },
             "styles": [{
-                "visible": true,
-                "type": "fill-style",
-                "name": "Fill Style",
-                "maximumScale": 10000000000,
-                "minimumScale": 0,
-                "lineWidth": 1,
-                "fillStyle": "yellow",
-                "strokeStyle": "blue"
-            }],
-            "minimumScale": 0,
-            "maximumScale": 10000000000
-        }]
-    }, {
-        "type": "layer-group",
-        "name": "Base Overaly",
-        "visible": true,
-        "layers": [{
-            "type": "feature-layer",
-            "name": "USStates",
-            "source": {
-                "type": "shapefile-feature-source",
-                "name": "USStates",
-                "projection": {
-                    "from": {
-                        "unit": "unknown"
-                    },
-                    "to": {
-                        "unit": "unknown"
-                    }
+                    "visible": true,
+                    "id": "style-k9dnjzab",
+                    "type": "fill-style",
+                    "name": "Fill Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "lineWidth": 1,
+                    "fillStyle": "yellow",
+                    "strokeStyle": "blue"
                 },
-                "flag": "rs",
-                "filePath": "./tests/data/layers/USStates.shp"
-            },
-            "styles": [{
-                "visible": true,
-                "type": "fill-style",
-                "name": "Fill Style",
-                "maximumScale": 10000000000,
-                "minimumScale": 0,
-                "lineWidth": 1,
-                "fillStyle": "yellow",
-                "strokeStyle": "blue"
-            }],
+                {
+                    "visible": true,
+                    "id": "style-k9dnjzac",
+                    "type": "fill-style",
+                    "name": "Fill Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "lineWidth": 1,
+                    "fillStyle": "yellow",
+                    "strokeStyle": "blue"
+                },
+                {
+                    "visible": true,
+                    "id": "style-d953rwqn",
+                    "type": "line-style",
+                    "name": "Line Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "strokeStyle": "#00ff00",
+                    "lineWidth": 6
+                },
+                {
+                    "visible": true,
+                    "id": "style-ddx3xnaz",
+                    "type": "point-style",
+                    "name": "Point Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "symbol": "rect",
+                    "fillStyle": "green",
+                    "strokeStyle": "yellow",
+                    "lineWidth": 6,
+                    "radius": 20
+                },
+                {
+                    "visible": true,
+                    "id": "style-ddx3xnvg",
+                    "type": "point-style",
+                    "name": "Point Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "symbol": "circle",
+                    "fillStyle": "red",
+                    "strokeStyle": "black",
+                    "lineWidth": 2,
+                    "radius": 20
+                },
+                {
+                    "visible": true,
+                    "id": "style-dddenvg",
+                    "type": "class-break-style",
+                    "name": "Class Break Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "field": "type",
+                    "classBreaks": [{
+                        "minimum": 0,
+                        "maximum": 25,
+                        "style": {
+                            "visible": true,
+                            "id": "style-dddse4nvg",
+                            "type": "point-style",
+                            "name": "0 ~ 25",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#ff0000",
+                            "strokeStyle": "#ff0000",
+                            "lineWidth": 0,
+                            "radius": 12
+                        }
+                    }, {
+                        "minimum": 25,
+                        "maximum": 50,
+                        "style": {
+                            "visible": true,
+                            "id": "style-1111111",
+                            "type": "point-style",
+                            "name": "25 ~ 50",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#ff0000",
+                            "strokeStyle": "#ff0000",
+                            "lineWidth": 0,
+                            "radius": 12
+                        }
+                    }, {
+                        "minimum": 50,
+                        "maximum": 75,
+                        "style": {
+                            "visible": true,
+                            "id": "style-2222222",
+                            "type": "point-style",
+                            "name": "50 ~ 75",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#aaff00",
+                            "strokeStyle": "#aaff00",
+                            "lineWidth": 0,
+                            "radius": 12
+                        }
+                    }, {
+                        "minimum": 75,
+                        "maximum": 10000000000,
+                        "style": {
+                            "visible": true,
+                            "id": "style-33333333",
+                            "type": "point-style",
+                            "name": "75 ~ ∞",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#0000ff",
+                            "strokeStyle": "#0000ff",
+                            "lineWidth": 0,
+                            "radius": 12
+                        }
+                    }]
+                },
+                {
+                    "visible": true,
+                    "id": "style-vi11111",
+                    "type": "value-style",
+                    "name": "Value Style",
+                    "maximumScale": 10000000000,
+                    "minimumScale": 0,
+                    "items": [{
+                        "value": "1",
+                        "style": {
+                            "visible": true,
+                            "id": "style-visub11111",
+                            "type": "point-style",
+                            "name": "1",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#ff0000",
+                            "strokeStyle": "#000000",
+                            "lineWidth": 1,
+                            "radius": 12
+                        }
+                    }, {
+                        "value": "2",
+                        "style": {
+                            "visible": true,
+                            "id": "style-visub11112",
+                            "type": "point-style",
+                            "name": "2",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#ff0000",
+                            "strokeStyle": "#000000",
+                            "lineWidth": 1,
+                            "radius": 12
+                        }
+                    }, {
+                        "value": "3",
+                        "style": {
+                            "visible": true,
+                            "id": "style-visub11113",
+                            "type": "point-style",
+                            "name": "3",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#aaff00",
+                            "strokeStyle": "#000000",
+                            "lineWidth": 1,
+                            "radius": 12
+                        }
+                    }, {
+                        "value": "4",
+                        "style": {
+                            "visible": true,
+                            "id": "style-visub11114",
+                            "type": "point-style",
+                            "name": "4",
+                            "maximumScale": 10000000000,
+                            "minimumScale": 0,
+                            "symbol": "default",
+                            "fillStyle": "#0000ff",
+                            "strokeStyle": "#000000",
+                            "lineWidth": 1,
+                            "radius": 12
+                        }
+                    }],
+                    "field": "type"
+                }
+            ],
             "minimumScale": 0,
             "maximumScale": 10000000000
         }]
