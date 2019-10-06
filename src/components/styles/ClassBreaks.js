@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import React, { Component } from "react";
-import { Form, Select, Button, List, InputNumber } from "antd";
+import { Form, Select, Button, List, InputNumber, Checkbox } from "antd";
 import ColorPicker from "rc-color-picker";
 import { MapsService } from "../../services";
 import { randomColor, normalizeRCColor } from "../../shared";
@@ -27,7 +28,8 @@ export class ClassBreaks extends Component {
       strokeWidth: 1,
       classBreaksCount: 6,
       classBreaks: [],
-      loading: false
+      loading: false,
+      enableQuantileBreak: false
     };
   }
 
@@ -115,6 +117,8 @@ export class ClassBreaks extends Component {
         </Item>
         <Item label="Stroke Width" {...formItemProps}>
           <InputNumber defaultValue={this.state.strokeWidth} min={0} onChange={v => this.setState({ strokeWidth: v })} />
+          <span className="color-picker-space">Quantile Break: </span>
+          <Checkbox checked={this.state.enableQuantileBreak} onChange={e => this.setState({ enableQuantileBreak: !this.state.enableQuantileBreak })} /> 
         </Item>
         <Item wrapperCol={{ sm: { span: 16, offset: 6 }, xs: { span: 24 } }}>
           <Button
@@ -231,6 +235,18 @@ export class ClassBreaks extends Component {
   }
 
   async getClassBreakValues() {
+    let classBreakValues = [];
+    if (this.state.enableQuantileBreak) {
+      classBreakValues = await this.getQuantileBreakValues();
+    }
+    else {
+      classBreakValues = await this.getMaxMinBreakValues();
+    }
+
+    return classBreakValues;
+  }
+
+  async getMaxMinBreakValues() {
     const fieldValueRange = await this.getFieldValueRange();
     const min = fieldValueRange.minimum;
     const max = fieldValueRange.maximum;
@@ -240,11 +256,72 @@ export class ClassBreaks extends Component {
     const classBreakValues = [];
     for (let i = 0; i < breakCount; i++) {
       const currentMin = min + i * breakIncrement;
-      const currentMax = currentMin + breakIncrement + 1;
+      const currentMax = currentMin + breakIncrement;
       classBreakValues.push({ min: currentMin, max: currentMax });
     }
 
+    if (breakCount > 0) {
+      classBreakValues[breakCount - 1].max += 1;
+    }
+
     return classBreakValues;
+  }
+
+  async getQuantileBreakValues() {
+    const response = await MapsService.getPropertyByField(
+      this.state.selectedField,
+      this.state.layerID,
+      this.state.groupID,
+      this.state.mapID
+    );
+
+    const classBreakValues = [];
+    if (response.status === 200) {
+      const fieldValues = _.uniq(response.data.map(f => parseFloat(f))).sort((a, b) => a - b);
+      const breakCount = this.state.classBreaksCount;
+      const indexIncrement = fieldValues.length / breakCount;
+
+      for (let i = 0; i < breakCount; i++) {
+        const startIndex = i * indexIncrement;
+        const currentMin = this.getQuantileBreakValue(startIndex, fieldValues);
+        const currentMax = this.getQuantileBreakValue(startIndex + indexIncrement, fieldValues);
+        classBreakValues.push({ min: currentMin, max: currentMax });
+      }
+
+      if (breakCount > 0) {
+        classBreakValues[breakCount - 1].max += 1;
+      }
+  
+      return classBreakValues;
+    }
+    else {
+      throw new Error(`Fetch field (${this.state.style.field}) value range failed. ${response.data}`);
+    }
+  }
+
+  getQuantileBreakValue(index, fieldValues) {
+    let indexFloor = Math.floor(index);
+    indexFloor = this.getFieldIndexInRange(indexFloor, fieldValues);
+    const diff = index - indexFloor;
+    if (diff <= 1e-6) {
+      return fieldValues[indexFloor];
+    }
+
+    const valueStart = fieldValues[indexFloor];
+    let indexCeil = Math.ceil(index);
+    indexCeil = this.getFieldIndexInRange(indexCeil, fieldValues);
+
+    const valueEnd = fieldValues[indexCeil];
+    const value = valueStart + (valueEnd - valueStart) * diff;
+    return value;
+  }
+
+  getFieldIndexInRange(index, fieldValues) {
+    if (index >= fieldValues.length) {
+      index = fieldValues.length - 1;
+    }
+
+    return index;
   }
 
   async getFieldValueRange() {
@@ -271,10 +348,8 @@ export class ClassBreaks extends Component {
       return { minimum, maximum };
     }
     else {
-      console.error(response.data);
+      throw new Error(`Fetch field (${this.state.style.field}) value range failed. ${response.data}`);
     }
-
-    throw new Error(`Fetch field (${this.state.style.field}) value range failed.`);
   }
 
   async getClassBreakFillColors() {
