@@ -168,8 +168,7 @@ export class ClassBreaks extends Component {
     this.setState({ loading: true });
 
     try {
-      const fieldValueRange = await this.getFieldValueRange();
-      const classBreaks = await this.getClassBreaks(fieldValueRange.minimum, fieldValueRange.maximum);
+      const classBreaks = await this.getClassBreaks();
       this.setState({ classBreaks });
 
       this.props.classBreaks.length = 0;
@@ -184,38 +183,8 @@ export class ClassBreaks extends Component {
     }
   }
 
-  async getFieldValueRange() {
-    const response = await MapsService.getPropertyByField(
-      this.state.selectedField,
-      this.state.layerID,
-      this.state.groupID,
-      this.state.mapID,
-      ['min', 'max']
-    );
-
-    let minimum = undefined;
-    let maximum = undefined;
-    if (response.status === 200) {
-      const minimumRecord = response.data.find(f => f.minimum);
-      if (minimumRecord !== undefined) {
-        minimum = minimumRecord.minimum;
-      }
-      const maximumRecord = response.data.find(f => f.maximum);
-      if (maximumRecord !== undefined) {
-        maximum = maximumRecord.maximum;
-      }
-
-      return { minimum, maximum };
-    }
-    else {
-      console.error(response.data);
-    }
-
-    throw new Error(`Fetch field (${this.state.style.field}) value range failed.`);
-  }
-
-  async getClassBreaks(min, max) {
-    const classBreakValues = this.getClassBreakValues(min, max);
+  async getClassBreaks() {
+    const classBreakValues = await this.getClassBreakValues();
     const classBreakColors = await Promise.all([
       this.getClassBreakFillColors(),
       this.getClassBreakStrokeColors()
@@ -261,17 +230,51 @@ export class ClassBreaks extends Component {
     return classBreaks;
   }
 
-  getClassBreakValues(min, max) {
+  async getClassBreakValues() {
+    const fieldValueRange = await this.getFieldValueRange();
+    const min = fieldValueRange.minimum;
+    const max = fieldValueRange.maximum;
+
     const breakCount = this.state.classBreaksCount;
     const breakIncrement = Math.abs(max - min) / breakCount;
     const classBreakValues = [];
     for (let i = 0; i < breakCount; i++) {
       const currentMin = min + i * breakIncrement;
-      const currentMax = currentMin + breakIncrement;
+      const currentMax = currentMin + breakIncrement + 1;
       classBreakValues.push({ min: currentMin, max: currentMax });
     }
 
     return classBreakValues;
+  }
+
+  async getFieldValueRange() {
+    const response = await MapsService.getPropertyByField(
+      this.state.selectedField,
+      this.state.layerID,
+      this.state.groupID,
+      this.state.mapID,
+      ['min', 'max']
+    );
+
+    let minimum = undefined;
+    let maximum = undefined;
+    if (response.status === 200) {
+      const minimumRecord = response.data.find(f => f.minimum);
+      if (minimumRecord !== undefined) {
+        minimum = minimumRecord.minimum;
+      }
+      const maximumRecord = response.data.find(f => f.maximum);
+      if (maximumRecord !== undefined) {
+        maximum = maximumRecord.maximum;
+      }
+
+      return { minimum, maximum };
+    }
+    else {
+      console.error(response.data);
+    }
+
+    throw new Error(`Fetch field (${this.state.style.field}) value range failed.`);
   }
 
   async getClassBreakFillColors() {
