@@ -7,7 +7,7 @@ export class UsersService {
             return response.data;
         }
         else {
-            throw new Error('User not registered. ' + response.data);
+            throw new Error('Sign up failed. ' + response.data);
         }
     }
 }

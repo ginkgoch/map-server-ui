@@ -1,7 +1,10 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Modal } from 'antd';
+import { UsersService } from '../../services/UsersService';
+import { FormUtils } from '../shared';
 
-class SignupForm extends Component {
+class SignUpForm extends Component {
     constructor(props) {
         super(props);
 
@@ -12,33 +15,33 @@ class SignupForm extends Component {
         const Item = Form.Item;
         const { getFieldDecorator } = this.props.form;
         return <div className="signup-form-layout">
-            <Form {...this.getFormItemProps()}>
+            <Form {...FormUtils.formItemLayoutProps}>
                 <Item label="Name">
                     {
-                        getFieldDecorator('name', this.getRules('name'))(<Input />)
+                        getFieldDecorator('name', FormUtils.getFormItemOptions('name'))(<Input />)
                     }
                 </Item>
                 <Item label="E-mail">
                     {
-                        getFieldDecorator('email', this.getRules('e-mail'))(<Input />)
+                        getFieldDecorator('email', FormUtils.getFormItemOptions('e-mail'))(<Input />)
                     }
                 </Item>
                 <Item label="Password">
                     {
-                        getFieldDecorator('password', this.getRules('password', undefined, {
+                        getFieldDecorator('password', FormUtils.getFormItemOptions('password', undefined, {
                             validator: this.validNextPassword()
                         }))(<Input.Password />)
                     }
                 </Item>
                 <Item label="Password confirm">
                     {
-                        getFieldDecorator('password-confirm', this.getRules('password-confirm', 'Please re-type password.', {
+                        getFieldDecorator('password-confirm', FormUtils.getFormItemOptions('password-confirm', 'Please re-type password.', {
                             validator: this.compareFirstPassword()
                         }))(<Input.Password onBlur={e => this.setState({ passwordConfirmInvalid: !!e.target })} />)
                     }
                 </Item>
-                <Item {...this.getSubmitFormItemProps()}>
-                    <Button type="primary" onClick={this.onRegister()}>Submit</Button>
+                <Item {...FormUtils.submitFormItemLayoutProps}>
+                    <Button type="primary" onClick={this.onRegister()}>Sign Up</Button>
                 </Item>
             </Form>
         </div>
@@ -46,56 +49,28 @@ class SignupForm extends Component {
 
     onRegister() {
         const { form } = this.props;
-        return e => {
+        return async e => {
             e.preventDefault();
             e.stopPropagation();
-            form.validateFields((error, values) => {
-                console.log(error, values);
+            form.validateFields(async (error, values) => {
+                if (error) {
+                    return;
+                }
+
+                values = _.omit(values, ['password-confirm']);
+                
+                try {
+                    values = await UsersService.signup(values);
+                    this.props.history.push('/');
+                }
+                catch (ex) {
+                    Modal.error({
+                        title: 'Sign up failed',
+                        content: `User ${values.name} signs up failed. ${ex}.`
+                    });
+                }
             });
         }
-    }
-
-    getFormItemProps() {
-        return {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-    }
-
-    getSubmitFormItemProps() {
-        return {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            }
-        }
-    }
-
-    getRules(fieldName, message = undefined, validator = undefined) {
-        const rules = [
-            {
-                required: true,
-                message: message || `Please input ${fieldName}.`
-            }
-        ];
-
-        if (validator) {
-            rules.push(validator);
-        }
-
-        return { rules };
     }
 
     compareFirstPassword() {
@@ -122,4 +97,4 @@ class SignupForm extends Component {
     }
 }
 
-export const Signup = Form.create({ name: 'Signup' })(SignupForm);
+export const SignUp = Form.create({ name: 'SignUp' })(SignUpForm);
