@@ -175,3 +175,8 @@ table.popup-content td {
 .select-option-item {
     text-transform: capitalize;
 }
+
+.signup-form-layout {
+    max-width: 600px;
+    margin: 40px auto;
+}
