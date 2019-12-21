@@ -8,6 +8,12 @@ This is a portal of my [map server project](https://github.com/ginkgoch/node-map
 
 > `Ginkgoch Map Server` is a Node.js project that allows to build map with your own local map data (`Shapefile`, `GeoJSON`, `Postgre` and it is extensible for any other GIS data sources). It also provides some built-in RESTful APIs for spatial querying and rendering tiles  with your hosted data source.
 
+## Run with Docker
+```bash
+# Require Ginkgoch Map Server to serve first
+docker run -d -p 8080:8080 --name ui ginkgoch/map-server-ui
+```
+
 ## Feature List
 #### Sep 28th, 2019
 1. A central map list that are created. In this view, you could get the general information of your created maps. It is also allowed to kick started to build a new map here.
