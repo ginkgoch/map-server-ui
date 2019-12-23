@@ -1,3 +1,3 @@
 all:
 	yarn build
-	docker build -t ginkgoch/map-server-ui .
+	docker build -t ginkgoch/map-server-ui:v1 .
