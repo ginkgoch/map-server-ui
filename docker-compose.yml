@@ -1,0 +1,19 @@
+version: '3'
+
+services: 
+    map-server:
+        image: ginkgoch/map-server:v1
+        container_name: map-server
+        ports: 
+            - 3000:3000
+        restart: always
+        volumes:
+            - ~/Downloads/Africa_SHP/:/root/map-server/data/
+    map-server-ui:
+        image: ginkgoch/map-server-ui:1.0.3
+        container_name: map-server-ui
+        ports: 
+            - 8080:8080
+        restart: always
+        depends_on: 
+            - map-server
