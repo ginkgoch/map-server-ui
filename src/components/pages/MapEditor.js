@@ -76,7 +76,7 @@ export class MapEditor extends React.Component {
           <LaunchButton />
           <Logo />
         </Header>
-        <Content>
+        <Content style={{height: "100%"}}>
           <div id="content" style={{ position: "relative", height: "100%" }}>
             <div
               id="mapContainer"
