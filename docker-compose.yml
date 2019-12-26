@@ -9,8 +9,11 @@ services:
         restart: always
         volumes:
             - ~/Downloads/Africa_SHP/:/root/map-server/data/
+        environment: 
+            - CLUSTER_ON=true
+            - CLUSTER_SLAVE_COUNT=4
     map-server-ui:
-        image: ginkgoch/map-server-ui:1.0.3
+        image: ginkgoch/map-server-ui:v1
         container_name: map-server-ui
         ports: 
             - 8080:8080
